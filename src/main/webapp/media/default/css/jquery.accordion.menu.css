@@ -1,0 +1,30 @@
+BODY {
+	FONT-SIZE: 0.9em; FONT-FAMILY: Helvetica, Arial, sans-serif
+}
+UL.menu {
+	PADDING-RIGHT: 0px; PADDING-LEFT: 0px; PADDING-BOTTOM: 0px; MARGIN: 0px; WIDTH: 15em; PADDING-TOP: 0px; LIST-STYLE-TYPE: none
+}
+UL.menu UL {
+	PADDING-RIGHT: 0px; PADDING-LEFT: 0px; PADDING-BOTTOM: 0px; MARGIN: 0px; WIDTH: 15em; PADDING-TOP: 0px; LIST-STYLE-TYPE: none
+	
+}
+UL.menu A {
+	DISPLAY: block; TEXT-DECORATION: none
+}
+UL.menu LI {
+	MARGIN-TOP: 1px ;
+}
+UL.menu LI A {
+	width:202px;;PADDING-RIGHT: 0.5em; PADDING-LEFT: 0.5em; BACKGROUND: #56B5E1; PADDING-BOTTOM: 0.5em; COLOR: #fff; font-weight:bold; PADDING-TOP: 0.5em
+}
+UL.menu LI A:hover {
+	BACKGROUND: #50AFDC
+}
+UL.menu LI UL LI A {
+	PADDING-LEFT: 20px; BACKGROUND: #CBE5F2; font-weight:normal; COLOR: #000;width:189px;
+}
+UL.menu LI UL LI A:hover {
+	PADDING-LEFT: 15px; BACKGROUND: #8FC6E3; BORDER-LEFT: #8FC6E3 5px solid
+}
+ 
+ 

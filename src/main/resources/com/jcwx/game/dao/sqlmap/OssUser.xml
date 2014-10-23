@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="OssUser">
+	<typeAlias alias="OssUser" type="com.jcwx.game.domain.OssUser" />
+
+	<insert id="createOssUser" parameterClass="OssUser">
+		INSERT INTO T_OSS_USER(USERNAME, PASSWORD, LAST_LOGIN_TIME, LAST_LOGIN_IP, LOGIN_NUM, CREATE_TIME, REALNAMES,CARRIER_OPERATOR ,IS_OPERATOR,STATUS) VALUES(#username#, #password#, #lastLoginTime#, #lastLoginIp#, #loginNum#, #createTime#, #realnames#,#carrierOperator#,#isOperator#,#status#)
+	</insert>
+	
+	<update id="updateOssUserPassword" parameterClass="OssUser">
+		UPDATE T_OSS_USER SET PASSWORD=#password# WHERE USERNAME=#username#
+	</update>
+
+	<update id="updateOssUserLastLoginInfo" parameterClass="OssUser">
+		UPDATE T_OSS_USER SET LAST_LOGIN_TIME=#lastLoginTime#, LAST_LOGIN_IP=#lastLoginIp#, LOGIN_NUM=#loginNum# WHERE USERNAME=#username#
+	</update>
+
+	<select id="getOssUserByID" parameterClass="String" resultClass="OssUser">
+		SELECT USERNAME AS username, PASSWORD AS password, LAST_LOGIN_TIME AS lastLoginTime, LAST_LOGIN_IP AS lastLoginIp, LOGIN_NUM AS loginNum, CREATE_TIME AS createTime, REALNAMES AS realnames,CARRIER_OPERATOR AS carrierOperator,IS_OPERATOR AS isOperator ,STATUS AS status  FROM T_OSS_USER WHERE USERNAME=#username#
+	</select>
+	
+	<select id="getOssUserList" resultClass="OssUser">
+		SELECT USERNAME AS username, PASSWORD AS password, LAST_LOGIN_TIME AS lastLoginTime, LAST_LOGIN_IP AS lastLoginIp, LOGIN_NUM AS loginNum, CREATE_TIME AS createTime, REALNAMES AS realnames, STATUS AS status,IS_OPERATOR AS isOperator ,CARRIER_OPERATOR AS carrierOperator FROM T_OSS_USER
+	</select>
+	
+	<update id="updateOssUser" parameterClass="OssUser">
+		UPDATE T_OSS_USER SET USERNAME=#username#, PASSWORD=#password#, LAST_LOGIN_TIME=#lastLoginTime#, LAST_LOGIN_IP=#lastLoginIp#, LOGIN_NUM=#loginNum#, CREATE_TIME=#createTime#, REALNAMES=#realnames#,CARRIER_OPERATOR=#carrierOperator# , IS_OPERATOR=#isOperator#,STATUS=#status# WHERE  USERNAME=#username#
+	</update>
+
+	<delete id="deleteOssUserByID" parameterClass="String">
+		DELETE FROM T_OSS_USER  WHERE USERNAME=#username#
+	</delete>
+	
+
+</sqlMap>

@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="ServerNotice">
+
+	<typeAlias alias="ServerNotice" type="com.jcwx.game.domain.ServerNotice" />
+
+	<insert id="createServerNotice" parameterClass="ServerNotice">
+		INSERT INTO T_SERVER_NOTICE(notice_id, server_id, notive_content, create_time, update_time, create_user_id, update_user_id) VALUES(#noticeId#, #serverId#, #notiveContent#, #createTime#, #updateTime#, #createUserId#, #updateUserId#)
+	</insert>
+
+	<update id="updateServerNotice" parameterClass="ServerNotice">
+		UPDATE T_SERVER_NOTICE SET notice_id=#noticeId#, server_id=#serverId#, notive_content=#notiveContent#, create_time=#createTime#, update_time=#updateTime#, create_user_id=#createUserId#, update_user_id=#updateUserId# WHERE notice_id=#noticeId#
+	</update>
+
+	<delete id="deleteServerNoticeByID" parameterClass="String">
+		DELETE FROM T_SERVER_NOTICE WHERE notice_id=#noticeId#
+	</delete> 
+
+	<select id="getServerNoticeByID" parameterClass="String" resultClass="ServerNotice">
+		SELECT notice_id AS noticeId, server_id AS serverId, notive_content AS notiveContent, create_time AS createTime, update_time AS updateTime, create_user_id AS createUserId, update_user_id AS updateUserId FROM T_SERVER_NOTICE WHERE notice_id=#noticeId#
+	</select>
+
+	<select id="getServerNoticeList" resultClass="ServerNotice">
+		SELECT notice_id AS noticeId, server_id AS serverId, notive_content AS notiveContent, create_time AS createTime, update_time AS updateTime, create_user_id AS createUserId, update_user_id AS updateUserId FROM T_SERVER_NOTICE
+	</select>
+	
+	<select id="getServerNoticeByServerID" resultClass="ServerNotice"  parameterClass="Integer">
+		SELECT notice_id AS noticeId, server_id AS serverId, notive_content AS notiveContent, create_time AS createTime, update_time AS updateTime, create_user_id AS createUserId, update_user_id AS updateUserId FROM T_SERVER_NOTICE WHERE server_id=#serverID#
+	</select>
+	
+	<select id="getServerNoticeByUrl" resultClass="ServerNotice"  parameterClass="String">
+		SELECT notice_id AS noticeId, server_id AS serverId, notive_content AS notiveContent, create_time AS createTime, update_time AS updateTime, create_user_id AS createUserId, update_user_id AS updateUserId FROM T_SERVER_NOTICE WHERE server_id in 
+		(select id from t_oss_server s where s.url=#url#)
+	</select>
+
+</sqlMap>
+

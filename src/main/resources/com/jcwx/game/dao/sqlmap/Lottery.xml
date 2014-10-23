@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="OssLottery">
+
+	<typeAlias alias="OssLottery" type="com.jcwx.game.domain.OssLottery" />
+
+	<insert id="createOssLottery" parameterClass="OssLottery">
+		INSERT INTO T_OSS_LOTTERY(lottery_id, item_id, item_num, area_id, login_name, player_base_id, game_code, activity_code, serial_no, create_time,title,content) 
+		VALUES(#lotteryId#, #itemId#, #itemNum#, #areaId#, #loginName#, #playerBaseId#, #gameCode#, #activityCode#, #serialNo#, sysdate(),#title#,#content#)
+	</insert>
+
+	<update id="updateOssLottery" parameterClass="OssLottery">
+		UPDATE T_OSS_LOTTERY SET lottery_id=#lotteryId#, item_id=#itemId#, item_num=#itemNum#, area_id=#areaId#, login_name=#loginName#, player_base_id=#playerBaseId#, game_code=#gameCode#, activity_code=#activityCode#, serial_no=#serialNo#, create_time=#createTime# WHERE lottery_id=#lotteryId#
+	</update>
+
+	<delete id="deleteOssLotteryByID" parameterClass="String">
+		DELETE FROM T_OSS_LOTTERY WHERE lottery_id=#lotteryId#
+	</delete>
+
+	<select id="getOssLotteryBySerialNo" parameterClass="String" resultClass="OssLottery">
+		SELECT lottery_id AS lotteryId, item_id AS itemId, item_num AS itemNum, area_id AS areaId, login_name AS loginName,
+		 player_base_id AS playerBaseId, game_code AS gameCode, activity_code AS activityCode, serial_no AS serialNo, create_time AS createTime FROM T_OSS_LOTTERY
+		 WHERE serial_no=#serialNo#
+	</select>
+
+	<select id="getOssLotteryList" resultClass="OssLottery">
+		SELECT lottery_id AS lotteryId, item_id AS itemId, item_num AS itemNum, area_id AS areaId, login_name AS loginName, player_base_id AS playerBaseId, game_code AS gameCode, activity_code AS activityCode, serial_no AS serialNo, create_time AS createTime,title,content FROM T_OSS_LOTTERY
+	</select>
+
+</sqlMap>

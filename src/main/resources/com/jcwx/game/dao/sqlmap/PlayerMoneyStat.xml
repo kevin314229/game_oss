@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="PlayerMoneyStat">
+
+	<typeAlias alias="PlayerMoneyStat" type="com.jcwx.game.domain.PlayerMoneyStat" />
+
+	<insert id="createPlayerMoneyStat" parameterClass="PlayerMoneyStat">
+		INSERT INTO T_PLAYER_MONEY_STAT(PLAYER_MONEY_STAT_ID, PLAYER_ID, YEAR_MONTH_DAY_STR, CONSUME_PAY_MONEY, CONSUME_GIFT_MONEY, ACHIEVE_PAY_MONEY, ACHIEVE_GIFT_MONEY, MONEY_VERIFY) VALUES(#playerMoneyStatId#, #playerId#, #yearMonthDayStr#, #consumePayMoney#, #consumeGiftMoney#, #achievePayMoney#, #achieveGiftMoney#, #moneyVerify#)
+	</insert>
+
+	<update id="updatePlayerMoneyStat" parameterClass="PlayerMoneyStat">
+		UPDATE T_PLAYER_MONEY_STAT SET PLAYER_MONEY_STAT_ID=#playerMoneyStatId#, PLAYER_ID=#playerId#, YEAR_MONTH_DAY_STR=#yearMonthDayStr#, CONSUME_PAY_MONEY=#consumePayMoney#, CONSUME_GIFT_MONEY=#consumeGiftMoney#, ACHIEVE_PAY_MONEY=#achievePayMoney#, ACHIEVE_GIFT_MONEY=#achieveGiftMoney#, MONEY_VERIFY=#moneyVerify# WHERE PLAYER_MONEY_STAT_ID=#playerMoneyStatId#
+	</update>
+
+	<delete id="deletePlayerMoneyStatByID" parameterClass="String">
+		DELETE FROM T_PLAYER_MONEY_STAT WHERE PLAYER_MONEY_STAT_ID=#playerMoneyStatId#
+	</delete>
+
+	<select id="getPlayerMoneyStatByID" parameterClass="String" resultClass="PlayerMoneyStat">
+		SELECT PLAYER_MONEY_STAT_ID AS playerMoneyStatId, PLAYER_ID AS playerId, YEAR_MONTH_DAY_STR AS yearMonthDayStr, CONSUME_PAY_MONEY AS consumePayMoney, CONSUME_GIFT_MONEY AS consumeGiftMoney, ACHIEVE_PAY_MONEY AS achievePayMoney, ACHIEVE_GIFT_MONEY AS achieveGiftMoney, MONEY_VERIFY AS moneyVerify FROM T_PLAYER_MONEY_STAT WHERE PLAYER_MONEY_STAT_ID=#playerMoneyStatId#
+	</select>
+
+	<select id="getPlayerMoneyStatList" resultClass="PlayerMoneyStat">
+		SELECT PLAYER_MONEY_STAT_ID AS playerMoneyStatId, PLAYER_ID AS playerId, YEAR_MONTH_DAY_STR AS yearMonthDayStr, CONSUME_PAY_MONEY AS consumePayMoney, CONSUME_GIFT_MONEY AS consumeGiftMoney, ACHIEVE_PAY_MONEY AS achievePayMoney, ACHIEVE_GIFT_MONEY AS achieveGiftMoney, MONEY_VERIFY AS moneyVerify FROM T_PLAYER_MONEY_STAT
+	</select>
+
+</sqlMap>

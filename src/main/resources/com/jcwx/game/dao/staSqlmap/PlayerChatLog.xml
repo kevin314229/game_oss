@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="PlayerChatLog">
+
+	<typeAlias alias="PlayerChatLog" type="com.jcwx.game.domain.PlayerChatLog" />
+
+	<insert id="createPlayerChatLog" parameterClass="PlayerChatLog">
+		INSERT INTO STA_PLAYER_CHAT_LOG(player_chat_log_id, game_id, pt_id, area_id, login_name, player_id, sender, player_base_id, content, recipient_id, recipient, type, status, chat_date) VALUES(#playerChatLogId#, #gameId#, #ptId#, #areaId#, #loginName#, #playerId#, #sender#, #playerBaseId#, #content#, #recipientId#, #recipient#, #type#, #status#, #chatDate#)
+	</insert>
+
+	<update id="updatePlayerChatLog" parameterClass="PlayerChatLog">
+		UPDATE STA_PLAYER_CHAT_LOG SET player_chat_log_id=#playerChatLogId#, game_id=#gameId#, pt_id=#ptId#, area_id=#areaId#, login_name=#loginName#, player_id=#playerId#, sender=#sender#, player_base_id=#playerBaseId#, content=#content#, recipient_id=#recipientId#, recipient=#recipient#, type=#type#, status=#status#, chat_date=#chatDate# WHERE player_chat_log_id=#playerChatLogId#
+	</update>
+
+	<delete id="deletePlayerChatLogByID" parameterClass="String">
+		DELETE FROM STA_PLAYER_CHAT_LOG WHERE player_chat_log_id=#playerChatLogId#
+	</delete>
+
+	<select id="getPlayerChatLogByID" parameterClass="String" resultClass="PlayerChatLog">
+		SELECT player_chat_log_id AS playerChatLogId, game_id AS gameId, pt_id AS ptId, area_id AS areaId, login_name AS loginName, player_id AS playerId, sender AS sender, player_base_id AS playerBaseId, content AS content, recipient_id AS recipientId, recipient AS recipient, type AS type, status AS status, chat_date AS chatDate FROM STA_PLAYER_CHAT_LOG WHERE player_chat_log_id=#playerChatLogId#
+	</select>
+
+	<select id="getPlayerChatLogList" resultClass="PlayerChatLog">
+		SELECT player_chat_log_id AS playerChatLogId, game_id AS gameId, pt_id AS ptId, area_id AS areaId, login_name AS loginName, player_id AS playerId, sender AS sender, player_base_id AS playerBaseId, content AS content, recipient_id AS recipientId, recipient AS recipient, type AS type, status AS status, chat_date AS chatDate FROM STA_PLAYER_CHAT_LOG
+	</select>
+	
+	<select id="getPlayerChatLogListByInfo" parameterClass="java.util.HashMap" resultClass="PlayerChatLog" >
+		SELECT player_chat_log_id AS playerChatLogId, game_id AS gameId, pt_id AS ptId, area_id AS areaId, login_name AS loginName,
+		 player_id AS playerId, sender AS sender, player_base_id AS playerBaseId, content AS content, recipient_id AS recipientId,
+		  recipient AS recipient, type AS type, status AS status, chat_date AS chatDate FROM STA_PLAYER_CHAT_LOG
+		where 1=1
+		<dynamic>
+		<isNotNull property="beginDate" prepend="AND">
+				<![CDATA[ chat_date>='$beginDate$ 00:00:00' ]]>
+		</isNotNull>
+		<isNotNull property="endDate" prepend="AND">
+				<![CDATA[ chat_date<='$endDate$ 23:59:59' ]]>
+		</isNotNull>
+		<isGreaterThan prepend="and" property="gameId" compareValue="0">
+                 game_id = #gameId#
+        </isGreaterThan>
+            
+	  	<isNotNull property="areaId" prepend="AND">
+         	<isNotEqual property="areaId" compareValue="null">
+			  	area_id IN ($areaId$)
+			</isNotEqual>
+        </isNotNull>
+        <isNotEmpty property="loginName" prepend="AND">
+			<![CDATA[	login_name like '%$loginName$%']]>
+		</isNotEmpty>
+		<isNotEmpty property="content" prepend="AND">
+			<![CDATA[	content like '%$content$%']]>
+		</isNotEmpty>
+		<isNotEmpty property="nickName" prepend="AND">
+			<![CDATA[	sender like '%$nickName$%']]>
+		</isNotEmpty>
+		</dynamic>
+		order by chat_date desc 
+		LIMIT #beginNum#,#onePageNum# 
+	</select>
+	
+	<select id="getPlayerChatLogCountByInfo" resultClass="Integer">
+		SELECT count(1) FROM STA_PLAYER_CHAT_LOG
+		where 1=1
+		<dynamic>
+		<isNotNull property="beginDate" prepend="AND">
+				<![CDATA[ chat_date>='$beginDate$ 00:00:00' ]]>
+		</isNotNull>
+		<isNotNull property="endDate" prepend="AND">
+				<![CDATA[ chat_date<='$endDate$ 23:59:59' ]]>
+		</isNotNull>
+		<isGreaterThan prepend="and" property="gameId" compareValue="0">
+                 game_id = #gameId#
+        </isGreaterThan>
+            
+	  	<isNotNull property="areaId" prepend="AND">
+         	<isNotEqual property="areaId" compareValue="null">
+			  	area_id IN ($areaId$)
+			</isNotEqual>
+        </isNotNull>
+        <isNotEmpty property="loginName" prepend="AND">
+			<![CDATA[	login_name like '%$loginName$%']]>
+		</isNotEmpty>
+		<isNotEmpty property="content" prepend="AND">
+			<![CDATA[	content like '%$content$%']]>
+		</isNotEmpty>
+		<isNotEmpty property="nickName" prepend="AND">
+			<![CDATA[	sender like '%$nickName$%']]>
+		</isNotEmpty>
+		</dynamic>
+		order by chat_date desc 
+		LIMIT #beginNum#,#onePageNum# 
+	</select>
+
+</sqlMap>

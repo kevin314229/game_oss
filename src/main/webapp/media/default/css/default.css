@@ -1,0 +1,148 @@
+BODY {
+	background-color: #ffffff;
+	scrollbar-face-color: #CEE3E3;
+	scrollbar-highlight-color: #4A8B8C;
+	scrollbar-shadow-color: #0E494B;
+	scrollbar-3dlight-color: #D9EEEE;
+	scrollbar-arrow-color: #000000;
+	scrollbar-track-color: #D9EEEE;
+	scrollbar-darkshadow-color: #EFF1F0;
+	margin-left: 0px;
+	margin-top: 0px;
+	margin-right: 0px;
+	margin-bottom: 0px;
+	font-size:12px;
+	overflow-y: auto;
+	min-width:1000px
+}
+
+A {
+	color: #000000; 
+	text-decoration : underline;
+}
+A:visited {
+	color: #000000;
+}
+A:hover {
+	color: #ff6600;
+}
+
+.topinfo {
+	font-size:26px;
+	color: #fff;
+}
+
+.topwelcome {
+	font-size:14px;
+	color: #fff;
+}
+
+#container {margin:0 auto; width:100%;}
+
+#divLeft {
+	position: relative;
+	font-size:12px;
+	color:#000;
+	text-align:left;
+	vertical-align: middle;
+	width: 99%;
+	margin-left: 4px;
+	margin-top: 4px;
+	margin-right: 4px;
+	margin-bottom: 4px;
+}
+
+#divQuery {
+	position: relative;
+	font-size:12px;
+	color:#000;
+	text-align:left;
+	vertical-align: middle;
+	width: 99%;
+	margin-left: 4px;
+	margin-top: 4px;
+	margin-right: 4px;
+	margin-bottom: 4px;
+}
+
+#divList {
+	position: relative;
+	width:99%;
+	text-align:center;
+	vertical-align: top;
+	margin-left: 4px;
+	margin-top: 4px;
+	margin-right: 4px;
+	margin-bottom: 4px;
+}
+
+#listRight {
+	position:relative;
+	float:right;
+	text-align:right;
+	width:99%;
+	margin-left: 4px;
+	margin-top: 4px;
+	margin-right: 4px;
+	margin-bottom: 4px;
+}
+
+#row {
+	border:1px #3598E1 solid;
+	border-collapse:collapse;
+	font-size:12px;
+	width:100%;
+	text-align:left;
+	margin-bottom:5px;
+}
+#row th {
+	padding: 2px 0px 2px 0px;
+	text-align: center;
+	border:1px #3598E1 solid;
+	background-color:#7dc4e6;
+	color:#FFF;
+	height:20px;
+	font-weight:bold;
+	white-space:nowrap;
+}
+#row tr.thead{
+	background-color: #acdef6;
+}
+#row td {
+	padding: 2px 4px 2px 4px;
+	border:1px #3598E1 solid;
+	height:20px;
+
+}
+#row th a,th a:visited {
+	color: black;
+}
+#row th a:hover {
+	text-decoration: underline;
+	color: black;
+}
+#row tr.odd {
+	background-color: #fff
+}
+#row tr.tableRowEven,#row tr.even {
+	background-color: #e9f4f9
+}
+#row td.money {
+	font-weight: bold;
+	color: blue;
+}
+#row td a {
+	color:red;
+}
+
+.color-red{
+	color : red; 
+} 
+
+.color-gr{
+	color : #60A70C;
+} 
+
+.color-blue{
+	color : #0044DD;
+}

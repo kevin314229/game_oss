@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="BlackList">
+
+	<typeAlias alias="BlackList" type="com.jcwx.game.domain.BlackList" />
+
+	<insert id="createBlackList" parameterClass="BlackList">
+		INSERT INTO T_BLACK_LIST(black_list_id, IP, BAN_STATE, BAN_TIME,
+		BAN_END_TIME) VALUES(#blackListId#, #ip#, #banState#, #banTime#,
+		#banEndTime#)
+		<selectKey resultClass="Integer" keyProperty="loginLogID">
+			SELECT @@IDENTITY AS ID
+		</selectKey>
+	</insert>
+
+	<update id="updateBlackList" parameterClass="BlackList">
+		UPDATE T_BLACK_LIST
+		SET black_list_id=#blackListId#, IP=#ip#, BAN_STATE=#banState#,
+		BAN_TIME=#banTime#, BAN_END_TIME=#banEndTime# WHERE
+		black_list_id=#blackListId#
+	</update>
+
+	<delete id="deleteBlackListByID" parameterClass="Integer">
+		DELETE FROM
+		T_BLACK_LIST WHERE black_list_id=#blackListId#
+	</delete>
+
+	<select id="getBlackListByID" parameterClass="Integer"
+		resultClass="BlackList">
+		SELECT black_list_id AS blackListId, IP AS ip, BAN_STATE
+		AS banState, BAN_TIME AS banTime, BAN_END_TIME AS banEndTime FROM
+		T_BLACK_LIST WHERE black_list_id=#blackListId#
+	</select>
+
+	<select id="getBlackListCount" resultClass="Integer">
+		SELECT count(*) FROM T_BLACK_LIST
+		<dynamic prepend="where">
+			<isNotEmpty prepend="and" property="keyword">
+				IP=#keyword#
+			</isNotEmpty>
+			<isNotEmpty prepend="and" property="banState">
+				BAN_STATE=#banState#
+			</isNotEmpty>
+		</dynamic>
+	</select>
+
+	<select id="getAllBlackListPage" resultClass="BlackList">
+		SELECT black_list_id AS blackListId, IP AS ip, BAN_STATE AS banState,
+		BAN_TIME AS banTime, BAN_END_TIME AS banEndTime FROM T_BLACK_LIST
+		<dynamic prepend="where">
+		    <isNotEmpty prepend="and" property="keyword">
+				IP=#keyword#
+			</isNotEmpty>
+			<isNotEmpty prepend="and" property="banState">
+				BAN_STATE=#banState#
+			</isNotEmpty>
+		</dynamic>
+		ORDER BY black_list_id $orderFlag$ limit #beginNum#,#pageNum#
+	</select>
+	
+	<select id="getBlackListByIP" parameterClass="String" resultClass="BlackList">
+		SELECT black_list_id AS blackListId, IP AS ip, BAN_STATE AS banState,
+		BAN_TIME AS banTime, BAN_END_TIME AS banEndTime FROM T_BLACK_LIST
+		where IP=#ip#
+	</select>
+</sqlMap>

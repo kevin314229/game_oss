@@ -1,0 +1,638 @@
+@charset "gb2312";
+BODY {
+	background-color: #ffffff;
+	scrollbar-face-color: #CEE3E3;
+	scrollbar-highlight-color: #4A8B8C;
+	scrollbar-shadow-color: #0E494B;
+	scrollbar-3dlight-color: #D9EEEE;
+	scrollbar-arrow-color: #000000;
+	scrollbar-track-color: #D9EEEE;
+	scrollbar-darkshadow-color: #EFF1F0;
+	margin-left: 0px;
+	margin-top: 0px;
+	margin-right: 0px;
+	margin-bottom: 0px;
+	overflow-y: auto;
+}
+A {
+	color: #000000;
+	text-decoration : underline;
+}
+A:visited {
+	color: #000000;
+}
+A:hover {
+	color: #ff6600;
+}
+A.menu {
+    color:#000000;
+    font-size: 12px;
+	line-height: 22px;
+	text-decoration: none;
+}
+A.menu:link {
+    color:#000000;
+    font-size: 12px;
+	line-height: 22px;
+	text-decoration: none;
+}
+A.menu:hover {
+    color:#ff6600;
+    font-size: 12px;
+	line-height: 22px;
+	text-decoration: none;
+}
+A.menu:visited {
+    color:#000000;
+    font-size: 12px;
+	line-height: 22px;
+	text-decoration: none;
+}
+
+FIELDSET {
+	border: #016b9d 1px solid;
+	padding: 2px;
+	width: 100%;
+}
+LEGEND {
+	font-family: "Arial", "Helvetica", "sans-serif","SimSun";
+	font-size: 12px;
+	color: #000000;
+	font-weight: bold;
+	line-height: 22px;
+}
+P {
+	text-indent: 2em;
+}
+TD {
+	font-family: "Arial", "Helvetica", "sans-serif","SimSun";
+	color: #000000;
+	font-size: 12px;
+	text-decoration: none;
+}
+/*
+oldname:li-reg-note 用来修饰无序列表
+
+UL {
+	list-style-position: outside;
+	//list-style-image:  url(../images/index/li.gif);
+	text-indent: 0em;
+	text-align: left;
+	left: -15px;
+	position: relative;
+}
+LI {
+	font-family: "Arial", "Helvetica", "sans-serif", "SimSun";
+	font-size: 12px;
+	color: #C10100;
+	list-style-position: outside;
+	//list-style-image:  url(../images/index/li.gif);
+	text-indent: 0em;
+	text-align: left;
+	padding-top: 2px;
+	padding-bottom: 2px;
+	text-decoration: underline;
+}*/
+A.handle:visited {
+	font-family: "Arial", "Helvetica", "sans-serif","SimSun";
+	font-size: 12px;
+	color: #C10100;
+	text-decoration: underline;
+}
+A.handle:hover {
+	font-family: "Arial", "Helvetica", "sans-serif","SimSun";
+	font-size: 12px;
+	color: #ff6600;
+	text-decoration: none;
+}
+A.handle:link {
+	font-family: "Arial", "Helvetica", "sans-serif","SimSun";
+	font-size: 12px;
+	color: #ff6600;
+	text-decoration: none;
+}
+/*
+oldname:table-form 用来修饰登录框背景表格；也可以用在别的表格内
+*/
+TABLE.backFrame {
+	border: #E3E2E2 1px solid;
+	background-color: #F9F8F8;
+}
+/*=============================================================================================*/
+/*
+--------------------------------------------------
+| 编号 | 标题栏 | 隔行变色 | 鼠标变色 | 圆角标题 |
+--------------------------------------------------
+|  1   |   X	|    X     |    X     |	          |
+|  2   |        |    X     |    X     |	          |
+|  3   |   X	|          |          |	          |
+|  4   |        |    X     |          |	          |
+--------------------------------------------------
+|  5   |        |    X     |          |    X     |
+--------------------------------------------------
+*/
+
+/*高亮单元行的样式*/
+TR.highlight {
+	background-color:  #c4e6fc;
+	height:22px;
+	font-size: 12px;
+}
+
+/*奇数单元行*/
+TR.odd {
+	background-color:  #ebf7ff;
+	height:22px;
+	font-size: 12px;
+	text-indent: 0.0em;
+	padding: 3px 0.5em;
+	vertical-align: top;
+}
+
+/*偶数单元行*/
+TR.even {
+	background-color:  #FFFFFF;
+	height:22px;
+	font-size: 12px;
+	text-indent: 0.0em;
+	padding: 3px 0.5em;
+	vertical-align: top;
+}
+
+/*标题单元行*/
+TR.title {
+	font-size: 12px;
+	color: #000000;
+	font-weight: bold;
+	BACKGROUND-IMAGE:  url(../images/tab_changecolor_title.gif);
+	background-repeat:repeat;	
+	line-height: 17px;
+	text-align: center;
+}
+TD.titleBackFrame {
+	border: #016b9d 1px solid;
+	background-color: #ffffff;
+}
+/*=============================================================================================*/
+
+/*
+oldname:form-input-checkbox 用来修饰所有的checkbox
+*/
+INPUT.checkbox {
+	height:12px
+}
+/*
+用来修饰所有的radio
+*/
+INPUT.radio {
+	height:15px
+}
+
+/*
+oldname:form-search-input 用来修饰一般Input输入框;
+*/
+INPUT.text {
+	border-right: 1px solid #CCCCCC;
+	border-top: 1px solid #999999;
+	font-size: 12px;
+	background: #ffffff;
+	border-left: 1px solid #999999;
+	border-bottom: 1px solid #CCCCCC;
+	font-family: Verdana, Arial, "宋体";
+}
+
+/*
+ 用来修饰必填框;
+*/
+INPUT.textRequired {
+	border-right: 1px solid #CCCCCC;
+	border-top: 1px solid #999999;
+	font-size: 12px;
+	background: #ffffff;
+	border-left: 1px solid #999999;
+	border-bottom: 1px solid #CCCCCC;
+}
+/*
+ 用来修饰带缩进的必填框;
+*/
+INPUT.textRequiredIndent {
+	border-right: 1px solid #CCCCCC;
+	border-top: 1px solid #999999;
+	border-left: 1px solid #999999;
+	border-bottom: 1px solid #CCCCCC;
+	clip: rect(auto auto auto -10px);
+	margin-left: 10px;
+	margin-top:-2px;
+	margin-bottom:-2px;
+	font-size: 12px;
+	background: #ffffff fixed no-repeat right bottom;
+}
+/*
+ 用来修饰只读框;
+*/
+INPUT.textReadOnly {
+	border-right: 1px solid #CCCCCC;
+	border-top: 1px solid #999999;
+	font-size: 12px;
+	background: #eeeeee;
+	border-left: 1px solid #999999;
+	border-bottom: 1px solid #CCCCCC;
+	color: #666666;
+	padding-left: 2px;
+}
+
+/*
+ 用来修饰带缩进的只读框;
+*/
+INPUT.textReadOnlyIndent {
+	border-right: 1px solid #CCCCCC;
+	border-top: 1px solid #999999;
+	border-left: 1px solid #999999;
+	border-bottom: 1px solid #CCCCCC;
+	margin-left: 10px;
+	font-size: 12px;
+	background: #E8E6E2 fixed no-repeat right bottom;
+}
+/*
+oldname:form-input-field 用来修饰登录框等固定大小的用户名input框;根据type来定义FixedSize前的名称
+*/
+INPUT.textFixedSize {
+	border-right: 1px solid #CCCCCC;
+	border-top: 1px solid #999999;
+	border-left: 1px solid #999999;
+	border-bottom: 1px solid #CCCCCC;
+	background-color:#ffffff;
+	width: 130px;
+	height: 22px;
+}
+/*
+oldname:form-input-field 用来修饰登录框等固定大小的密码input框;根据type来定义FixedSize前的名称
+*/
+INPUT.passwordFixedSize {
+	border-right: 1px solid #CCCCCC;
+	border-top: 1px solid #999999;
+	border-left: 1px solid #999999;
+	border-bottom: 1px solid #CCCCCC;
+	background-color:#ffffff;
+	width: 130px;
+	height: 22px;
+}
+/*
+oldname:form-input-field 用来修饰登录框等固定大小的验证码input框;根据type来定义FixedSize前的名称
+*/
+INPUT.changeFixedSize {
+	border-right: 1px solid #CCCCCC;
+	border-top: 1px solid #999999;
+	border-left: 1px solid #999999;
+	border-bottom: 1px solid #CCCCCC;
+	background-color:#ffffff;
+	width: 60px;
+	height: 22px;
+}
+/*
+oldname:list-input-field 用来修饰登列表表格内input框;未限制input框大小;根据type来定义input框的名称
+*/
+INPUT.textInTable {
+	border-right: 1px solid #CCCCCC;
+	border-top: 1px solid #999999;
+	border-left: 1px solid #999999;
+	border-bottom: 1px solid #CCCCCC;
+	clip: rect(auto auto auto -10px);
+	margin-left: 0px;
+	margin-top:-2px;
+	margin-bottom:-1px;
+	font-size: 12px;
+	background: #ffffff fixed no-repeat right bottom;
+}
+/*
+oldname:form-input-field 用来修饰带缩进的input框;根据type来定义input框的名称
+*/
+INPUT.textIndent {
+	border-right: 1px solid #CCCCCC;
+	border-top: 1px solid #999999;
+	border-left: 1px solid #999999;
+	border-bottom: 1px solid #CCCCCC;
+	clip: rect(auto auto auto -10px);
+	font-size: 12px;
+	margin-left: 10px;
+	background: #ffffff fixed no-repeat right bottom;
+}
+/*
+oldname:form-button 用来修饰按钮;
+*/
+INPUT.button {
+	border-right: 0px solid #CCCCCC;
+	border-top: 0px solid #999999;
+	border-left: 0px solid #999999;
+	border-bottom: 0px solid #CCCCCC;
+	background-image:  url(../images/buttonbg.gif);
+	font-size: 12px;
+	height: 22px;
+	cursor: hand;
+	border: 1px solid #1c95ce;
+	line-height: 20px;
+}
+/*
+oldname:help-table-line 用来修饰一般水平线
+*/
+HR.hr {
+	color: #78C4C0;
+	height: 1px;
+	width: 100%;
+	text-align: center;
+}
+/*
+oldname:reg-table-line 用来修饰应用在表格内部的水平线
+*/
+HR.hrInsideTab {
+	color: #ABC4E4;
+	height: 1px;
+	width: 92%;
+	text-align: center;
+}
+
+/*
+用来修饰下拉框;
+*/
+SELECT.dropDown {
+	border-right: #b6b9cb 1px solid;
+	border-top: #b6b9cb 1px solid;
+	font-size: 12px;
+	background: #ffffff;
+	border-left: #b6b9cb 1px solid;
+	border-bottom: #b6b9cb 1px solid;
+	font-family: Verdana, Arial, "宋体";
+}
+/*
+用来修饰带缩进下拉框;
+*/
+SELECT.dropDownIndent {
+	border-right: #b6b9cb 1px solid;
+	border-top: #b6b9cb 1px solid;
+	border-left: #b6b9cb 1px solid;
+	border-bottom: #b6b9cb 1px solid;
+	clip: rect(auto auto auto -10px);
+	font-size: 12px;
+	margin-left: 10px;
+	background: #ffffff fixed no-repeat right bottom;
+}
+/*
+用来修饰列表框;
+*/
+SELECT.list {
+	border-right: #b6b9cb 1px solid;
+	border-top: #b6b9cb 1px solid;
+	font-size: 12px;
+	background: #ffffff;
+	border-left: #b6b9cb 1px solid;
+	border-bottom: #b6b9cb 1px solid;
+}
+
+TEXTAREA.textarea {
+	border-right: #b6b9cb 1px solid;
+	border-top: #b6b9cb 1px solid;
+	border-left: #b6b9cb 1px solid;
+	border-bottom: #b6b9cb 1px solid;
+	font-size: 12px;
+	background: #ffffff;
+}
+/*
+用来修饰列表框;
+*/
+TEXTAREA.textareaIndent {
+	border-right: #b6b9cb 1px solid;
+	border-top: #b6b9cb 1px solid;
+	border-left: #b6b9cb 1px solid;
+	border-bottom: #b6b9cb 1px solid;
+	clip: rect(auto auto auto -10px);
+	font-size: 12px;
+	margin-left: 10px;
+	background: #ffffff fixed no-repeat right bottom;
+}
+/*
+版权信息
+*/
+.text_copyright {
+	font-family: "Arial", "Helvetica", "sans-serif","SimSun";
+	color: #ffffff;
+	font-size: 12px;
+	text-decoration: none;
+	text-align: center;
+}
+/*
+突出显示的字体
+*/
+.text_emphasis {
+	font-family: "Arial", "Helvetica", "sans-serif","SimSun";
+	font-size: 12px;
+	color: #000000;
+	font-weight: bold;
+	line-height: 22px;
+}
+/*
+红色信息文字，使用于“*”号公告等内容
+*/
+.text_info {
+	font-family: "Arial", "Helvetica", "sans-serif","SimSun";
+	font-size: 12px;
+	color: #FF0000;
+}
+/*
+oldname:text-search-field 修饰搜索框内带缩进的文字
+*/
+.text_IndentSearch {
+	font-family: "Arial", "Helvetica", "sans-serif","SimSun";
+	font-size: 12px;
+	color: #000000;
+	text-decoration: none;
+	text-indent: 0.5em;
+	height: 26px;
+}
+.text_main_index {
+	font-family: "Arial", "Helvetica", "sans-serif","SimSun";
+	color: #000000;
+	font-size: 12px;
+	text-decoration: none;
+	line-height: 22px;
+	text-indent: 10px;
+}
+.text_title_underline {
+	font-family: "Arial", "Helvetica", "sans-serif","SimSun";
+	font-size: 13px;
+	color: #044C43;
+	font-weight: bold;
+	line-height: 22px;
+	text-decoration : underline;
+}
+TD.left_menu {
+	padding-left: 12px;
+}
+A.left_menu:link {
+    color:#000000;
+    font-size: 12px;
+	line-height: 22px;
+	text-decoration: none;
+}
+A.left_menu:hover {
+    color:#ff6600;
+    font-size: 12px;
+	line-height: 22px;
+	text-decoration: none;
+}
+A.left_menu:visited {
+    color:#000000;
+    font-size: 12px;
+	line-height: 22px;
+	text-decoration: none;
+}
+
+/* -----------表格边框-------*/
+TD.table_border01 {
+	border: 1px solid #73C3BD;
+}
+TD.moduleInfo {
+	font-family: Verdana, Arial, "宋体";
+	font-size: 12px;
+	padding-top: 3px;
+	padding-bottom: 3px;
+	text-align: justify;
+	text-justify: distribute;
+	ruby-align: auto;
+}
+.text_moduleInfo {
+	font-family: Verdana, Arial, "宋体";
+	font-size: 12px;
+	padding-top: 3px;
+	padding-bottom: 3px;
+	color: #333333;
+	text-align: justify;
+	text-justify: distribute;
+}
+INPUT.buttonIntable {
+	font-size: 12px;
+	height: 18px;
+	cursor: hand;
+	line-height: 16px;
+	border-top: 1px solid #f7f7f7;
+	border-right: 1px solid #666666;
+	border-bottom: 1px solid #666666;
+	border-left: 1px solid #f7f7f7;
+	top: 1px;
+	position: relative;
+}
+INPUT.buttons {
+	BORDER-RIGHT: #4ab3e3 1px solid; BORDER-TOP: #4ab3e3 1px solid; FONT-SIZE: 12px; BACKGROUND-IMAGE: url(../images/buttonbg.gif); BORDER-LEFT: #4ab3e3 1px solid; CURSOR: hand; BORDER-BOTTOM: #4ab3e3 1px solid; HEIGHT: 21px
+}
+
+/* ---Footer properties--- */
+#footer {
+	position: relative;
+	width:100%;
+	font-size:12px;
+	clear:both;
+	height:50px;
+	padding:0px;
+	color:#013751;
+	line-height:20px;
+	voice-family:inherit;
+	background:url(../images/footerBg.gif) repeat-x top;
+}
+
+#footer A {
+	font-size:12px;
+	line-height: 24px;
+	color: #333333;
+	text-decoration:none;
+}
+#footer A:hover {
+	color:#ff6600
+}
+#footer span {
+	font-size:12px;
+	color: #333333;
+	line-height: 19px;
+}
+#row {
+	border:1px #7dc4e6 solid;
+	border-collapse:collapse;
+	width:100%;
+	text-align:left;
+	margin-bottom:5px;
+}
+#row ul {
+	margin: 0px;
+}
+#row li {
+	line-height:18px;
+}
+/*----------------displaytag begin---------------*/
+#row th {
+	padding: 2px 0px 2px 0px;
+	text-align: center;
+	border:1px #7dc4e6 solid;
+	height:20px;
+	font-weight:bold;
+	white-space:nowrap;
+}
+
+#row thead tr {
+	background-color: #acdef6;
+}
+#row td {
+	padding: 2px 4px 2px 4px;
+	border-width: 1px;
+	border-style: solid;
+	border-color: #7dc4e6;
+	height:20px;
+
+}
+#row th.sorted {
+	background-color: orange;
+}
+#row th a,th a:visited {
+	color: black;
+}
+#row th a:hover {
+	text-decoration: underline;
+	color: black;
+}
+
+#row th.sorted a,th.sortable a {
+	background-position: right;
+	display: block;
+	width: 100%;
+}
+
+#row th.sortable a {
+	background-image: url(img/arrow_off.png);
+	background-repeat:no-repeat
+}
+
+#row th.order1 a {
+	background-image: url(img/arrow_down.png);
+	background-repeat:no-repeat
+}
+
+#row th.order2 a {
+	background-image: url(img/arrow_up.png);
+	background-repeat:no-repeat
+}
+
+#row tr.odd {
+	background-color: #fff
+}
+
+#row tr.tableRowEven,#row tr.even {
+	background-color: #e9f4f9
+}
+#row td.tableCellError {
+	font-weight: bold;
+	color:red;
+}
+#row td.money {
+	font-weight: bold;
+	color: blue;
+}
+#row td a {
+	color:red;
+}

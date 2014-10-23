@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="PlayerWarehouse">
+
+	<typeAlias alias="PlayerWarehouse" type="com.jcwx.game.domain.PlayerWarehouse" />
+
+	<insert id="createPlayerWarehouse" parameterClass="PlayerWarehouse">
+		INSERT INTO T_PLAYER_WAREHOUSE(player_warehouse_id, player_id, grid_number, silver) VALUES(#playerWarehouseId#, #playerId#, #gridNumber#, #silver#)
+	</insert>
+
+	<update id="updatePlayerWarehouse" parameterClass="PlayerWarehouse">
+		UPDATE T_PLAYER_WAREHOUSE SET player_warehouse_id=#playerWarehouseId#, player_id=#playerId#, grid_number=#gridNumber#, silver=#silver# WHERE player_warehouse_id=#playerWarehouseId#
+	</update>
+
+	<delete id="deletePlayerWarehouseByID" parameterClass="String">
+		DELETE FROM T_PLAYER_WAREHOUSE WHERE player_warehouse_id=#playerWarehouseId#
+	</delete>
+
+	<select id="getPlayerWarehouseByID" parameterClass="String" resultClass="PlayerWarehouse">
+		SELECT player_warehouse_id AS playerWarehouseId, player_id AS playerId, grid_number AS gridNumber, silver AS silver FROM T_PLAYER_WAREHOUSE WHERE player_warehouse_id=#playerWarehouseId#
+	</select>
+
+	<select id="getPlayerWarehouseList" resultClass="PlayerWarehouse">
+		SELECT player_warehouse_id AS playerWarehouseId, player_id AS playerId, grid_number AS gridNumber, silver AS silver FROM T_PLAYER_WAREHOUSE
+	</select>
+
+</sqlMap>

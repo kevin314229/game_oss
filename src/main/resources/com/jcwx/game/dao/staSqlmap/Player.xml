@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="Player">
+
+	<typeAlias alias="Player" type="com.jcwx.game.domain.Player" />
+	<typeAlias alias="PlayerCreateStat" type="com.jcwx.game.domain.PlayerCreateStat"/>
+	<insert id="createPlayer" parameterClass="Player">
+		INSERT INTO STA_PLAYER(game_player_id, game_id, pt_id, area_id, login_name, player_id, phone_type, first_login_time, first_logout_time, create_time) VALUES(#gamePlayerId#, #gameId#, #ptId#, #areaId#, #loginName#, #playerId#, #phoneType#, #firstLoginTime#, #firstLogoutTime#, #createTime#)
+	</insert>
+
+	<update id="updatePlayer" parameterClass="Player">
+		UPDATE STA_PLAYER SET game_player_id=#gamePlayerId#, game_id=#gameId#, pt_id=#ptId#, area_id=#areaId#, login_name=#loginName#, player_id=#playerId#, phone_type=#phoneType#, first_login_time=#firstLoginTime#, first_logout_time=#firstLogoutTime#, create_time=#createTime# WHERE game_player_id=#gamePlayerId#
+	</update>
+
+	<delete id="deletePlayerByID" parameterClass="String">
+		DELETE FROM STA_PLAYER WHERE game_player_id=#gamePlayerId#
+	</delete>
+
+	<select id="getPlayerByID" parameterClass="String" resultClass="Player">
+		SELECT game_player_id AS gamePlayerId, game_id AS gameId, pt_id AS ptId, area_id AS areaId, login_name AS loginName, player_id AS playerId, phone_type AS phoneType, first_login_time AS firstLoginTime, first_logout_time AS firstLogoutTime, create_time AS createTime FROM STA_PLAYER WHERE game_player_id=#gamePlayerId#
+	</select>
+
+	<select id="getPlayerList" resultClass="Player">
+		SELECT game_player_id AS gamePlayerId, game_id AS gameId, pt_id AS ptId, area_id AS areaId, login_name AS loginName, player_id AS playerId, phone_type AS phoneType, first_login_time AS firstLoginTime, first_logout_time AS firstLogoutTime, create_time AS createTime FROM STA_PLAYER
+	</select>
+	
+	<select id="getPlayerCreateStatListByDay" parameterClass="java.util.Map" resultClass="PlayerCreateStat">
+		
+		SELECT DATE_FORMAT(create_time,'%Y-%m-%d') as year, COUNT(distinct area_id, player_id) as countNum
+		FROM STA_PLAYER  where 1=1
+		<dynamic>
+			<isNotEmpty  property="beginDate" prepend="AND">
+				<![CDATA[	create_time >= #beginDate# ]]>
+			</isNotEmpty>
+			<isNotEmpty  property="endDate" prepend="AND">
+				<![CDATA[		create_time <= #endDate#  ]]>
+			</isNotEmpty>
+			<isNotEmpty property="projectId" prepend="AND">
+					game_id = #projectId#
+			</isNotEmpty>			
+			<isNotEmpty  property="ossServerId" prepend="AND">
+					area_id IN ($ossServerId$)
+			</isNotEmpty>
+			<isNotEmpty property="ptCode" prepend="AND">
+					pt_id=#ptCode#
+			</isNotEmpty>
+		</dynamic>
+		
+		GROUP BY year
+		
+	</select>
+	
+	<select id="getPlayerNum" resultClass="Integer" parameterClass="Integer">
+		SELECT count(distinct game_id,area_id,player_id) FROM STA_PLAYER where game_id=#gameId#
+	</select>
+	
+	<select id="getPlayerCreateStatListByPtCode" parameterClass="java.util.Map" resultClass="java.util.HashMap">
+		SELECT DATE_FORMAT(create_time,'%Y-%m-%d')everyDay,pt_id AS ptCode,COUNT(distinct area_id,player_id) countNum
+		FROM STA_PLAYER where 1=1
+		<dynamic>
+			<isNotEmpty  property="beginDate" prepend="AND">
+				<![CDATA[	create_time >= #beginDate# ]]>
+			</isNotEmpty>
+			<isNotEmpty  property="endDate" prepend="AND">
+				<![CDATA[		create_time <= #endDate#  ]]>
+			</isNotEmpty>
+			<isNotEmpty property="projectId" prepend="AND">
+					game_id = #projectId#
+			</isNotEmpty>			
+			<isNotEmpty  property="ossServerId" prepend="AND">
+					area_id IN ($ossServerId$)
+			</isNotEmpty>
+			<isNotEmpty property="ptCode" prepend="AND">
+					pt_id=#ptCode#
+			</isNotEmpty>
+		</dynamic>
+		GROUP BY ptCode,everyDay
+	</select>	
+	
+	<select id="getPlayerCreateStatListByServerId" parameterClass="java.util.Map" resultClass="java.util.HashMap">
+		SELECT DATE_FORMAT(create_time,'%Y-%m-%d')everyDay,area_id AS serverId,COUNT(*) countNum
+			FROM STA_PLAYER where 1=1
+			<dynamic>
+			<isNotEmpty  property="beginDate" prepend="AND">
+				<![CDATA[	create_time >= #beginDate# ]]>
+			</isNotEmpty>
+			<isNotEmpty  property="endDate" prepend="AND">
+				<![CDATA[		create_time <= #endDate#  ]]>
+			</isNotEmpty>
+			<isNotEmpty property="projectId" prepend="AND">
+					game_id = #projectId#
+			</isNotEmpty>			
+			<isNotEmpty  property="ossServerId" prepend="AND">
+					area_id IN ($ossServerId$)
+			</isNotEmpty>
+			<isNotEmpty property="ptCode" prepend="AND">
+					pt_id=#ptCode#
+			</isNotEmpty>
+			<isNotEmpty property="ptId" prepend="AND">
+					pt_id IN ($ptId$)
+			</isNotEmpty>
+		</dynamic>
+			GROUP BY everyDay,serverId
+	</select>
+</sqlMap>

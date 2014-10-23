@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="OssDict">
+
+	<typeAlias alias="OssDictData" type="com.jcwx.game.domain.OssDictData" />
+	<typeAlias alias="OssDictType" type="com.jcwx.game.domain.OssDictType" />
+
+	<insert id="createOssDictType" parameterClass="OssDictType">
+		INSERT INTO T_OSS_DICT_TYPE(game_id, dict_type, order_sort, dict_name, dict_desc, create_time, modify_time) VALUES(#gameId#, #dictType#, #orderSort#, #dictName#, #dictDesc#, sysdate(),sysdate())
+	</insert>
+
+	<update id="updateOssDictType" parameterClass="OssDictType">
+		UPDATE T_OSS_DICT_TYPE SET  game_id=#gameId#, dict_type=#dictType#, order_sort=#orderSort#, dict_name=#dictName#, dict_desc=#dictDesc#, modify_time=sysdate() WHERE type_id=#typeId#
+	</update>
+
+	<delete id="deleteOssDictTypeByID" parameterClass="Integer">
+		DELETE FROM T_OSS_DICT_TYPE WHERE type_id=#typeId#
+	</delete>
+
+	<select id="getOssDictTypeByID" parameterClass="Integer" resultClass="OssDictType">
+		SELECT type_id AS typeId, game_id AS gameId, dict_type AS dictType, order_sort AS orderSort, dict_name AS dictName, dict_desc AS dictDesc, create_time AS createTime, modify_time AS modifyTime FROM T_OSS_DICT_TYPE WHERE type_id=#typeId#
+	</select>
+
+	<select id="getOssDictTypeByName" parameterClass="java.util.Map" resultClass="OssDictType">
+		SELECT type_id AS typeId, game_id AS gameId, dict_type AS dictType, order_sort AS orderSort, dict_name AS dictName, dict_desc AS dictDesc, create_time AS createTime, modify_time AS modifyTime FROM T_OSS_DICT_TYPE 
+		WHERE game_id=#gameId# and dict_name= #typeName#
+			<isNotNull property="typeId" prepend="AND">
+				<![CDATA[ type_id !=#typeId# ]]>
+			</isNotNull>
+	</select>
+	
+	<select id="getOssDictTypeByType" parameterClass="java.util.Map" resultClass="OssDictType">
+		SELECT type_id AS typeId, game_id AS gameId, dict_type AS dictType, order_sort AS orderSort, dict_name AS dictName, dict_desc AS dictDesc, create_time AS createTime, modify_time AS modifyTime FROM T_OSS_DICT_TYPE
+		 WHERE game_id=#gameId# and dict_type= #dictType#
+		 	<isNotNull property="typeId" prepend="AND">
+				<![CDATA[ type_id !=#typeId# ]]>
+			</isNotNull>
+	</select>
+	
+	<select id="getOssDictTypeList" resultClass="OssDictType">
+		SELECT type_id AS typeId, game_id AS gameId, dict_type AS dictType, order_sort AS orderSort, dict_name AS dictName, dict_desc AS dictDesc, create_time AS createTime, modify_time AS modifyTime FROM T_OSS_DICT_TYPE
+		where game_id=#gameId# order by order_sort 
+	</select>
+
+	<insert id="createOssDictData" parameterClass="OssDictData">
+		INSERT INTO T_OSS_DICT_DATA(dict_Id, game_id, dict_type, dict_name, dict_value,order_sort, create_time, modify_time) VALUES(#dictId#, #gameId#, #dictType#, #dictName#, #dictValue#,#orderSort#, sysdate() , sysdate())
+	</insert>
+
+	<update id="updateOssDictData" parameterClass="OssDictData">
+		UPDATE T_OSS_DICT_DATA SET dict_Id=#dictId#, game_id=#gameId#, dict_type=#dictType#, dict_name=#dictName#, dict_value=#dictValue#,order_sort=#orderSort#, modify_time=sysdate()  WHERE dict_Id=#dictId#
+	</update>
+
+	<delete id="deleteOssDictDataByID" parameterClass="Integer">
+		DELETE FROM T_OSS_DICT_DATA WHERE dict_Id=#dictId#
+	</delete>
+
+	<select id="getOssDictDataByID" parameterClass="Integer" resultClass="OssDictData">
+		SELECT dict_Id AS dictId, game_id AS gameId, dict_type AS dictType, dict_name AS dictName, dict_value AS dictValue,order_sort as orderSort , create_time AS createTime, modify_time AS modifyTime FROM T_OSS_DICT_DATA WHERE dict_Id=#dictId#
+	</select>
+
+	<select id="getOssDictDataList" resultClass="OssDictData">
+		SELECT dict_Id AS dictId, game_id AS gameId, dict_type AS dictType, dict_name AS dictName, dict_value AS dictValue,order_sort as orderSort ,create_time AS createTime, modify_time AS modifyTime FROM T_OSS_DICT_DATA
+		where    game_id = #gameId# and dict_type= #dictType# order by order_sort 
+	</select>
+
+	<select id="getOssDictDataByName" parameterClass="java.util.Map" resultClass="OssDictData">
+		SELECT dict_Id AS dictId, game_id AS gameId, dict_type AS dictType, dict_name AS dictName, dict_value AS dictValue,order_sort as orderSort , create_time AS createTime, modify_time AS modifyTime FROM T_OSS_DICT_DATA 
+		WHERE game_id=#gameId# and dict_type= #dictType# and dict_Name= #dataName# 
+			<isNotNull property="dictId" prepend="AND">
+				<![CDATA[ dict_Id !=#dictId# ]]>
+			</isNotNull>
+	</select>
+
+	<select id="getOssDictDataByValue" parameterClass="java.util.Map" resultClass="OssDictData">
+		SELECT dict_Id AS dictId, game_id AS gameId, dict_type AS dictType, dict_name AS dictName, dict_value AS dictValue,order_sort as orderSort , create_time AS createTime, modify_time AS modifyTime FROM T_OSS_DICT_DATA 
+		WHERE game_id=#gameId# and dict_type= #dictType# and dict_value= #dictValue# 
+	</select>
+</sqlMap>

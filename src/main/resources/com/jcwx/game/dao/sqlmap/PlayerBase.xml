@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="PlayerBase">
+
+	<typeAlias alias="PlayerBase" type="com.jcwx.game.domain.PlayerBase" />
+	<typeAlias alias="PlayerAttribute"	type="com.jcwx.game.domain.PlayerAttribute" />
+	<resultMap id="PlayerBaseEx" class="PlayerBase">
+		<result property="playerBaseId" column="playerBaseId" />
+		<result property="playerId" column="playerId" />
+		<result property="occupation" column="occupation" />
+		<result property="nickName" column="nickName" />
+		<result property="gold" column="gold" />
+		<result property="silver" column="silver" />
+		<result property="status" column="status" />
+		<result property="movex" column="movex" />
+		<result property="movey" column="movey" />
+		<result property="mapId" column="mapId" />
+		<result property="experience" column="experience" />
+		<result property="level" column="level" />
+		<result property="playerAttribute" column="playerBaseId" select="PlayerAttribute.getPlayerAttributeByPlayerBaseId" />
+	</resultMap>
+	<insert id="createPlayerBase" parameterClass="PlayerBase">
+		INSERT INTO T_PLAYER_BASE(player_base_id, player_id, sex, occupation, nick_name, gold, silver, status, power, tech_point, movex, movey, map_id, experience, level) VALUES(#playerBaseId#, #playerId#, #sex#, #occupation#, #nickName#, #gold#, #silver#, #status#, #power#, #techPoint#, #movex#, #movey#, #mapId#, #experience#, #level#)
+	</insert>
+
+	<update id="updatePlayerBase" parameterClass="PlayerBase">
+		UPDATE T_PLAYER_BASE SET player_base_id=#playerBaseId#, player_id=#playerId#, sex=#sex#, occupation=#occupation#, nick_name=#nickName#, gold=#gold#, silver=#silver#, status=#status#, power=#power#, tech_point=#techPoint#, movex=#movex#, movey=#movey#, map_id=#mapId#, experience=#experience#, level=#level# WHERE player_base_id=#playerBaseId#
+	</update>
+
+	<delete id="deletePlayerBaseByID" parameterClass="String">
+		DELETE FROM T_PLAYER_BASE WHERE player_base_id=#playerBaseId#
+	</delete>
+
+	<select id="getPlayerBaseByID" parameterClass="String" resultClass="PlayerBase">
+		SELECT player_base_id AS playerBaseId, player_id AS playerId, sex AS sex, occupation AS occupation, nick_name AS nickName, gold AS gold, silver AS silver, status AS status, power AS power, tech_point AS tech_point, movex AS movex, movey AS movey, map_id AS mapId, experience AS experience, level AS level FROM T_PLAYER_BASE WHERE player_base_id=#playerBaseId#
+	</select>
+
+	<select id="getPlayerBaseList" resultClass="PlayerBase">
+		SELECT player_base_id AS playerBaseId, player_id AS playerId, sex AS sex, occupation AS occupation, nick_name AS nickName, gold AS gold, silver AS silver, status AS status, power AS power, tech_point AS tech_point, movex AS movex, movey AS movey, map_id AS mapId, experience AS experience, level AS level FROM T_PLAYER_BASE
+	</select>
+
+	<select id="getPlayerBaseByPlayerID" parameterClass="java.util.Map" resultMap="PlayerBaseEx">
+		SELECT player_base_id AS playerBaseId, player_id AS playerId, sex AS sex, occupation AS occupation, nick_name AS nickName, gold AS gold, silver AS silver, status AS status, power AS power, tech_point AS tech_point, movex AS movex, movey AS movey, map_id AS mapId, experience AS experience, level AS level FROM T_PLAYER_BASE WHERE player_id=#playerId# and occupation=#occupation#
+	</select>
+
+</sqlMap>

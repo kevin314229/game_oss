@@ -1,0 +1,249 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="loginLog">
+	<typeAlias alias="LoginLog" type="com.jcwx.game.domain.LoginLog" />
+	<typeAlias alias="LoginLogInfo" type="com.jcwx.game.domain.LoginLogInfo" />
+	<typeAlias alias="IPStats" type="com.jcwx.game.domain.IPStats" />
+	
+	<insert id="createLoginLog" parameterClass="LoginLog">
+		INSERT INTO T_LOGIN_LOG(PLAYER_ID, IP, LOGIN_TIME, QUIT_TIME) VALUES(#playerID#, #ip#, #loginTime#, #quitTime#)
+		<selectKey resultClass="Integer" keyProperty="loginLogID" >
+			SELECT @@IDENTITY AS ID
+		</selectKey>
+	</insert>
+	
+	<select id="getLoginLogByID" parameterClass="int" resultClass="LoginLog">
+		SELECT LOGIN_LOG_ID AS loginLogID, PLAYER_ID AS playerID,IP AS ip,
+			LOGIN_TIME AS loginTime, QUIT_TIME AS quitTime 
+		FROM T_LOGIN_LOG 
+		WHERE LOGIN_LOG_ID=#loginLogID#
+	</select>
+	 
+	<select id="getLastLoginLog" resultClass="LoginLog">
+		SELECT LOGIN_LOG_ID AS loginLogID, PLAYER_ID AS playerID,IP AS ip, LOGIN_TIME AS loginTime, QUIT_TIME AS quitTime 
+		FROM T_LOGIN_LOG ORDER BY LOGIN_LOG_ID DESC LIMIT 0,1
+	</select>
+	
+	<select id="getLoginNumByTime" parameterClass="java.util.Map" resultClass="Integer">
+		<![CDATA[ SELECT COUNT(LOGIN_LOG_ID) AS num FROM T_LOGIN_LOG WHERE LOGIN_TIME >= #beginTime# AND LOGIN_TIME <= #endTime# ]]>
+	</select>
+
+	<select id="getIpNumByTime" parameterClass="java.util.Map" resultClass="Integer">
+		<![CDATA[ SELECT COUNT(DISTINCT IP) AS num FROM T_LOGIN_LOG WHERE LOGIN_TIME >= #beginTime# AND LOGIN_TIME <= #endTime# ]]>
+	</select>
+
+	<select id="getOnlyOneLoginNumByTime" parameterClass="java.util.Map" resultClass="Integer">
+		<![CDATA[ SELECT COUNT(player_id) AS num FROM (SELECT PLAYER_ID AS player_id FROM T_LOGIN_LOG 	WHERE LOGIN_TIME >= #beginTime# AND LOGIN_TIME <= #endTime#   GROUP BY PLAYER_ID HAVING COUNT(PLAYER_ID) = 1) AS t_login_log  ]]>
+	</select>
+
+	<select id="getActivityPlayerNumByTime" parameterClass="java.util.Map" resultClass="Integer">
+		<![CDATA[ SELECT COUNT(player_id) AS num FROM (SELECT PLAYER_ID AS player_id FROM T_LOGIN_LOG WHERE LOGIN_TIME >= #beginTime# AND LOGIN_TIME <= #endTime#  GROUP BY PLAYER_ID HAVING COUNT(PLAYER_ID) >= #loginNum#) AS t_login_log  ]]>
+	</select>
+
+	<select id="getLoginLogListByParams" parameterClass="java.util.Map" resultClass="java.util.HashMap">
+		SELECT LOGIN_LOG_ID AS loginLogID, PLAYER_ID AS playerID,IP AS ip, LOGIN_TIME AS loginTime  FROM T_LOGIN_LOG 
+		<dynamic prepend="WHERE">
+			<isNotEmpty  property="beginTime" prepend="AND">
+					LOGIN_TIME >= #beginTime#
+			</isNotEmpty>
+			<isNotEmpty  property="endTime" prepend="AND">
+				<![CDATA[	LOGIN_TIME <= #endTime# ]]>
+			</isNotEmpty>
+			<isNotEmpty property="playerID" prepend="AND">
+					PLAYER_ID = #playerID#
+			</isNotEmpty>			
+			<isNotEmpty  property="ip" prepend="AND">
+					IP = #ip#
+			</isNotEmpty>
+		</dynamic>
+	</select>
+	
+	
+	
+	<select id="getLoginLogInfoList" parameterClass="java.util.Map" resultClass="java.util.HashMap">
+		SELECT a.PLAYER_ID AS playerID,a.LOGIN_NAME AS userName,
+    	(SELECT max(c.LOGIN_LOG_ID) FROM t_login_log c WHERE c.PLAYER_ID=a.PLAYER_ID) AS LOGIN_LOG_ID_tem,
+		(SELECT c.LOGIN_TIME FROM t_login_log c WHERE c.LOGIN_LOG_ID = LOGIN_LOG_ID_tem) AS lastLoginDate,
+		(SELECT d.IP from t_login_log d WHERE d.LOGIN_LOG_ID = LOGIN_LOG_ID_tem) AS lastLoginIP,
+		(SELECT COUNT(IP) from t_login_log f WHERE f.PLAYER_ID = a.PLAYER_ID) AS loginAmount,
+		(SELECT COUNT(DISTINCT IP) from t_login_log e WHERE e.PLAYER_ID = a.PLAYER_ID) historyIPAmount
+		FROM T_PLAYER a
+		<dynamic prepend="WHERE">
+			<isNotEmpty property="keyword"  prepend="AND">
+				<![CDATA[ (a.LOGIN_NAME  like '%$keyword$%' OR a.NAME LIKE '%$keyword$%') ]]>
+			</isNotEmpty>
+		</dynamic>
+		<dynamic>
+			<isEqual property="orderFlag" compareValue="lastLoginDateASC">
+				ORDER BY lastLoginDate ASC 
+			</isEqual>
+			<isEqual property="orderFlag" compareValue="lastLoginDateDESC">
+				ORDER BY lastLoginDate DESC 
+			</isEqual>
+			<isEqual property="orderFlag" compareValue="loginAmountASC">
+				ORDER BY loginAmount ASC 
+			</isEqual>
+			<isEqual property="orderFlag" compareValue="loginAmountDESC">
+				ORDER BY loginAmount DESC 
+			</isEqual>
+		</dynamic>
+		LIMIT $beginNum$,$pageNum$
+	</select>
+	
+	<select id="getLoginLogInfoListCount" parameterClass="java.util.Map" resultClass="Integer">
+		SELECT count(PLAYER_ID) FROM T_PLAYER a
+		<dynamic prepend="WHERE">
+			<isNotEmpty property="keyword"  prepend="AND">
+				<![CDATA[ (a.LOGIN_NAME  like '%$keyword$%' OR a.NICK_NAME LIKE '%$keyword$%') ]]>
+			</isNotEmpty>
+		</dynamic>
+	</select>
+	
+	
+	<select id="getLoginLogList"  parameterClass="java.util.Map" resultClass="LoginLog">
+		SELECT LOGIN_LOG_ID AS loginLogID, PLAYER_ID AS playerID,IP AS ip, LOGIN_TIME AS loginTime  FROM T_LOGIN_LOG 
+		<dynamic prepend="WHERE">
+			<isNotEmpty  property="beginTime" prepend="AND">
+					LOGIN_TIME >= #beginTime#
+			</isNotEmpty>
+			<isNotEmpty  property="endTime" prepend="AND">
+				<![CDATA[	LOGIN_TIME <= #endTime# ]]>
+			</isNotEmpty>
+			<isNotEmpty property="playerID" prepend="AND">
+					PLAYER_ID = #playerID#
+			</isNotEmpty>			
+			<isNotEmpty  property="keyword" prepend="AND">
+					<![CDATA[ IP  like '%$keyword$%' ]]>
+			</isNotEmpty>
+		</dynamic>
+		<dynamic>
+			<isEqual property="orderFlag" compareValue="ASC">
+				ORDER BY LOGIN_TIME ASC 
+			</isEqual>
+			<isEqual property="orderFlag" compareValue="DESC">
+				ORDER BY LOGIN_TIME DESC 
+			</isEqual>
+		</dynamic>
+		LIMIT $beginNum$,$pageNum$
+	</select>
+	
+	<select id="getLoginLogListCount" parameterClass="java.util.Map" resultClass="Integer">
+		SELECT count(LOGIN_LOG_ID) FROM T_LOGIN_LOG
+		<dynamic prepend="WHERE">
+			<isNotEmpty  property="beginTime" prepend="AND">
+					LOGIN_TIME >= #beginTime#
+			</isNotEmpty>
+			<isNotEmpty  property="endTime" prepend="AND">
+				<![CDATA[	LOGIN_TIME <= #endTime# ]]>
+			</isNotEmpty>
+			<isNotEmpty property="playerID" prepend="AND">
+					PLAYER_ID = #playerID#
+			</isNotEmpty>			
+			<isNotEmpty  property="keyword" prepend="AND">
+					<![CDATA[ IP  like '%$keyword$%' ]]>
+			</isNotEmpty>
+		</dynamic>
+	</select>
+	
+	<!-- IP统计 -->
+	<select id="getIPStats" parameterClass="java.util.Map" resultClass="IPStats">
+		SELECT a.IP AS ip,MAX(a.LOGIN_TIME) AS loginTime,COUNT(a.IP) AS visitNum from t_login_log a GROUP BY a.IP HAVING 1=1 
+		<dynamic>
+			<isNotNull property="beginTime" >
+				<![CDATA[ AND MAX(a.LOGIN_TIME) >= #beginTime# ]]>
+			</isNotNull>
+			<isNotNull property="endTime" >
+				<![CDATA[ AND MAX(a.LOGIN_TIME) <= #endTime# ]]>
+			</isNotNull>
+			<isEqual property="orderFlag" compareValue="lastLoginDateASC">
+				ORDER BY loginTime ASC
+			</isEqual>
+			<isEqual property="orderFlag" compareValue="lastLoginDateDESC">
+				ORDER BY loginTime DESC
+			</isEqual>
+			<isEqual property="orderFlag" compareValue="visitNumASC">
+				ORDER BY visitNum ASC
+			</isEqual>
+			<isEqual property="orderFlag" compareValue="visitNumDESC">
+				ORDER BY visitNum DESC 
+			</isEqual>
+		</dynamic>
+		LIMIT $beginNum$,$pageNum$
+	</select>
+	
+	<!-- IP统计总数 -->
+	<select id="getIPStatsCount" parameterClass="java.util.Map" resultClass="Integer">
+		SELECT COUNT(*) from 
+	    (SELECT a.IP as IP FROM  t_login_log a GROUP BY a.IP HAVING 1=1 
+	    <dynamic>
+			<isNotNull property="beginTime" >
+				<![CDATA[ AND MAX(a.LOGIN_TIME) >= #beginTime# ]]>
+			</isNotNull>
+			<isNotNull property="endTime" >
+				<![CDATA[ AND MAX(a.LOGIN_TIME) <= #endTime# ]]>
+			</isNotNull>
+		</dynamic>
+		) b;
+	</select>
+	
+	<!-- 分时段统计总登录数,月 -->
+	<select id="getLoginLogCountByMonth" parameterClass="java.util.Map" resultClass="java.util.HashMap" remapResults="true">
+		SELECT COUNT(*) AS total,DAYOFMONTH(a.LOGIN_TIME) AS mon from t_login_log AS a
+		<dynamic prepend="WHERE">
+			<isNotNull  property="beginTime" prepend="AND">
+				<![CDATA[ a.LOGIN_TIME >= #beginTime# ]]>
+			</isNotNull>
+			<isNotNull  property="endTime" prepend="AND">
+				<![CDATA[ a.LOGIN_TIME <= #endTime# ]]>
+			</isNotNull>
+		</dynamic>
+		GROUP BY DAYOFMONTH(a.LOGIN_TIME) ORDER BY DAYOFMONTH(a.LOGIN_TIME);
+	</select>
+	
+	<!-- 分时段统计总登录数,天 -->
+	<select id="getLoginLogCountByDay" parameterClass="java.util.Map" resultClass="java.util.HashMap" remapResults="true">
+		SELECT COUNT(*) AS total,HOUR(a.LOGIN_TIME) AS h from t_login_log a
+		<dynamic prepend="WHERE">
+			<isNotNull  property="beginTime" prepend="AND">
+				<![CDATA[ a.LOGIN_TIME >= #beginTime# ]]>
+			</isNotNull>
+			<isNotNull  property="endTime" prepend="AND">
+				<![CDATA[ a.LOGIN_TIME <= #endTime# ]]>
+			</isNotNull>
+		</dynamic>
+		GROUP BY HOUR(a.LOGIN_TIME) ORDER BY HOUR(a.LOGIN_TIME);
+	</select>
+	
+
+	
+	<!-- 分时段统计总登录数,年 -->
+	<select id="getLoginLogCountByYear" parameterClass="java.util.Map" resultClass="java.util.HashMap" remapResults="true">
+		SELECT COUNT(*) AS total,MONTH(a.LOGIN_TIME) AS y from t_login_log a
+		<dynamic prepend="WHERE">
+			<isNotNull  property="beginTime" prepend="AND">
+				<![CDATA[ a.LOGIN_TIME >= #beginTime# ]]>
+			</isNotNull>
+			<isNotNull  property="endTime" prepend="AND">
+				<![CDATA[ a.LOGIN_TIME <= #endTime# ]]>
+			</isNotNull>
+		</dynamic>
+		GROUP BY MONTH(a.LOGIN_TIME) ORDER BY MONTH(a.LOGIN_TIME);
+	</select>
+	
+	
+	<delete id="deleteLoginLogOverdue" parameterClass="Date" >
+		<![CDATA[
+		DELETE FROM T_LOGIN_LOG WHERE LOGIN_TIME < #createTime# LIMIT 1000
+		]]>
+	</delete>
+	
+	<select id="getLastLoginLogByPlayerID"  parameterClass="Integer" resultClass="LoginLog">
+		select LOGIN_LOG_ID AS loginLogID, PLAYER_ID AS playerID,IP AS ip, LOGIN_TIME AS loginTime, QUIT_TIME AS quitTime  from t_login_log where PLAYER_ID = #playerID# order by LOGIN_LOG_ID desc limit 0,1
+	</select>
+	
+	<update id="updateQuitTimeOfLoginLog" parameterClass="LoginLog">
+		UPDATE t_login_log SET QUIT_TIME=#quitTime# WHERE LOGIN_LOG_ID=#loginLogID#
+	</update>
+	
+	
+</sqlMap>

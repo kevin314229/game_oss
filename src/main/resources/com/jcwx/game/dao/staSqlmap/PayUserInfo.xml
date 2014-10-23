@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="PayUserInfo">
+
+	<typeAlias alias="PayUserLastLoginInfo" type="com.jcwx.game.domain.PayUserLastLoginInfo" />
+	
+	<select id="queryPayUserLastLoginInfo" resultClass="PayUserLastLoginInfo" parameterClass="java.util.Map">
+	SELECT t1.game_id as gameId,t1.nick_name as nickName,t1.`level` as level,t1.login_name as loginName,t1.player_id as playerId,t1.player_base_id as playerBaseId,MAX(login_time) as lastLoginTime,t3.total_pay as totalPay,t3.currency as currency,t3.pt_area as ptArea from 
+sta_login_log t1,(SELECT pt_area,player_id,player_base_id,currency,SUM(money_num) total_pay from sta_pay_history t2 WHERE player_base_id GROUP BY t2.pt_area,t2.player_base_id) t3 
+WHERE 
+t1.player_id=t3.player_id AND t1.player_base_id=t3.player_base_id and t1.game_id=#gameId# and t1.area_id in ($areaIds$)
+GROUP BY t1.player_base_id,t1.area_id;
+	
+	</select>
+</sqlMap>	

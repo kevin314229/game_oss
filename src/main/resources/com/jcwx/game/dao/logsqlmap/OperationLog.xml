@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="OperationLog">
+	<typeAlias alias="OperationLog" type="com.jcwx.game.domain.OperationLog" />
+	<typeAlias alias="MoneyStatistics" type="com.jcwx.game.domain.MoneyStatistics" />
+	<typeAlias alias="MoneyLogStatistics" type="com.jcwx.game.domain.MoneyLogStatistics" />
+
+	<insert id="createOperationLog" parameterClass="OperationLog">
+		INSERT INTO `T_OPERATION_LOG_$tableNameSuffix$`(PLAYER_ID, OPERATION, OPERATION_DETAIL, TARGET, TYPE, NUMBER, REMARK, CREATE_TIME) VALUES(#playerId#, #operation#, #operationDetail#, #target#, #type#, #number#, #remark#, #createTime#)
+		<selectKey resultClass="Integer" keyProperty="operationLogId" >
+			SELECT @@IDENTITY AS ID
+		</selectKey> 
+	</insert>
+
+	<insert id="createTable" parameterClass="String" >
+		create table if not exists `T_OPERATION_LOG_$tableNameSuffix$` like T_OPERATION_LOG
+	</insert>
+	
+	<update id="updateOperationLog" parameterClass="OperationLog">
+		UPDATE T_OPERATION_LOG SET OPERATION_LOG_ID=#operationLogId#, PLAYER_ID=#playerId#, OPERATION=#operation#, OPERATION_DETAIL=#operationDetail#, TARGET=#target#, TYPE=#type#, NUMBER=#number#, REMARK=#remark#, CREATE_TIME=#createTime# WHERE OPERATION_LOG_ID=#operationLogId#
+	</update>
+
+	<delete id="deleteOperationLogByID" parameterClass="String">
+		DELETE FROM T_OPERATION_LOG WHERE OPERATION_LOG_ID=#operationLogId#
+	</delete>
+	
+	<delete id="deleteOperationLogOverdue" parameterClass="Date" >
+		<![CDATA[
+		DELETE FROM T_OPERATION_LOG WHERE CREATE_TIME < #createTime# LIMIT 1000
+		]]>
+	</delete>
+
+	<select id="getOperationLogByID" parameterClass="String" resultClass="OperationLog">
+		SELECT OPERATION_LOG_ID AS operationLogId, PLAYER_ID AS playerId, OPERATION AS operation, OPERATION_DETAIL AS operationDetail, TARGET AS target, TYPE AS type, NUMBER AS number, REMARK AS remark, CREATE_TIME AS createTime FROM T_OPERATION_LOG WHERE OPERATION_LOG_ID=#operationLogId#
+	</select>
+
+	<select id="getOperationLogList" resultClass="OperationLog">
+		SELECT OPERATION_LOG_ID AS operationLogId, PLAYER_ID AS playerId, OPERATION AS operation, OPERATION_DETAIL AS operationDetail, TARGET AS target, TYPE AS type, NUMBER AS number, REMARK AS remark, CREATE_TIME AS createTime FROM T_OPERATION_LOG
+	</select>
+	
+	
+	
+	<select id="isExistTable" parameterClass="String" resultClass="String" remapResults="true">
+		show tables like 'T_OPERATION_LOG_$tableName$'
+	</select>
+	
+	<select id="getOperationLogNumByPlayerIDAndOperation" parameterClass="java.util.Map" resultClass="java.lang.Integer">
+		SELECT COUNT(*) FROM `T_OPERATION_LOG_$tableName$` WHERE PLAYER_ID=#playerID# 
+		<dynamic>
+			<isNotNull property="operation" prepend="AND">
+				OPERATION=#operation#
+			</isNotNull>
+			<isNotNull property="beginTime"  prepend="AND">
+				<![CDATA[ CREATE_TIME >= #beginTime# ]]>
+			</isNotNull>
+			<isNotNull property="endTime"  prepend="AND">
+				<![CDATA[ CREATE_TIME <= #endTime# ]]>
+			</isNotNull>
+		</dynamic>
+	</select>
+	
+	<select id="getOperationLogListByPlayerIDAndOperation" parameterClass="java.util.Map" resultClass="OperationLog">
+		SELECT OPERATION_LOG_ID AS operationLogId, PLAYER_ID AS playerId, OPERATION AS operation, OPERATION_DETAIL AS operationDetail, TARGET AS target, TYPE AS type, NUMBER AS number, REMARK AS remark, CREATE_TIME AS createTime		  
+		FROM `T_OPERATION_LOG_$tableName$` WHERE PLAYER_ID=#playerID# 
+		<dynamic>
+			<isNotNull property="operation" prepend="AND">
+				OPERATION=#operation#
+			</isNotNull>
+			<isNotNull property="beginTime"  prepend="AND">
+				<![CDATA[ CREATE_TIME >= #beginTime# ]]>
+			</isNotNull>
+			<isNotNull property="endTime"  prepend="AND">
+				<![CDATA[ CREATE_TIME <= #endTime# ]]>
+			</isNotNull>
+		</dynamic>
+		ORDER BY CREATE_TIME DESC LIMIT #beginNum#,#pageNum#
+	</select>
+	
+</sqlMap>

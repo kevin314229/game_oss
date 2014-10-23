@@ -1,0 +1,202 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="OperationStatistic">
+
+	<typeAlias alias="OperationStatistic" type="com.jcwx.game.domain.OperationStatistic" />
+
+	<insert id="createOperationStatistic" parameterClass="OperationStatistic">
+		INSERT INTO RE_OPERATION_STATISTIC(operation_id, operation_date, game_id, area_id, item_id, item_name, flow_type, number, operation) VALUES(#operationId#, #operationDate#, #gameId#, #areaId#, #itemId#, #itemName#, #flowType#, #number#, #operation#)
+	</insert>
+
+	<update id="updateOperationStatistic" parameterClass="OperationStatistic">
+		UPDATE RE_OPERATION_STATISTIC SET operation_id=#operationId#, operation_date=#operationDate#, game_id=#gameId#, area_id=#areaId#, item_id=#itemId#, item_name=#itemName#, flow_type=#flowType#, number=#number#, operation=#operation# WHERE operation_id=#operationId#
+	</update>
+
+	<delete id="deleteOperationStatisticByID" parameterClass="String">
+		DELETE FROM RE_OPERATION_STATISTIC WHERE operation_id=#operationId#
+	</delete>
+
+	<select id="getOperationStatisticByID" parameterClass="String" resultClass="OperationStatistic">
+		SELECT operation_id AS operationId, operation_date AS operationDate, game_id AS gameId, area_id AS areaId, item_id AS itemId, item_name AS itemName, flow_type AS flowType, number AS number, operation AS operation FROM RE_OPERATION_STATISTIC WHERE operation_id=#operationId#
+	</select>
+
+	<select id="getOperationStatisticList" resultClass="OperationStatistic">
+		SELECT operation_id AS operationId, operation_date AS operationDate, game_id AS gameId, area_id AS areaId, item_id AS itemId, item_name AS itemName, flow_type AS flowType, number AS number, operation AS operation 
+		FROM RE_OPERATION_STATISTIC
+	</select>
+
+ <select id="getOperationStaSum" parameterClass="java.util.Map" resultClass="OperationStatistic">
+		
+		SELECT item_id AS itemId, item_name AS itemName,
+		sum(case when flow_type=1 then number else 0 end)  produceNum,
+	    sum(case when flow_type=2 then number else 0 end)  consumeNum 
+    	from report_operation_statistic  
+		where  <![CDATA[ operation_date>=#beginDate#  and  operation_date<=#endDate#]]> 
+		<dynamic>
+			 <isGreaterThan prepend="and" property="gameId" compareValue="0">
+                 game_id = #gameId#
+            </isGreaterThan>
+	  	 <isNotNull property="areaId" prepend="AND">
+         <isNotEqual property="areaId" compareValue="null">
+			  	area_id IN ($areaId$)
+		 </isNotEqual>
+          </isNotNull>
+		 <isNotNull property="itemIds" prepend="AND">
+			 item_id   in ($itemIds$)
+		</isNotNull>	
+		 <isNull property="itemIds" prepend="AND">
+		 	<isEqual  property="gameId" compareValue="1" >
+		 	 item_id   in (2990001,2990002,2990003)
+		 	</isEqual>
+			<isEqual  property="gameId" compareValue="2" >
+		 	 item_id   in (2990001,2990002,2990003,2990005)
+		 	</isEqual>
+		</isNull>
+		</dynamic>
+	group by itemId,item_name
+	order by item_id desc
+	</select>
+	<select id="getOperationDaySum" parameterClass="java.util.Map" resultClass="OperationStatistic">
+		
+		SELECT item_id AS itemId, item_name AS itemName,
+		sum(case when flow_type=1 then number else 0 end)  produceNum,
+	    sum(case when flow_type=2 then number else 0 end)  consumeNum,
+	    substring(operation_date,1,10) as operationDate
+    	from report_operation_statistic  
+		where  <![CDATA[ operation_date>=#beginDate#  and  operation_date<=#endDate#]]> 
+		<dynamic>
+			 <isGreaterThan prepend="and" property="gameId" compareValue="0">
+                 game_id = #gameId#
+            </isGreaterThan>
+	  	 <isNotNull property="areaId" prepend="AND">
+         <isNotEqual property="areaId" compareValue="null">
+			  	area_id IN ($areaId$)
+		 </isNotEqual>
+          </isNotNull>
+		 <isNotNull property="itemIds" prepend="AND">
+			 item_id   in ($itemIds$)
+		</isNotNull>	
+		 <isNull property="itemIds" prepend="AND">
+		 	<isEqual  property="gameId" compareValue="1" >
+		 	 item_id   in (2990001,2990002,2990003)
+		 	</isEqual>
+			<isEqual  property="gameId" compareValue="2" >
+		 	 item_id   in (2990001,2990002,2990003,2990005)
+		 	</isEqual>
+		</isNull>
+		</dynamic>
+	group by itemId,item_name,substring(operation_date,1,10)
+	order by operationDate desc, item_id desc
+	</select>
+	
+	<select id="getOperationSumByNickName" parameterClass="java.util.Map" resultClass="OperationStatistic">
+	
+	 select item_id AS itemId, item_name AS itemName,
+		sum(case when flow_type=1 then number else 0 end)  produceNum,
+	    sum(case when flow_type=2 then number else 0 end)  consumeNum  from sta_operation_log  
+ 	where   1=1
+		<dynamic>
+			 <isGreaterThan prepend="and" property="gameId" compareValue="0">
+                 game_id = #gameId#
+            </isGreaterThan>
+	  	 <isNotNull property="areaId" prepend="AND">
+         <isNotEqual property="areaId" compareValue="null">
+			  	area_id IN ($areaId$)
+		 </isNotEqual>
+          </isNotNull>
+		 <isNotNull property="itemIds" prepend="AND">
+			 item_id   in ($itemIds$)
+		</isNotNull>	
+		 <isNull property="itemIds" prepend="AND">
+		 	<isEqual  property="gameId" compareValue="1" >
+		 	 item_id   in (2990001,2990002,2990003)
+		 	</isEqual>
+			<isEqual  property="gameId" compareValue="2" >
+		 	 item_id   in (2990001,2990002,2990003,2990005)
+		 	</isEqual>
+			</isNull>	
+		</dynamic>
+		 <![CDATA[ and	nick_name like '%$nickName$%' and
+		         create_time>=#beginDate#  and  create_time<=#endDate# ]]> 
+				 group by itemId,item_name
+				 order by item_id desc
+				 
+	</select>
+	
+	<select id="getOperationDaySumByNickName" parameterClass="java.util.Map" resultClass="OperationStatistic">
+	
+	 select item_id AS itemId, item_name AS itemName,substring(create_time,1,10) as operationDate,
+		sum(case when flow_type=1 then number else 0 end)  produceNum,
+	    sum(case when flow_type=2 then number else 0 end)  consumeNum  from sta_operation_log  
+ 	where   1=1
+		<dynamic>
+			 <isGreaterThan prepend="and" property="gameId" compareValue="0">
+                 game_id = #gameId#
+            </isGreaterThan>
+	  	 <isNotNull property="areaId" prepend="AND">
+         <isNotEqual property="areaId" compareValue="null">
+			  	area_id IN ($areaId$)
+		 </isNotEqual>
+          </isNotNull>
+		 <isNotNull property="itemIds" prepend="AND">
+			 item_id   in ($itemIds$)
+		</isNotNull>	
+		 <isNull property="itemIds" prepend="AND">
+		 	<isEqual  property="gameId" compareValue="1" >
+		 	 item_id   in (2990001,2990002,2990003)
+		 	</isEqual>
+			<isEqual  property="gameId" compareValue="2" >
+		 	 item_id   in (2990001,2990002,2990003,2990005)
+		 	</isEqual>
+			</isNull>	
+		</dynamic>
+		 <![CDATA[ and	nick_name = #nickName# and
+		         create_time>=#beginDate#  and  create_time<=#endDate# ]]> 
+				 group by itemId,item_name,substring(create_time,1,10)
+				 order by operationDate desc,item_id desc
+	</select>
+	
+	<select id="getOperationStaList" parameterClass="java.util.Map" resultClass="OperationStatistic">
+		
+		SELECT operation,
+		sum(number)  produceNum  
+    	from report_operation_statistic  
+		where  flow_type=#flowType#
+		<dynamic>
+			 <isGreaterThan prepend="and" property="gameId" compareValue="0">
+                 game_id = #gameId#
+            </isGreaterThan>
+	  	 <isNotNull property="areaId" prepend="AND">
+         <isNotEqual property="areaId" compareValue="null">
+			  	area_id IN ($areaId$)
+		 </isNotEqual>
+          </isNotNull>
+           <![CDATA[ and  item_id= #itemId#  and
+           operation_date>=#beginDate#  and  operation_date<=#endDate#]]> 
+		</dynamic>
+	group by operation
+	</select>
+	
+	
+	
+	<select id="getOperationListByNickName" parameterClass="java.util.Map" resultClass="OperationStatistic">
+	
+	 select  operation,
+			sum(number)  produceNum
+	    	 from sta_operation_log  
+ 	where  flow_type=#flowType#
+		<dynamic>
+			 <isGreaterThan prepend="and" property="gameId" compareValue="0">
+                 game_id = #gameId#
+            </isGreaterThan>
+	  	 <isNotNull property="areaId" prepend="AND">
+         <isNotEqual property="areaId" compareValue="null">
+			  	area_id IN ($areaId$)
+		 </isNotEqual>
+          </isNotNull>
+		</dynamic>
+		 <![CDATA[ and nick_name like '%$nickName$%' and  item_id= #itemId#  and
+		      create_time>=#beginDate#  and  create_time<=#endDate#]]> 
+	    group by operation
+	</select>
+</sqlMap>

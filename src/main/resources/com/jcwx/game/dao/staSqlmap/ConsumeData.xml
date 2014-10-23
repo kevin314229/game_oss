@@ -1,0 +1,334 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="ConsumeData">
+
+	<typeAlias alias="ConsumeData" type="com.jcwx.game.domain.ConsumeData" />
+	<typeAlias alias="FirstConsume" type="com.jcwx.game.domain.ConsumeFirstData" />
+	<resultMap id="levelMap" class="java.util.HashMap">
+		<result property="level" column="level" />
+		<result property="levelNum" column="levelNum" />
+	</resultMap>
+	<resultMap id="operationMap" class="java.util.HashMap">
+		<result property="operation" column="operation" />
+		<result property="operationNum" column="operationNum" />
+	</resultMap>
+	<resultMap id="fromFirstDaysMap" class="java.util.HashMap">
+		<result property="fromFirstDays" column="fromFirstDays" />
+		<result property="fromFirstDaysNum" column="fromFirstDaysNum" />
+	</resultMap>
+	<resultMap id="goldMap" class="java.util.HashMap">
+		<result property="operation" column="operation" javaType="java.lang.String"/>
+		<result property="number" column="number"  javaType="java.lang.Double"/>
+	</resultMap>
+	<select id="getPortConsumeDataByID" parameterClass="String" resultClass="ConsumeData">
+		SELECT consume_id AS consumeId, consume_date AS consumeDate, game_id AS gameId, area_id AS areaId, login_name AS loginName, role_name AS roleName, player_base_id AS playerBaseId, career AS career, sex AS sex, consume_type AS consumeType, consume_num AS consumeNum, money_num AS moneyNum, complete_time AS completeTime FROM REPORT_CONSUME_DATA WHERE consume_id=#consumeId#
+	</select>
+
+	<select id="getConsumeDataList" parameterClass="java.util.Map" resultClass="ConsumeData">
+		SELECT consume_id AS consumeId, consume_date AS consumeDate, game_id AS gameId, area_id AS areaId,pt_id as ptId,
+		 login_name AS loginName, nick_name AS nickName, player_base_id AS playerBaseId, career AS career, sex AS sex, 
+		 operation AS operation, operation_detail AS operationDetail, number AS number, money_num AS moneyNum, create_time AS createTime 
+		 FROM REPORT_CONSUME_DATA t
+		 where  flow_type=2 <![CDATA[and consume_date>=#beginDate#  ]]>
+		<dynamic>
+			<isNotNull property="endDate" prepend="AND">
+				<![CDATA[ consume_date<=#endDate# ]]>
+			</isNotNull>
+			 <isGreaterThan prepend="and" property="gameId" compareValue="0">
+                     game_id = #gameId#
+            </isGreaterThan>
+            	 
+			 <isNotNull prepend="and" property="areaId" >
+                <isNotEqual property="areaId" compareValue="null">
+			  	area_id IN ($areaId$)
+			   </isNotEqual>
+            </isNotNull>
+			 <isNotNull property="loginName" prepend="AND">
+				<![CDATA[ login_name like '%$loginName$%' ]]>
+			</isNotNull>
+			<isNotNull property="nickName" prepend="AND">
+				<![CDATA[ nick_name like '%$nickName$%' ]]>
+			</isNotNull>
+			
+			<isNotNull property="sourceType"  prepend="and">
+				<!--  <isEqual property="sourceType" compareValue="0">
+				EXISTS (select * from (select DISTINCT p.area_id,p.game_id,p.login_name,p.player_base_id  from sta_pay_history p ) t2
+				where  t.game_id=t2.game_id and t.area_id=t2.area_id and t.login_name=t2.login_name and t.player_base_id=t2.player_base_id)
+				 
+				 </isEqual>
+				  <isEqual property="sourceType" compareValue="1">
+				 not EXISTS (select * from (select DISTINCT p.area_id,p.game_id,p.login_name,p.player_base_id  from sta_pay_history p ) t2
+				where  t.game_id=t2.game_id and t.area_id=t2.area_id and t.login_name=t2.login_name and t.player_base_id=t2.player_base_id)
+				  </isEqual> -->
+				  source_type=#sourceType#
+			</isNotNull>
+		</dynamic>
+		 <isGreaterThan prepend="" property="onePageNum" compareValue="0">
+                    	LIMIT #beginNum#,#onePageNum#
+         </isGreaterThan>
+	</select>
+	
+	<select id="getConsumeDataCount" parameterClass="java.util.Map" resultClass="java.lang.Integer">
+		SELECT  count(*) from REPORT_CONSUME_DATA t
+			 where   flow_type=2	<![CDATA[ and consume_date>=#beginDate#  ]]>
+		<dynamic>
+			<isNotNull property="endDate" prepend="AND">
+				<![CDATA[ consume_date<=#endDate# ]]>
+			</isNotNull>
+	 
+			 <isGreaterThan prepend="and" property="gameId" compareValue="0">
+                     game_id = #gameId#
+            </isGreaterThan>
+             
+			  <isNotNull prepend="and" property="areaId" >
+                <isNotEqual property="areaId" compareValue="null">
+			  	area_id IN ($areaId$)
+			   </isNotEqual>
+            </isNotNull>
+			 <isNotNull property="loginName" prepend="AND">
+				<![CDATA[ login_name like '%$loginName$%' ]]>
+			</isNotNull>
+			<isNotNull property="nickName" prepend="AND">
+				<![CDATA[ nick_name like '%$nickName$%' ]]>
+			</isNotNull>
+			<isNotNull property="sourceType"  prepend="and">
+				source_type=#sourceType#
+				<!--  <isEqual property="sourceType" compareValue="0">
+				EXISTS (select * from (select DISTINCT p.area_id,p.game_id,p.login_name,p.player_base_id  from sta_pay_history p ) t2
+				where  t.game_id=t2.game_id and t.area_id=t2.area_id and t.login_name=t2.login_name and t.player_base_id=t2.player_base_id)
+				 
+				 </isEqual>
+				  <isEqual property="sourceType" compareValue="1">
+				 not EXISTS (select * from (select DISTINCT p.area_id,p.game_id,p.login_name,p.player_base_id  from sta_pay_history p ) t2
+				where  t.game_id=t2.game_id and t.area_id=t2.area_id and t.login_name=t2.login_name and t.player_base_id=t2.player_base_id)
+				  </isEqual> -->
+			</isNotNull>
+			
+		</dynamic>
+	</select>
+
+	<select id="getConsumeFirstList" parameterClass="java.util.Map" resultClass="FirstConsume">
+		SELECT consume_id AS consumeId, consume_date AS consumeDate, game_id AS gameId, area_id AS areaId, login_name AS loginName,pt_id as ptId,
+		 nick_Name AS nickName, player_base_id AS playerBaseId, level AS level, operation AS operation, operation_detail AS operationDetail,
+		   money_num AS moneyNum,
+		 first_login_time AS firstLoginTime, from_first_days AS fromFirstDays, props_name AS propsName FROM REPORT_FIRST_CONSUME
+		 where   flow_type=2 <![CDATA[and consume_date>=#beginDate#  ]]>
+		<dynamic>
+			<isNotNull property="endDate" prepend="AND">
+				<![CDATA[ consume_date<=#endDate# ]]>
+			</isNotNull>
+			 <isGreaterThan prepend="and" property="gameId" compareValue="0">
+                     game_id = #gameId#
+            </isGreaterThan>
+			<isNotNull prepend="and" property="areaId" >
+                <isNotEqual property="areaId" compareValue="null">
+			  	area_id IN ($areaId$)
+			   </isNotEqual>
+            </isNotNull>
+            <isNotNull property="loginName" prepend="AND">
+				<![CDATA[ login_name like '%$loginName$%' ]]>
+			</isNotNull>
+			<isNotNull property="nickName" prepend="AND">
+				<![CDATA[ nick_name like '%$nickName$%' ]]>
+			</isNotNull>
+			  <isGreaterThan prepend="" property="onePageNum" compareValue="0">
+                    	LIMIT #beginNum#,#onePageNum#
+         </isGreaterThan>
+		</dynamic>
+	</select>
+	
+	<select id="getConsumeFirstCount" parameterClass="java.util.Map" resultClass="java.lang.Integer">
+		SELECT  count(*) from REPORT_FIRST_CONSUME
+			 where    flow_type=2 	<![CDATA[ and  consume_date>=#beginDate#  ]]>
+		<dynamic>
+			<isNotNull property="endDate" prepend="AND">
+				<![CDATA[ consume_date<=#endDate# ]]>
+			</isNotNull>
+			 
+			 <isGreaterThan prepend="and" property="gameId" compareValue="0">
+                     game_id = #gameId#
+            </isGreaterThan>
+			<isNotNull prepend="and" property="areaId" >
+                <isNotEqual property="areaId" compareValue="null">
+			  	area_id IN ($areaId$)
+			   </isNotEqual>
+            </isNotNull>
+			 <isNotNull property="loginName" prepend="AND">
+				<![CDATA[ login_name like '%$loginName$%' ]]>
+			</isNotNull>
+			<isNotNull property="nickName" prepend="AND">
+				<![CDATA[ nick_name like '%$nickName$%' ]]>
+			</isNotNull>
+		</dynamic>
+	</select>
+	
+	<select id="sumLevelCount" parameterClass="java.util.Map" resultMap="levelMap">
+		SELECT   count(level) as levelNum,level from REPORT_FIRST_CONSUME
+			 where    flow_type=2	<![CDATA[and consume_date>=#beginDate#  ]]>
+		<dynamic>
+			<isNotNull property="endDate" prepend="AND">
+				<![CDATA[ consume_date<=#endDate# ]]>
+			</isNotNull>
+			 <isGreaterThan prepend="and" property="gameId" compareValue="0">
+                     game_id = #gameId#
+            </isGreaterThan>
+            	 
+			<isNotNull prepend="and" property="areaId" >
+                <isNotEqual property="areaId" compareValue="null">
+			  	area_id IN ($areaId$)
+			   </isNotEqual>
+            </isNotNull>
+			 <isNotNull property="loginName" prepend="AND">
+				<![CDATA[ login_name like '%$loginName$%' ]]>
+			</isNotNull>
+			<isNotNull property="nickName" prepend="AND">
+				<![CDATA[ nick_name like '%$nickName$%' ]]>
+			</isNotNull>
+		</dynamic>
+		group by `level`
+	</select>
+	<select id="sumOperationCount" parameterClass="java.util.Map" resultMap="operationMap">
+		SELECT   count(operation) as operationNum,operation from REPORT_FIRST_CONSUME
+			 where   flow_type=2	<![CDATA[and consume_date>=#beginDate#  ]]>
+		<dynamic>
+			<isNotNull property="endDate" prepend="AND">
+				<![CDATA[ consume_date<=#endDate# ]]>
+			</isNotNull>
+			 <isGreaterThan prepend="and" property="gameId" compareValue="0">
+                     game_id = #gameId#
+            </isGreaterThan>
+             
+			<isNotNull prepend="and" property="areaId" >
+                <isNotEqual property="areaId" compareValue="null">
+			  	area_id IN ($areaId$)
+			   </isNotEqual>
+            </isNotNull>
+			 <isNotNull property="loginName" prepend="AND">
+				<![CDATA[ login_name like '%$loginName$%' ]]>
+			</isNotNull>
+			<isNotNull property="nickName" prepend="AND">
+				<![CDATA[ nick_name like '%$nickName$%' ]]>
+			</isNotNull>
+		</dynamic>
+		group by operation
+	</select>
+	<select id="sumFromFirstDaysCount" parameterClass="java.util.Map" resultMap="fromFirstDaysMap">
+		SELECT   count(from_first_days) as fromFirstDaysNum,from_first_days as fromFirstDays from REPORT_FIRST_CONSUME
+			 where   flow_type=2	<![CDATA[and consume_date>=#beginDate#  ]]>
+		<dynamic>
+			<isNotNull property="endDate" prepend="AND">
+				<![CDATA[ consume_date<=#endDate# ]]>
+			</isNotNull>
+			 <isGreaterThan prepend="and" property="gameId" compareValue="0">
+                     game_id = #gameId#
+            </isGreaterThan>
+            	 
+			<isNotNull prepend="and" property="areaId" >
+                <isNotEqual property="areaId" compareValue="null">
+			  	area_id IN ($areaId$)
+			   </isNotEqual>
+            </isNotNull>
+			 <isNotNull property="loginName" prepend="AND">
+				<![CDATA[ login_name like '%$loginName$%' ]]>
+			</isNotNull>
+			<isNotNull property="nickName" prepend="AND">
+				<![CDATA[ nick_name like '%$nickName$%' ]]>
+			</isNotNull>
+		</dynamic>
+		group by from_first_days
+	</select>
+	
+	<select id="sumAreaConsumeList" parameterClass="java.util.Map" resultClass="ConsumeData">
+		SELECT  game_id AS gameId, area_id AS areaId,pt_id as ptId,
+		  sum(number) AS number, sum(money_num) AS moneyNum ,count(distinct nick_name) as consumeNum
+		 FROM REPORT_CONSUME_DATA t
+		 where  flow_type=2 <![CDATA[and consume_date>=#beginDate#  ]]>
+		<dynamic>
+			<isNotNull property="endDate" prepend="AND">
+				<![CDATA[ consume_date<=#endDate# ]]>
+			</isNotNull>
+			 
+			 <isGreaterThan prepend="and" property="gameId" compareValue="0">
+                     game_id = #gameId#
+            </isGreaterThan>
+			 <isNotNull prepend="and" property="areaId" >
+                <isNotEqual property="areaId" compareValue="null">
+			  	area_id IN ($areaId$)
+			   </isNotEqual>
+            </isNotNull>
+            <isNotNull property="loginName" prepend="AND">
+				<![CDATA[ login_name like '%$loginName$%' ]]>
+			</isNotNull>
+			<isNotNull property="nickName" prepend="AND">
+				<![CDATA[ nick_name like '%$nickName$%' ]]>
+			</isNotNull>
+			<isNotNull property="sourceType"  prepend="and">
+				<!--  <isEqual property="sourceType" compareValue="0">
+				EXISTS (select * from (select DISTINCT p.area_id,p.game_id,p.login_name,p.player_base_id  from sta_pay_history p ) t2
+				where  t.game_id=t2.game_id and t.area_id=t2.area_id and t.login_name=t2.login_name and t.player_base_id=t2.player_base_id)
+				 
+				 </isEqual>
+				  <isEqual property="sourceType" compareValue="1">
+				 not EXISTS (select * from (select DISTINCT p.area_id,p.game_id,p.login_name,p.player_base_id  from sta_pay_history p ) t2
+				where  t.game_id=t2.game_id and t.area_id=t2.area_id and t.login_name=t2.login_name and t.player_base_id=t2.player_base_id)
+				  </isEqual> -->
+				  source_type=#sourceType#
+			</isNotNull>
+		</dynamic>
+		group by  game_id,area_id 
+	</select>
+	
+	<select id="sumAreaGameConsumeList" parameterClass="java.util.Map" resultClass="java.util.HashMap">
+		select  date_format(s.create_time ,'%Y-%c-%d') as createTime , SUM(number) as sum, count(nick_name) as NUM ,
+		count(distinct game_id,area_id,nick_name) as NUM2,
+		SUM(number)/count(nick_name) as ARPU from report_consume_data s where s.flow_type=2  
+		<![CDATA[and create_time>=#beginDate#  ]]>
+		<isNotNull property="endDate" prepend="AND">
+			<![CDATA[ create_time<=#endDate# ]]>
+		</isNotNull>
+		<isNotNull prepend="and" property="areaId" >
+            <isNotEqual property="areaId" compareValue="null">
+			  area_id IN ($areaId$)
+			</isNotEqual>
+        </isNotNull>
+		<isGreaterThan prepend="and" property="gameId" compareValue="0">
+              game_id = #gameId#
+        </isGreaterThan>
+        	<isNotNull property="sourceType"  prepend="and">
+				  source_type=#sourceType#
+			</isNotNull>
+		 GROUP BY date_format(s.create_time ,'%Y-%c-%d') 
+	</select>
+	
+	
+	<select id="queryCycConsumeGoldList" parameterClass="java.util.Map" resultClass="ConsumeData">
+		 SELECT  t.operation,sum(t.number) as consumeNum from report_consume_data  t where t.flow_type=2
+		  and EXISTS (select  1 from (select b.area_id,b.game_id,b.login_name   from sta_player b 
+		where b.game_id=#gameId# 
+		<![CDATA[ and  b.first_login_time>=#beginDate# and b.first_login_time<=#endDate#]]> ) b 
+		where   b.game_id=t.game_id and b.area_id=t.area_id and b.login_name=t.login_name)
+ 		<![CDATA[and t.create_time>=#cycBeginDate# and  t.create_time<=#cycEndDate# ]]> 
+ 		and t.game_id=#gameId#
+ 		 <isNotNull prepend="and" property="areaId" >
+                <isNotEqual property="areaId" compareValue="null">
+			  	t.area_id IN ($areaId$)
+			   </isNotEqual>
+            </isNotNull>
+		group by t.operation
+	</select>
+	
+	<select id="queryCycConsumeGoldSum" parameterClass="java.util.Map" resultClass="ConsumeData">
+		 SELECT  sum(t.number) as consumeNum from report_consume_data  t where t.flow_type=2
+		  and EXISTS (select  1 from (select b.area_id,b.game_id,b.login_name   from sta_player b 
+		where b.game_id=#gameId# 
+		<![CDATA[ and  b.first_login_time>=#beginDate# and b.first_login_time<=#endDate#]]> ) b 
+		where   b.game_id=t.game_id and b.area_id=t.area_id and b.login_name=t.login_name)
+ 		<![CDATA[and t.create_time>=#cycBeginDate# and  t.create_time<=#cycEndDate# ]]> 
+ 		and t.game_id=#gameId#
+ 		 <isNotNull prepend="and" property="areaId" >
+                <isNotEqual property="areaId" compareValue="null">
+			  	t.area_id IN ($areaId$)
+			   </isNotEqual>
+            </isNotNull>
+	</select>
+</sqlMap>

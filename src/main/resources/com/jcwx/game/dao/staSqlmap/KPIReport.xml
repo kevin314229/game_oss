@@ -1,0 +1,211 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="KPIReport">
+	<typeAlias alias="KPIDayReport" type="com.jcwx.game.domain.KPIDayReport" />
+ 
+	<select id="getKPIDayReport" parameterClass="java.util.Map" resultClass="KPIDayReport">
+		SELECT kpi_id as kpiId, kpi_date as kpiDate, game_id as gameId , area_id as areaId,dau,ipau, 
+		new_login_num as newLoginNum, active_user_num as activeUserNum,new_role_num as newRoleNum, 
+		all_new_login_num as allNewLoginNum,next_reg_login_rate as nextRegLoginRate,
+		next_login_rate as nextLoginRate, avg_online_time as avgOnlineTime, hpc, ca,  
+		all_money as allMoney, android_money as androidMoney,
+		ios_money as iosMoney,consume_money as consumeMoney, round((all_money -consume_money),2) as remainMoney, 
+		consume_arpu as consumeARPU, pay_arpu as payARPU ,all_consume_num as allConsumeNum,
+		new_pay_num as newPayNum,all_pay_num as allPayNum, buy_props_num as buyPropsNum,buy_people_num as buyPeopleNum,
+		registe_num as registeNum
+		from report_kpi_day
+		where  	<![CDATA[kpi_date>=#beginDate#  ]]>
+		<dynamic>
+			<isNotNull property="endDate" prepend="AND">
+				<![CDATA[ kpi_date<=#endDate# ]]>
+			</isNotNull>
+		
+			 <isGreaterThan prepend="and" property="gameId" compareValue="0">
+                     game_id = #gameId#
+            </isGreaterThan>
+         
+				<!--    <isNotNull property="#selectArray#" prepend="AND">
+           area_id IN
+         	  <iterate   open="(" close=")" conjunction=",">
+        	 	 #selectArray[]#
+          	</iterate>
+           </isNotNull> -->
+	  <isNotNull property="areaId" prepend="AND">
+         <isNotEqual property="areaId" compareValue="null">
+			  	area_id IN ($areaId$)
+			  </isNotEqual>
+          </isNotNull>
+		</dynamic>
+		group by game_id,area_id,kpi_date
+		order by kpi_date
+		LIMIT #beginNum#,#onePageNum#
+	</select>
+	
+	<select id="getKPIDayReportCount" parameterClass="java.util.Map" resultClass="java.lang.Integer">
+	 select count(1) from (	SELECT  1
+		from report_kpi_day 
+		where  	<![CDATA[kpi_date>=#beginDate#  ]]>
+		<dynamic>
+			<isNotNull property="endDate" prepend="AND">
+				<![CDATA[ kpi_date<=#endDate# ]]>
+			</isNotNull>
+			 <isGreaterThan prepend="and" property="gameId" compareValue="0">
+                     game_id = #gameId#
+            </isGreaterThan>
+			  <isNotNull property="areaId" prepend="AND">
+			  <isNotEqual property="areaId" compareValue="null">
+			  	area_id IN ($areaId$)
+			  </isNotEqual>
+			  </isNotNull> 
+			 
+		</dynamic>
+		group by game_id,area_id,kpi_date) t
+	</select>
+	<select id="sumKPIDayData" parameterClass="java.util.Map" resultClass="KPIDayReport">
+		SELECT kpi_date as kpiDate ,sum(dau) as dau , sum(ipau) as ipau, 
+		sum(new_login_num)  as newLoginNum, sum(active_user_num)  as activeUserNum,sum(new_role_num)  as newRoleNum,
+		sum(all_new_login_num)  as allNewLoginNum,
+		round(avg(next_login_rate),2) as nextLoginRate, sum(avg_online_time*all_role_num)/sum(all_role_num)   as avgOnlineTime,sum(hpc) as hpc,
+		sum(ca) as ca, sum(all_money)   as allMoney,
+		sum(android_money)   as androidMoney,sum(all_consume_num)  as allConsumeNum,
+		sum(ios_money) as iosMoney,sum(consume_money)  as consumeMoney, round(sum(all_money -consume_money),2)  as remainMoney, 
+		round(sum(consume_money)/sum(all_consume_num),2)  as consumeARPU,round(sum(all_money)/sum(all_pay_num),2)   as payARPU ,
+		sum(new_pay_num)  as newPayNum,sum(all_pay_num)  as allPayNum, sum(buy_props_num)  as buyPropsNum,
+		sum(buy_people_num) as buyPeopleNum,sum(registe_num) as registeNum
+		from report_kpi_day
+		where  	<![CDATA[kpi_date>=#beginDate#  ]]>
+		<dynamic>
+			<isNotNull property="endDate" prepend="AND">
+				<![CDATA[ kpi_date<=#endDate# ]]>
+			</isNotNull>
+		
+			 <isGreaterThan prepend="and" property="gameId" compareValue="0">
+                     game_id = #gameId#
+            </isGreaterThan>
+         
+				<!--    <isNotNull property="#selectArray#" prepend="AND">
+           area_id IN
+         	  <iterate   open="(" close=")" conjunction=",">
+        	 	 #selectArray[]#
+          	</iterate>
+           </isNotNull> -->
+	  <isNotNull property="areaId" prepend="AND">
+         <isNotEqual property="areaId" compareValue="null">
+			  	area_id IN ($areaId$)
+			  </isNotEqual>
+          </isNotNull>
+		</dynamic>
+		 group by kpi_date
+	</select>
+	
+		
+	<select id="querySumLogin" parameterClass="java.util.Map" resultClass="java.util.HashMap">
+		select COUNT(DISTINCT game_id,area_id,login_name) as sumLoginName,
+		count(DISTINCT game_id,area_id,player_base_id) as sumPlayerBaseId,
+		count(DISTINCT game_id,area_id,ip) as sumIp 
+		from sta_login_log where 1=1
+		<dynamic>
+			<isNotEmpty  property="beginDate" prepend="AND">
+				<![CDATA[	login_time >= #beginDate# ]]>
+			</isNotEmpty>
+			<isNotEmpty  property="endDate" prepend="AND">
+				<![CDATA[		login_time <= #endDate#  ]]>
+			</isNotEmpty>
+			<isNotEmpty property="gameId" prepend="AND">
+					game_id = #gameId#
+			</isNotEmpty>			
+			<isNotEmpty  property="areaIds" prepend="AND">
+					area_id IN ($areaIds$)
+			</isNotEmpty>
+			<isNotEmpty property="ptCode" prepend="AND">
+					pt_id=#ptCode#
+			</isNotEmpty>
+		</dynamic>
+	</select>
+	<select id="querySumPay" parameterClass="java.util.Map" resultClass="java.util.HashMap">
+		select COUNT(DISTINCT game_id,area_id,login_name) as sumLoginName,
+		count(DISTINCT game_id,area_id,player_base_id) as sumPlayerBaseId 
+		from sta_pay_history where 1=1
+		<dynamic>
+			<isNotEmpty  property="beginDate" prepend="AND">
+				<![CDATA[	complete_time >= #beginDate# ]]>
+			</isNotEmpty>
+			<isNotEmpty  property="endDate" prepend="AND">
+				<![CDATA[		complete_time <= #endDate#  ]]>
+			</isNotEmpty>
+			<isNotEmpty property="projectId" prepend="AND">
+					game_id = #projectId#
+			</isNotEmpty>			
+			<isNotEmpty  property="areaIds" prepend="AND">
+					area_id IN ($areaIds$)
+			</isNotEmpty>
+			<isNotEmpty property="ptCode" prepend="AND">
+					pt_id=#ptCode#
+			</isNotEmpty>
+		</dynamic>
+		 
+	</select>
+	
+	
+	<select id="getKPIDayReportByPtCode" parameterClass="java.util.Map" resultClass="KPIDayReport">
+		SELECT  kpi_date AS kpiDate, game_id AS gameId, 
+		sum(dau) AS dau,  sum(new_login_num) AS newLoginNum,
+ 		sum(active_user_num) AS activeUserNum, sum(next_login_num) as nextLoginNum,sum(login_num_day3) as loginNumDay3,
+ 		sum(login_num_day7) as loginNumDay7,sum(hpc) as hpc ,abs(sum(dau)/24) as ca,
+ 		sum(avg_online_time*dau)/sum(dau)  as avgOnlineTime,sum(all_pay_num) as allPayNum,
+ 		sum(new_pay_num) as newPayNum,sum(all_money) as allMoney,sum(consume_gold) as consumeGold,
+ 		sum(all_consume_num) AS allConsumeNum,sum(consume_num) as consumeNum,sum(all_remain_gold) as allRemainGold
+		FROM REPORT_KPI_DAY
+		where 1=1
+		<dynamic>
+			<isNotEmpty  property="beginDate" prepend="AND">
+				<![CDATA[	kpi_date >= #beginDate# ]]>
+			</isNotEmpty>
+			<isNotEmpty  property="endDate" prepend="AND">
+				<![CDATA[	kpi_date <= #endDate#  ]]>
+			</isNotEmpty>
+			 <isGreaterThan prepend="and" property="gameId" compareValue="0">
+                     game_id = #gameId#
+            </isGreaterThan>			
+			<isNotEmpty  property="areaIds" prepend="AND">
+					area_id IN ($areaIds$)
+			</isNotEmpty>
+			<isNotEmpty property="ptAreaIds" prepend="AND">
+					area_id=($ptAreaIds$)
+			</isNotEmpty>
+		</dynamic>
+		group by kpi_date
+		order by kpi_date desc
+		LIMIT #beginNum#,#onePageNum#
+	</select>
+	
+	
+	<select id="getPtKPIDayReport" parameterClass="java.util.Map" resultClass="KPIDayReport">
+		SELECT  PT_ID AS ptId, game_id AS gameId, 
+		sum(dau) AS DAU,  sum(new_login_num) AS newLoginNum,
+ 		sum(active_user_num) AS activeUserNum, sum(next_login_num) as nextLoginNum,sum(login_num_day3) as loginNumDay3,
+ 		sum(login_num_day7) as loginNumDay7,
+ 		sum(all_pay_num) as allPayNum,
+ 		sum(new_pay_num) as newPayNum,sum(all_money) as allMoney,sum(new_pay_money) as newPayMoney
+		FROM REPORT_KPI_DAY_PT
+		where 1=1
+		<dynamic>
+			<isNotEmpty  property="beginDate" prepend="AND">
+				<![CDATA[	kpi_date = #beginDate# ]]>
+			</isNotEmpty>
+			<isNotEmpty  property="endDate" prepend="AND">
+				<![CDATA[	kpi_date <= #endDate#  ]]>
+			</isNotEmpty>
+			 <isGreaterThan prepend="and" property="gameId" compareValue="0">
+                     game_id = #gameId#
+            </isGreaterThan>			
+			<isNotEmpty  property="areaIds" prepend="AND">
+					area_id IN ($areaIds$)
+			</isNotEmpty>
+			<isNotEmpty property="ptAreaIds" prepend="AND">
+					area_id=($ptAreaIds$)
+			</isNotEmpty>
+		</dynamic>
+		group by PT_ID
+	</select>
+</sqlMap>

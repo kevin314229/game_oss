@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="CenterServer">
+
+	<typeAlias alias="CenterServer" type="com.jcwx.game.domain.CenterServer" />
+	<typeAlias alias="CenterPt" type="com.jcwx.game.domain.CenterPt" />
+	 
+
+	<select id="queryCenterServers" resultClass="CenterServer">
+	select  t.id AS areaId,t.`name` as name ,t.socket_ip as ip ,t.socket_port as socketPort,t.notify_addr as url,t.oss_login_key as loginKey
+ 	from pt_game_server t where t.is_open=1 and t.is_view=1 and t.is_use=1
+	</select>
+
+	<select id="queryCenterPts" resultClass="CenterPt" parameterClass="java.lang.Integer">
+		select t.game_server_id as areaId ,t.`name` as name,t2.pt_name as ptName ,t.pt_code as ptCode from pt_server_area t,pt_server t2
+		where t.game_server_id=#areaId# and t.pt_code = t2.pt_code 
+	</select>
+	
+	<select id="queryCenterArea" resultClass="java.util.HashMap" parameterClass="java.util.Map">
+		select t.id as id ,t.`name` as name,t.pt_code as ptCode from pt_server_area t 
+		where t.game_server_id=#areaId# and t.pt_code = #ptId#
+	</select>
+</sqlMap>

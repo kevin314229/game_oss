@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="StaMallRecord">
+
+	<typeAlias alias="StaMallRecord" type="com.jcwx.game.domain.StaMallRecord" />
+
+	<insert id="createAMallRecord" parameterClass="StaMallRecord">
+		INSERT INTO STA_MALL_RECORD(mall_record_id, game_id, area_id, pt_id, good_id, player_id, player_base_id, price, number, gold_sum, type, create_time, moldfy_time) VALUES(#mallRecordId#, #gameId#, #areaId#, #ptId#, #goodId#, #playerId#, #playerBaseId#, #price#, #number#, #goldSum#, #type#, #createTime#, #moldfyTime#)
+	</insert>
+
+	<update id="updateAMallRecord" parameterClass="StaMallRecord">
+		UPDATE STA_MALL_RECORD SET mall_record_id=#mallRecordId#, game_id=#gameId#, area_id=#areaId#, pt_id=#ptId#, good_id=#goodId#, player_id=#playerId#, player_base_id=#playerBaseId#, price=#price#, number=#number#, gold_sum=#goldSum#, type=#type#, create_time=#createTime#, moldfy_time=#moldfyTime# WHERE mall_record_id=#mallRecordId#
+	</update>
+
+	<delete id="deleteAMallRecordByID" parameterClass="String">
+		DELETE FROM STA_MALL_RECORD WHERE mall_record_id=#mallRecordId#
+	</delete>
+
+	<select id="getAMallRecordByID" parameterClass="String" resultClass="StaMallRecord">
+		SELECT mall_record_id AS mallRecordId, game_id AS gameId, area_id AS areaId, pt_id AS ptId, good_id AS goodId, player_id AS playerId, player_base_id AS playerBaseId, price AS price, number AS number, gold_sum AS goldSum, type AS type, create_time AS createTime, moldfy_time AS moldfyTime FROM STA_MALL_RECORD WHERE mall_record_id=#mallRecordId#
+	</select>
+
+	<select id="getAMallRecordList" parameterClass="java.util.Map"  resultClass="StaMallRecord">
+		SELECT mall_record_id AS mallRecordId, game_id AS gameId, area_id AS areaId, pt_id AS ptId, good_id AS goodId, player_id AS playerId, player_base_id AS playerBaseId, price AS price, number AS number, gold_sum AS goldSum, type AS type, create_time AS createTime FROM STA_MALL_RECORD
+		where 1=1
+		<dynamic>
+		<isNotEmpty  property="ossServerId" prepend="AND">
+					area_id IN ($ossServerId$)
+		</isNotEmpty>
+		<isNotEmpty  property="beginDate" prepend="AND">
+				<![CDATA[create_time >= #beginDate# ]]>
+		</isNotEmpty>
+		<isNotEmpty  property="endDate" prepend="AND">
+				<![CDATA[create_time <= #endDate# ]]>
+		</isNotEmpty>
+		</dynamic>
+		order by goodId 
+	</select>
+	
+
+</sqlMap>

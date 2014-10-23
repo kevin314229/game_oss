@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<KeyList>
+  <value>123</value>
+  <keys>
+    <Key>
+      <required>true</required>
+      <value>award</value>
+    </Key>
+    <Key>
+      <required>true</required>
+      <value>confirm</value>
+    </Key>
+  </keys>
+</KeyList>

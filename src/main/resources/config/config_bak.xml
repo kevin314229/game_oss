@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
+<properties>
+
+	<!-- 说明ENC()括号里是加密的，如果没有ENC表示不加密，如果想要加密哪个值用ENC就可以，加密方法访问 /admin/keytool -->
+	
+	<!-- 游戏数据源 -->	
+    <entry key="dataSource.jdbcUrl">jdbc:mysql://192.168.1.109:3306/rzjh?useUnicode=true&amp;characterEncoding=UTF-8</entry>
+    <entry key="dataSource.user">ENC(gX7jJOLjFUN2VLnJ0d0Cpw==)</entry>
+    <entry key="dataSource.password">ENC(ytwgP9/CXi+0cO2nmqAX3g==)</entry>
+    <entry key="dataSource.acquireIncrement">5</entry>
+    <entry key="dataSource.maxIdleTime">3600</entry>
+    <entry key="dataSource.initialPoolSize">20</entry>
+    <entry key="dataSource.minPoolSize">20</entry>
+    <entry key="dataSource.maxPoolSize">300</entry>
+    <entry key="dataSource.numHelperThreads">5</entry>
+    <entry key="dataSource.maxStatements">1000</entry>
+  
+	<!-- 游戏日志数据源 -->
+    <entry key="dataSourceLog.jdbcUrl">jdbc:mysql://192.168.1.109:3306/rzjh_log?useUnicode=true&amp;characterEncoding=UTF-8</entry>
+    <entry key="dataSourceLog.user">ENC(gX7jJOLjFUN2VLnJ0d0Cpw==)</entry>
+    <entry key="dataSourceLog.password">jjl</entry>
+    <entry key="dataSourceLog.acquireIncrement">5</entry>
+    <entry key="dataSourceLog.maxIdleTime">3600</entry>
+    <entry key="dataSourceLog.initialPoolSize">10</entry>
+    <entry key="dataSourceLog.minPoolSize">10</entry>
+    <entry key="dataSourceLog.maxPoolSize">100</entry>
+    <entry key="dataSourceLog.numHelperThreads">5</entry>
+    <entry key="dataSourceLog.maxStatements">1000</entry>
+    
+    <!-- 游戏部署服务名字 （rzjh002）-->
+	<entry key="sysconfig.serverName">rzjh002</entry>
+	<!-- 游戏部署服务版本 -->
+	<entry key="sysconfig.serverVersion">1.0.12.061901</entry>
+	<!-- 游戏当前版本对应的资源路径 -->
+	<entry key="sysconfig.resUrl">http://192.168.1.109:8083/svn/devRes/serverJH/</entry>
+	<!-- 服务端socket IP -->
+	<entry key="sysconfig.gameSocketIp">192.168.1.109</entry>
+	<!-- 服务端socket端口 -->
+	<entry key="sysconfig.gameSocketPort">9999</entry>
+    <!-- 游戏是否开发模式（开服设为false） -->
+	<entry key="sysconfig.devMode">false</entry>
+	<!-- 语言环境 -->
+	<entry key="sysconfig.locale">zh_CN</entry>
+	<!-- 战斗日志表分表规则 1 按月分表 2 按周分表 -->
+	<entry key="sysconfig.battleLogTableSplit">1</entry>
+	<!-- 玩家操作日志表分表规则 1 按月分表 2 按周分表 -->
+	<entry key="sysconfig.operationLogTableSplit">1</entry>
+	<!-- 是否验证密码（开服后设为true） -->
+	<entry key="sysconfig.isNotCheckPasswd">false</entry>
+	<!-- 在线人数最大值,如果为负数表示不限制 -->
+	<entry key="sysconfig.onlineMaxNum">-1</entry>
+	
+	<!-- 充值Key -->
+	<entry key="sysconfig.payKey">wej824HYTY3cqe4RfsW4Y7Mkdhwvb54G</entry>
+	<!-- 用户中心登录使用的key -->
+	<entry key="sysconfig.loginKey">SQ4BLwebga9m3e1J2J4L</entry>
+	
+	<!-- 是否开启本地后台登录(若开启控制中心可设为false) -->
+	<entry key="sysconfig.isOnLocalOSSLogin">true</entry>
+	<!-- 控制中心地址,例htpp://192.168.1.50/SSO  目前没有使用到(若开启控制中心则需要使用）! -->
+	<entry key="sysconfig.ossCenterAddress">http://192.168.1.51:8090/StoneSSO</entry>
+	<!-- OSS key -->
+	<entry key="sysconfig.ossCenterKey">wej824HYTY3cqe4RfsW4Y7Mkdhwvb666</entry>
+
+    
+</properties>

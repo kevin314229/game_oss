@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="PlayerBag">
+
+	<typeAlias alias="PlayerBag" type="com.jcwx.game.domain.PlayerBag" />
+
+	<insert id="createPlayerBag" parameterClass="PlayerBag">
+		INSERT INTO T_PLAYER_BAG(player_bag_id, player_id, grid_number) VALUES(#playerBagId#, #playerId#, #gridNumber#)
+	</insert>
+
+	<update id="updatePlayerBag" parameterClass="PlayerBag">
+		UPDATE T_PLAYER_BAG SET player_bag_id=#playerBagId#, player_id=#playerId#, grid_number=#gridNumber# WHERE player_bag_id=#playerBagId#
+	</update>
+
+	<delete id="deletePlayerBagByID" parameterClass="String">
+		DELETE FROM T_PLAYER_BAG WHERE player_bag_id=#playerBagId#
+	</delete>
+
+	<select id="getPlayerBagByID" parameterClass="String" resultClass="PlayerBag">
+		SELECT player_bag_id AS playerBagId, player_id AS playerId, grid_number AS gridNumber FROM T_PLAYER_BAG WHERE player_bag_id=#playerBagId#
+	</select>
+
+	<select id="getPlayerBagByPlayerId" parameterClass="String" resultClass="PlayerBag">
+		SELECT player_bag_id AS playerBagId, player_id AS playerId, grid_number AS gridNumber FROM T_PLAYER_BAG WHERE player_id=#playerId#
+	</select>
+	
+	<select id="getPlayerBagList" resultClass="PlayerBag">
+		SELECT player_bag_id AS playerBagId, player_id AS playerId, grid_number AS gridNumber FROM T_PLAYER_BAG
+	</select>
+
+
+</sqlMap>

@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="PlayerItem">
+
+	<typeAlias alias="PlayerItem" type="com.jcwx.game.domain.PlayerItem" />
+
+	<insert id="createPlayerItem" parameterClass="PlayerItem">
+		INSERT INTO T_PLAYER_ITEM(player_item_id, player_base_id, item_id, name, item_type, item_position, item_place, state, item_number, item_level, subclass, is_bind, sell_time, cd, cd_group) VALUES(#playerItemId#, #playerBaseId#, #itemId#, #name#, #itemType#, #itemPosition#, #itemPlace#, #state#, #itemNumber#, #itemLevel#, #subclass#, #isBind#, #sellTime#, #cd#, #cdGroup#)
+	</insert>
+
+	<update id="updatePlayerItem" parameterClass="PlayerItem">
+		UPDATE T_PLAYER_ITEM SET player_item_id=#playerItemId#, player_base_id=#playerBaseId#, item_id=#itemId#, name=#name#, item_type=#itemType#, item_position=#itemPosition#, item_place=#itemPlace#, state=#state#, item_number=#itemNumber#, item_level=#itemLevel#, subclass=#subclass#, is_bind=#isBind#, sell_time=#sellTime#, cd=#cd#, cd_group=#cdGroup# WHERE player_item_id=#playerItemId#
+	</update>
+
+	<delete id="deletePlayerItemByID" parameterClass="String">
+		DELETE FROM T_PLAYER_ITEM WHERE player_item_id=#playerItemId#
+	</delete>
+
+	<select id="getPlayerItemByID" parameterClass="String" resultClass="PlayerItem">
+		SELECT player_item_id AS playerItemId, player_base_id AS playerBaseId, item_id AS itemId, name AS name, item_type AS itemType, item_position AS itemPosition, item_place AS itemPlace, state AS state, item_number AS itemNumber, item_level AS itemLevel, subclass AS subclass, is_bind AS isBind, sell_time AS sellTime, cd AS cd, cd_group AS cdGroup FROM T_PLAYER_ITEM WHERE player_item_id=#playerItemId#
+	</select>
+
+	<select id="getPlayerItemList" resultClass="PlayerItem">
+		SELECT player_item_id AS playerItemId, player_base_id AS playerBaseId, item_id AS itemId, name AS name, item_type AS itemType, item_position AS itemPosition, item_place AS itemPlace, state AS state, item_number AS itemNumber, item_level AS itemLevel, subclass AS subclass, is_bind AS isBind, sell_time AS sellTime, cd AS cd, cd_group AS cdGroup FROM T_PLAYER_ITEM
+	</select>
+
+	<select id="getPlayerItemByPlayerID" parameterClass="String" resultClass="PlayerItem">
+		SELECT player_item_id AS playerItemId, player_base_id AS playerBaseId, item_id AS itemId, name AS name, item_type AS itemType, item_position AS itemPosition, item_place AS itemPlace, state AS state, item_number AS itemNumber, item_level AS itemLevel, subclass AS subclass, is_bind AS isBind, sell_time AS sellTime, cd AS cd, cd_group AS cdGroup FROM T_PLAYER_ITEM WHERE player_id=#playerId#
+	</select>
+
+</sqlMap>

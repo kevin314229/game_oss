@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="PlayerBaseRank">
+
+	<typeAlias alias="PlayerBaseRank" type="com.jcwx.game.domain.PlayerBaseRank" />
+	<typeAlias alias="PayInfo" type="com.jcwx.game.domain.PayHistory" />
+	<insert id="createPlayerBaseRank" parameterClass="PlayerBaseRank">
+		INSERT INTO REPORT_PLAYER_BASE_RANK(game_id, area_id, pt_id, player_base_id, nick_name, occupation, gold, all_gold, first_consume, operation, consume_time, login_time, logout_time, create_time) VALUES(#gameId#, #areaId#, #ptId#, #playerBaseId#, #nickName#, #occupation#, #gold#, #allGold#, #firstConsume#, #operation#, #consumeTime#, #loginTime#, #logoutTime#, #createTime#)
+	</insert>
+
+	<update id="updatePlayerBaseRank" parameterClass="PlayerBaseRank">
+		UPDATE REPORT_PLAYER_BASE_RANK SET game_id=#gameId#, area_id=#areaId#, pt_id=#ptId#, player_base_id=#playerBaseId#, nick_name=#nickName#, occupation=#occupation#, gold=#gold#, all_gold=#allGold#, first_consume=#firstConsume#, operation=#operation#, consume_time=#consumeTime#, login_time=#loginTime#, logout_time=#logoutTime#, create_time=#createTime# WHERE game_id=#gameId#
+	</update>
+
+	<delete id="deletePlayerBaseRankByID" parameterClass="String">
+		DELETE FROM REPORT_PLAYER_BASE_RANK WHERE game_id=#gameId#
+	</delete>
+
+	<select id="getPlayerBaseRankByID" parameterClass="String" resultClass="PlayerBaseRank">
+		SELECT game_id AS gameId, area_id AS areaId, pt_id AS ptId, player_base_id AS playerBaseId, nick_name AS nickName, occupation AS occupation, gold AS gold, all_gold AS allGold, first_consume AS firstConsume, operation AS operation, consume_time AS consumeTime, login_time AS loginTime, logout_time AS logoutTime, create_time AS createTime FROM REPORT_PLAYER_BASE_RANK WHERE game_id=#gameId#
+	</select>
+
+	<select id="getPlayerBaseRankList" resultClass="PlayerBaseRank">
+		SELECT game_id AS gameId, area_id AS areaId, pt_id AS ptId, player_base_id AS playerBaseId, nick_name AS nickName, occupation AS occupation, gold AS gold, all_gold AS allGold, all_money as allMoney,first_consume AS firstConsume, 
+		operation AS operation, consume_time AS consumeTime, login_time AS loginTime, logout_time AS logoutTime, create_time AS createTime ,
+		first_operation as firstOperation,first_Consume_Time as firstConsumeTime
+		
+		FROM REPORT_PLAYER_BASE_RANK
+		where 1=1 and all_money>=500 and  first_consume>0.0
+		   
+		<dynamic>
+		 
+		
+			 <isGreaterThan prepend="and" property="gameId" compareValue="0">
+                     game_id = #gameId#
+            </isGreaterThan>
+         <isGreaterThan prepend="and" property="ptId" compareValue="0">
+                     pt_id = #ptId#
+            </isGreaterThan>
+				<!--    <isNotNull property="#selectArray#" prepend="AND">
+           area_id IN
+         	  <iterate   open="(" close=")" conjunction=",">
+        	 	 #selectArray[]#
+          	</iterate>
+           </isNotNull> -->
+	  <isNotNull property="areaId" prepend="AND">
+         <isNotEqual property="areaId" compareValue="null">
+			  	area_id IN ($areaId$)
+			  </isNotEqual>
+          </isNotNull>
+        
+		</dynamic>
+		order by all_gold desc
+		LIMIT #beginNum#,#onePageNum#
+	</select>
+
+
+	<select id="getPlayerBaseRankCount" resultClass="java.lang.Integer">
+		SELECT  count(1) FROM REPORT_PLAYER_BASE_RANK
+				where 1=1 and  all_money>=500  and  first_consume>0.0
+		<dynamic>
+			 <isGreaterThan prepend="and" property="gameId" compareValue="0">
+                     game_id = #gameId#
+            </isGreaterThan>
+         <isGreaterThan prepend="and" property="ptId" compareValue="0">
+                     pt_id = #ptId#
+            </isGreaterThan>
+				<!--    <isNotNull property="#selectArray#" prepend="AND">
+           area_id IN
+         	  <iterate   open="(" close=")" conjunction=",">
+        	 	 #selectArray[]#
+          	</iterate>
+           </isNotNull> -->
+	  <isNotNull property="areaId" prepend="AND">
+         <isNotEqual property="areaId" compareValue="null">
+			  	area_id IN ($areaId$)
+			  </isNotEqual>
+          </isNotNull>
+		</dynamic>
+	</select>
+
+	<select id="getPayInfoList" parameterClass="java.util.Map" resultClass="PayInfo">
+		SELECT   game_id AS gameId, pt_id AS ptId, area_id AS areaId, login_name AS loginName,  nick_name AS nickName,  
+		currency , pt_money_num AS ptMoneyNum,money_num as moneyNum ,
+		complete_Time as completeTime from sta_pay_history 
+		where 1=1 and  game_id = #gameId#  and 	area_id =#areaId# and player_base_id=#playerBaseId#
+		<dynamic>	
+			<isNotNull property="ptId" prepend="AND">
+			  <isNotEqual property="ptId" compareValue="">
+			    pt_id = #ptId#
+			  </isNotEqual>
+          </isNotNull>
+				
+			</dynamic>
+			order by complete_Time desc
+		LIMIT #beginNum#,#onePageNum#
+		 
+	</select>
+	<select id="getPayInfoCount" parameterClass="java.util.Map" resultClass="java.lang.Integer">
+		SELECT  count(1) from sta_pay_history 
+		where 1=1 and  game_id = #gameId#   and 	area_id =#areaId# and player_base_id=#playerBaseId#
+		<dynamic>	
+			<isNotNull property="ptId" prepend="AND">
+			  <isNotEqual property="ptId" compareValue="">
+			    pt_id = #ptId#
+			  </isNotEqual>
+          </isNotNull>
+			</dynamic>
+	</select>
+</sqlMap>

@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="Project">
+
+	<typeAlias alias="Project" type="com.jcwx.game.domain.Project" />
+
+	<insert id="createProject" parameterClass="Project">
+		INSERT INTO T_PROJECT(project_id, project_name, project_describe) VALUES(#projectId#, #projectName#, #projectDescribe#)
+	</insert>
+
+	<update id="updateProject" parameterClass="Project">
+		UPDATE T_PROJECT SET project_id=#projectId#, project_name=#projectName#, project_describe=#projectDescribe# WHERE project_id=#projectId#
+	</update>
+
+	<delete id="deleteProjectByID" parameterClass="String">
+		DELETE FROM T_PROJECT WHERE project_id=#projectId#
+	</delete>
+
+	<select id="getProjectByID" parameterClass="String" resultClass="Project">
+		SELECT project_id AS projectId, project_name AS projectName, project_describe AS projectDescribe FROM T_PROJECT WHERE project_id=#projectId#
+	</select>
+
+	<select id="getProjectList" resultClass="Project">
+		SELECT project_id AS projectId, project_name AS projectName, project_describe AS projectDescribe FROM T_PROJECT
+	</select>
+	
+	<select id="getProjectListbyUserName" resultClass="Project">
+		SELECT project_id AS projectId, project_name AS projectName, project_describe AS projectDescribe FROM T_PROJECT 
+		where project_id in (select r.PROJECT_ID from t_oss_role r,t_oss_user_role u where r.OSS_ROLE_ID=u.OSS_ROLE_ID and u.USERNAME=#userName# )
+	</select>
+
+</sqlMap>

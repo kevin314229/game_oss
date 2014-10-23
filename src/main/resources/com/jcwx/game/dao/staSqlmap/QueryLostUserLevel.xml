@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="QueryLostUserLevel">
+
+	<typeAlias alias="ZQueryLostUserLevel" type="com.jcwx.game.domain.ZQueryLostUserLevel" />
+	<select id="queryLostUserLevelAllrecord" parameterClass="java.util.Map" resultClass="Integer" >
+		<![CDATA[ 
+		SELECT count(*) as allNum from report_lost_user_level_string where statistics_date>=#beginTime# AND statistics_date<=#endTime#
+		]]>
+		<dynamic>
+			<isNotNull property="gameId" prepend="AND">
+				game_id=#gameId#
+			</isNotNull>
+			<isNotNull property="selectString" prepend="AND">
+				area_id IN ($selectString$)
+			</isNotNull>
+		</dynamic>
+	</select>
+	
+	
+	
+	<select id="queryLostUserLeveByDateGameIdAreaId" parameterClass="java.util.Map" resultClass="ZQueryLostUserLevel" >
+	<![CDATA[SELECT statistics_date as statisticsDate,game_id as gameId,area_id as areaId,final_string as finalString
+	from report_lost_user_level_string 
+	where statistics_date>=#beginTime# AND statistics_date<=#endTime#]]>
+		<dynamic>
+			<isNotNull property="gameId" prepend="AND">
+				game_id=#gameId#
+			</isNotNull>
+			<isNotNull property="selectString" prepend="AND">
+				area_id IN ($selectString$)
+			</isNotNull>
+		</dynamic>
+	ORDER BY statistics_date 
+	</select>
+	
+	<select id="queryActiveUserLeveByDateGameIdAreaId" parameterClass="java.util.Map" resultClass="ZQueryLostUserLevel" >
+	<![CDATA[SELECT statistics_date as statisticsDate,game_id as gameId,area_id as areaId,final_string as finalString
+	from report_active_user_level_string 
+	where statistics_date>=#beginTime# AND statistics_date<=#endTime#]]>
+		<dynamic>
+			<isNotNull property="gameId" prepend="AND">
+				game_id=#gameId#
+			</isNotNull>
+			<isNotNull property="selectString" prepend="AND">
+				area_id IN ($selectString$)
+			</isNotNull>
+		</dynamic>
+	ORDER BY statistics_date 
+	</select>
+	
+	
+	
+	<parameterMap class="java.util.Map" id="procedureParameters">
+		<parameter property="quartz_time" javaType="java.util.Date"
+			jdbcType="DATETIME" mode="IN" />
+		<parameter property="run_flag" javaType="java.lang.Integer"
+			jdbcType="TINYINT" mode="INOUT" />
+	</parameterMap>
+
+	<procedure id="quarzQueryActiveUser" parameterMap="procedureParameters">
+		{ 	
+			call
+			query_from_login_log_to_query_active_user(?,?)
+		}
+	</procedure>
+</sqlMap>

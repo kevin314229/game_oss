@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="PlayerEquipProp">
+
+	<typeAlias alias="PlayerEquipProp" type="com.jcwx.game.domain.PlayerEquipProp" />
+
+	<insert id="createPlayerEquipProp" parameterClass="PlayerEquipProp">
+		INSERT INTO T_PLAYER_EQUIP_PROP(player_equip_id, physical_attack, magic_attack, physical_defend, magic_defend, critical, avoid, dodge, hp, mp, strength, body, clever, sharp, strong_level, vice_type1, vice_value1, vice_lock1, vice_lock7, vice_value7, vice_type7, vice_lock6, vice_value6, vice_type6, vice_lock5, vice_value5, vice_type5, vice_lock4, vice_value4, vice_type4, vice_lock3, vice_value3, vice_type3, vice_lock2, vice_value2, vice_type2) VALUES(#playerEquipId#, #physicalAttack#, #magicAttack#, #physicalDefend#, #magicDefend#, #critical#, #avoid#, #dodge#, #hp#, #mp#, #strength#, #body#, #clever#, #sharp#, #strongLevel#, #viceType1#, #viceValue1#, #viceLock1#, #viceLock7#, #viceValue7#, #viceType7#, #viceLock6#, #viceValue6#, #viceType6#, #viceLock5#, #viceValue5#, #viceType5#, #viceLock4#, #viceValue4#, #viceType4#, #viceLock3#, #viceValue3#, #viceType3#, #viceLock2#, #viceValue2#, #viceType2#)
+	</insert>
+
+	<update id="updatePlayerEquipProp" parameterClass="PlayerEquipProp">
+		UPDATE T_PLAYER_EQUIP_PROP SET player_equip_id=#playerEquipId#, physical_attack=#physicalAttack#, magic_attack=#magicAttack#, physical_defend=#physicalDefend#, magic_defend=#magicDefend#, critical=#critical#, avoid=#avoid#, dodge=#dodge#, hp=#hp#, mp=#mp#, strength=#strength#, body=#body#, clever=#clever#, sharp=#sharp#, strong_level=#strongLevel#, vice_type1=#viceType1#, vice_value1=#viceValue1#, vice_lock1=#viceLock1#, vice_lock7=#viceLock7#, vice_value7=#viceValue7#, vice_type7=#viceType7#, vice_lock6=#viceLock6#, vice_value6=#viceValue6#, vice_type6=#viceType6#, vice_lock5=#viceLock5#, vice_value5=#viceValue5#, vice_type5=#viceType5#, vice_lock4=#viceLock4#, vice_value4=#viceValue4#, vice_type4=#viceType4#, vice_lock3=#viceLock3#, vice_value3=#viceValue3#, vice_type3=#viceType3#, vice_lock2=#viceLock2#, vice_value2=#viceValue2#, vice_type2=#viceType2# WHERE player_equip_id=#playerEquipId#
+	</update>
+
+	<delete id="deletePlayerEquipPropByID" parameterClass="String">
+		DELETE FROM T_PLAYER_EQUIP_PROP WHERE player_equip_id=#playerEquipId#
+	</delete>
+
+	<select id="getPlayerEquipPropByID" parameterClass="String" resultClass="PlayerEquipProp">
+		SELECT player_equip_id AS playerEquipId, physical_attack AS physicalAttack, magic_attack AS magicAttack, physical_defend AS physicalDefend, magic_defend AS magicDefend, critical AS critical, avoid AS avoid, dodge AS dodge, hp AS hp, mp AS mp, strength AS strength, body AS body, clever AS clever, sharp AS sharp, strong_level AS strongLevel, vice_type1 AS viceType1, vice_value1 AS viceValue1, vice_lock1 AS viceLock1, vice_lock7 AS viceLock7, vice_value7 AS viceValue7, vice_type7 AS viceType7, vice_lock6 AS viceLock6, vice_value6 AS viceValue6, vice_type6 AS viceType6, vice_lock5 AS viceLock5, vice_value5 AS viceValue5, vice_type5 AS viceType5, vice_lock4 AS viceLock4, vice_value4 AS viceValue4, vice_type4 AS viceType4, vice_lock3 AS viceLock3, vice_value3 AS viceValue3, vice_type3 AS viceType3, vice_lock2 AS viceLock2, vice_value2 AS viceValue2, vice_type2 AS viceType2 FROM T_PLAYER_EQUIP_PROP WHERE player_equip_id=#playerEquipId#
+	</select>
+
+	<select id="getPlayerEquipPropList" resultClass="PlayerEquipProp">
+		SELECT player_equip_id AS playerEquipId, physical_attack AS physicalAttack, magic_attack AS magicAttack, physical_defend AS physicalDefend, magic_defend AS magicDefend, critical AS critical, avoid AS avoid, dodge AS dodge, hp AS hp, mp AS mp, strength AS strength, body AS body, clever AS clever, sharp AS sharp, strong_level AS strongLevel, vice_type1 AS viceType1, vice_value1 AS viceValue1, vice_lock1 AS viceLock1, vice_lock7 AS viceLock7, vice_value7 AS viceValue7, vice_type7 AS viceType7, vice_lock6 AS viceLock6, vice_value6 AS viceValue6, vice_type6 AS viceType6, vice_lock5 AS viceLock5, vice_value5 AS viceValue5, vice_type5 AS viceType5, vice_lock4 AS viceLock4, vice_value4 AS viceValue4, vice_type4 AS viceType4, vice_lock3 AS viceLock3, vice_value3 AS viceValue3, vice_type3 AS viceType3, vice_lock2 AS viceLock2, vice_value2 AS viceValue2, vice_type2 AS viceType2 FROM T_PLAYER_EQUIP_PROP
+	</select>
+
+</sqlMap>

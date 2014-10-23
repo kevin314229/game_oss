@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="OssServer">
+
+	<typeAlias alias="OssServer" type="com.jcwx.game.domain.OssServer" />
+	<typeAlias alias="OssLastServer" type="com.jcwx.game.domain.OssUserLastServer" />
+	<typeAlias alias="CenterServer" type="com.jcwx.game.domain.CenterServer" />
+	<insert id="createOssServer" parameterClass="OssServer">
+		INSERT INTO T_OSS_SERVER(id, server_id,server_code, server_provider, name, url,
+		communicate_key, create_time, create_user, update_time, update_user,PROJECT_ID)
+		VALUES(#id#, #serverId#,#serverCode#, #serverProvider#, #name#, #url#,
+		#communicateKey#, #createTime#, #createUser#, #updateTime#,
+		#updateUser#,#projectId#)
+		<selectKey resultClass="Integer" keyProperty="id">
+			SELECT
+			@@IDENTITY AS ID
+		</selectKey>
+	</insert>
+
+
+	<update id="updateOssServer" parameterClass="OssServer">
+		UPDATE T_OSS_SERVER
+		SET id=#id#, server_id=#serverId#,  server_code=#serverCode# ,  server_provider=#serverProvider#,
+		name=#name#, url=#url#, communicate_key=#communicateKey#,
+		create_time=#createTime#, create_user=#createUser#,
+		update_time=#updateTime#, update_user=#updateUser# ,project_id=#projectId# WHERE id=#id#
+	</update>
+
+	<delete id="deleteOssServerByID" parameterClass="Integer">
+		DELETE FROM
+		T_OSS_SERVER WHERE id=#id#
+	</delete>
+
+	<select id="getOssServerByID" parameterClass="Integer"
+		resultClass="OssServer">
+		SELECT id AS id, server_id AS serverId, server_code AS serverCode,  server_provider AS
+		serverProvider, name AS name, url AS url, communicate_key AS
+		communicateKey, create_time AS createTime, create_user AS createUser,
+		update_time AS updateTime, update_user AS updateUser ,PROJECT_ID AS projectId FROM T_OSS_SERVER
+		WHERE id=#id#
+	</select>
+
+	<select id="getOssServerList" resultClass="OssServer">
+		SELECT id AS id,
+		server_id AS serverId, server_provider AS serverProvider, name AS
+		name, url AS url, communicate_key AS communicateKey, create_time AS
+		createTime, create_user AS createUser, update_time AS updateTime,
+		update_user AS updateUser ,PROJECT_ID AS projectId FROM T_OSS_SERVER ORDER BY server_id ,`name` 
+	</select>
+	
+	<select id="getOssServerListByProjectId" parameterClass="Integer" resultClass="OssServer">
+		SELECT id AS id,
+		server_id AS serverId, server_provider AS serverProvider, name AS
+		name, url AS url, communicate_key AS communicateKey, create_time AS
+		createTime, create_user AS createUser, update_time AS updateTime,
+		update_user AS updateUser ,PROJECT_ID AS projectId FROM T_OSS_SERVER where PROJECT_ID=#projectId# ORDER BY server_id ,`name` 
+	</select>
+
+	<select id="getOssServerListByUser" parameterClass="String" resultClass="OssServer">
+		SELECT s.id AS id,
+		s.server_id AS serverId,s.server_code AS serverCode, s.server_provider AS serverProvider, s.name AS
+		name, s.url AS url, s.communicate_key AS communicateKey,PROJECT_ID AS projectId FROM
+		t_oss_server s LEFT JOIN t_oss_user_server os ON s.id =
+		os.server_id WHERE os.username = #username# ORDER BY s.server_id ,s.`name`
+	</select>
+	
+	<select id="getOssServerListByUserAndProjectId" parameterClass="java.util.HashMap" resultClass="OssServer">
+		SELECT s.id AS id,
+		s.server_id AS serverId,s.server_code AS serverCode, s.server_provider AS serverProvider, s.name AS
+		name, s.url AS url, s.communicate_key AS communicateKey,PROJECT_ID AS projectId FROM
+		t_oss_server s LEFT JOIN t_oss_user_server os ON s.id =
+		os.server_id WHERE os.username = #username# and PROJECT_ID=#projectId# ORDER BY s.server_id ,s.`name`
+	</select>
+	
+	<select id="getOssServerPtListByUserAndProjectId" parameterClass="java.util.HashMap" resultClass="OssServer">
+		SELECT s.id AS id,
+		s.server_id AS serverId, s.server_code AS serverCode,s.server_provider AS serverProvider,  s.name AS
+		name, s.url AS url, s.communicate_key AS communicateKey ,PROJECT_ID AS projectId FROM
+		t_oss_server s LEFT JOIN t_oss_user_server os ON s.id =
+		os.server_id WHERE os.username = #username# and PROJECT_ID=#projectId# GROUP BY s.server_provider 
+	</select>
+	
+	<select id="getOssServerPtListByUser" parameterClass="String" resultClass="OssServer">
+		SELECT s.id AS id,
+		s.server_id AS serverId, s.server_code AS serverCode,s.server_provider AS serverProvider,  s.name AS
+		name, s.url AS url, s.communicate_key AS communicateKey ,PROJECT_ID AS projectId FROM
+		t_oss_server s LEFT JOIN t_oss_user_server os ON s.id =
+		os.server_id WHERE os.username = #username# GROUP BY s.server_provider 
+	</select>
+	
+	<select id="getOssServerPtListByUserAndPt" parameterClass="java.util.HashMap" resultClass="OssServer">
+		SELECT s.id AS id,
+		s.server_id AS serverId, s.server_code AS serverCode , s.server_provider AS serverProvider, s.name AS
+		name, s.url AS url, s.communicate_key AS communicateKey ,PROJECT_ID AS projectId FROM
+		t_oss_server s LEFT JOIN t_oss_user_server os ON s.id =
+		os.server_id WHERE os.username = #username# AND s.server_code=#serverCode#
+	</select>
+	
+	<select id="getOssServerListByUserAndProjectIdAndPt" parameterClass="java.util.HashMap" resultClass="OssServer">
+		SELECT s.id AS id,
+		s.server_id AS serverId, s.server_code AS serverCode , s.server_provider AS serverProvider, s.name AS
+		name, s.url AS url, s.communicate_key AS communicateKey ,PROJECT_ID AS projectId FROM
+		t_oss_server s LEFT JOIN t_oss_user_server os ON s.id =
+		os.server_id WHERE os.username = #username# AND s.server_code=#serverCode# AND s.PROJECT_ID=#projectId#
+	</select>
+	
+	
+	<select id="getOssServerListByOperationId" parameterClass="Integer" resultClass="OssServer">
+		SELECT s.id AS id,
+		s.server_id AS serverId, s.server_code AS serverCode , s.server_provider AS serverProvider, s.name AS
+		name, s.url AS url, s.communicate_key AS communicateKey ,PROJECT_ID AS projectId FROM
+		t_oss_server s where  s.server_id=#operationId#
+	</select>
+	
+	<select id="checkUserOssServer" parameterClass="java.util.HashMap" resultClass="OssServer">
+		SELECT s.id AS id,
+		s.server_id AS serverId,s.server_code AS serverCode , s.server_provider AS serverProvider, s.name AS
+		name, s.url AS url, s.communicate_key AS communicateKey ,PROJECT_ID AS projectId FROM
+		t_oss_server s LEFT JOIN t_oss_user_server os ON s.id =
+		os.server_id WHERE os.username = #username#
+		AND os.server_id = #id#
+	</select>
+	
+	<select id="getOssServerListByProjectIdAndOperationId" parameterClass="java.util.HashMap" resultClass="OssServer">
+		SELECT s.id AS id,
+		s.server_id AS serverId, s.server_code AS serverCode , s.server_provider AS serverProvider, s.name AS
+		name, s.url AS url, s.communicate_key AS communicateKey ,PROJECT_ID AS projectId FROM
+		t_oss_server s where PROJECT_ID=#projectId#  and s.server_id=#operationId#
+	</select>
+	
+	<select id="getOssLastServerByID" parameterClass="java.util.HashMap"
+		resultClass="OssLastServer">
+		SELECT t.game_id AS gameId,t.user_name AS userName, t.area_id AS areaId FROM t_oss_user_last_server t
+		WHERE t.game_id=#gameId# and t.user_name=#userName# 
+		and exists(select 1 from t_oss_user_server t2 where t2.server_id=t.area_id and t.user_name=t2.username);
+	</select>
+	
+	<insert id="createOssLastServer" parameterClass="java.util.HashMap">
+		replace INTO t_oss_user_last_server(user_name,game_id,area_id,create_time,last_modify_time)
+		VALUES(#userName#, #gameId#,#areaId#, sysdate(),sysdate())
+	 
+	</insert>
+
+
+	<update id="updateOssLastServer" parameterClass="java.util.HashMap">
+		UPDATE t_oss_user_last_server
+		SET area_id=#areaId# ,last_modify_time=sysdate() where  user_name=#userName# and  game_id=#gameId#
+	</update>
+	
+	<insert id="insertCenterServer" parameterClass="CenterServer">
+		replace INTO  T_OSS_SERVER(id, server_id,server_code, server_provider, name, url,
+		communicate_key, create_time, create_user, update_time, update_user,PROJECT_ID)
+		VALUES(#areaId#,  28 ,'center_server', '中心服务器', #name#, #url#,
+		#loginKey#, sysdate(), #updateUser#, sysdate(),
+		#updateUser#,#projectId#)
+	</insert>
+	
+	<update id="updateCenterServer" parameterClass="CenterServer">
+		UPDATE T_OSS_SERVER
+		SET id=#areaId# ,update_time=sysdate(),name=#name#,communicate_key=#loginKey#,update_user=#updateUser# where  url=#url# and  PROJECT_ID=#projectId#
+	</update>
+	<update id="updateOssUserServer" parameterClass="CenterServer">
+		update T_OSS_USER_SERVER set server_id=#areaId# where username=#updateUser# and server_id=#serverId#
+	</update>
+	
+	<insert id="insertOssUserServer" parameterClass="CenterServer">
+		INSERT INTO T_OSS_USER_SERVER(id, username, server_id, create_time, create_user) VALUES(#areaId#, #updateUser#,#areaId#, sysdate(), #updateUser#)
+	</insert>
+</sqlMap>

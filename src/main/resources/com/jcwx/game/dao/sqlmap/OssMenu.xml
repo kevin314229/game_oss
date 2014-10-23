@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="OssMenu">
+	<typeAlias alias="OssMenu" type="com.jcwx.game.domain.OssMenu" />
+
+	<insert id="createOssMenu" parameterClass="OssMenu">
+		INSERT INTO T_OSS_MENU(OSS_MENU_ID, NAME, PARENT_MENU_ID, type, PAGE_URL, PROJECT_ID) VALUES(#ossMenuID#, #name#, #parentMenuID#, #type#, #pageUrl#,#projectId#)
+		<selectKey resultClass="String" keyProperty="ossMenuID">
+			SELECT @@IDENTITY AS ID
+		</selectKey>
+	</insert>
+
+	<update id="updateOssMenu" parameterClass="OssMenu">
+		UPDATE T_OSS_MENU SET OSS_MENU_ID=#ossMenuID#, NAME=#name#, PARENT_MENU_ID=#parentMenuID#, type=#type#, PAGE_URL=#pageUrl#,PROJECT_ID=#projectId# WHERE OSS_MENU_ID=#menuId#
+	</update>
+	
+	
+	<delete id="deleteOssMenuByID" parameterClass="String">
+		DELETE FROM T_OSS_MENU WHERE OSS_MENU_ID=#ossMenuID#
+	</delete>
+
+	<select id="getOssMenuByID" parameterClass="String" resultClass="OssMenu">
+		SELECT OSS_MENU_ID AS ossMenuID, NAME AS name, PARENT_MENU_ID AS parentMenuID, type AS type, PAGE_URL AS pageUrl,PROJECT_ID AS projectId FROM T_OSS_MENU WHERE OSS_MENU_ID=#ossMenuID#
+	</select>
+
+	<select id="getOssMenuList" resultClass="OssMenu">
+		SELECT OSS_MENU_ID AS ossMenuID, NAME AS name, PARENT_MENU_ID AS parentMenuID, type AS type, PAGE_URL AS pageUrl,PROJECT_ID AS projectId FROM T_OSS_MENU
+		order by PARENT_MENU_ID,OSS_MENU_ID
+	</select>
+	
+	<select id="getOssMenuListByProjectId" parameterClass="Integer" resultClass="OssMenu">
+		SELECT OSS_MENU_ID AS ossMenuID, NAME AS name, PARENT_MENU_ID AS parentMenuID, type AS type, PAGE_URL AS pageUrl,PROJECT_ID AS projectId FROM T_OSS_MENU where PROJECT_ID=#projectId#
+	order by PARENT_MENU_ID,OSS_MENU_ID
+	</select>
+	
+	<select id="getOssMenuListByProjectIdAndParentMenuID" parameterClass="java.util.Map" resultClass="OssMenu">
+		SELECT OSS_MENU_ID AS ossMenuID, NAME AS name, PARENT_MENU_ID AS parentMenuID, type AS type, PAGE_URL AS pageUrl,PROJECT_ID AS projectId FROM T_OSS_MENU where PROJECT_ID=#ProjectId# and PARENT_MENU_ID=#ParentMenuID#
+	</select>
+	
+	<select id="getOssMenuListByProjectIdAndRoleId" parameterClass="java.util.Map" resultClass="OssMenu">
+		SELECT o.OSS_MENU_ID AS ossMenuID, NAME AS name, PARENT_MENU_ID AS parentMenuID, type AS type, PAGE_URL AS pageUrl,
+		PROJECT_ID AS projectId FROM T_OSS_MENU o  where PROJECT_ID=#projectId# and 
+		(PARENT_MENU_ID =0  or o.OSS_MENU_ID in(select m.OSS_MENU_ID
+ 		from t_oss_role_menu m where m.OSS_ROLE_ID=#roleId# ) )
+	</select>
+	
+	
+	
+    <select id="getUserOssLeftMenuListByUserName" resultClass="OssMenu" parameterClass="String">
+		SELECT
+		m.`OSS_MENU_ID` AS ossMenuID,
+		m.`PARENT_MENU_ID`AS parentMenuID,
+		m.`NAME` AS NAME,
+		m.`PAGE_URL` AS pageUrl
+		FROM
+		t_oss_menu m
+		LEFT JOIN t_oss_role_menu rm
+		ON m.`OSS_MENU_ID` = rm.oss_menu_id
+		LEFT JOIN t_oss_user_role ur
+		ON rm.`OSS_ROLE_ID` = ur.`OSS_ROLE_ID`
+		WHERE ur.`USERNAME` = #userName#
+		AND m.`type` = 0
+		GROUP BY m.`OSS_MENU_ID`
+		ORDER BY m.`OSS_MENU_ID`
+	</select>
+	
+    <select id="getUserOssMenuListByUserNameAndProjectId" resultClass="OssMenu" parameterClass="java.util.Map" >
+		SELECT
+		m.`OSS_MENU_ID` AS ossMenuID,
+		m.`PARENT_MENU_ID`AS parentMenuID,
+		m.`NAME` AS NAME,
+		m.`PAGE_URL` AS pageUrl
+		FROM
+		t_oss_menu m
+		LEFT JOIN t_oss_role_menu rm
+		ON m.`OSS_MENU_ID` = rm.oss_menu_id
+		LEFT JOIN t_oss_user_role ur
+		ON rm.`OSS_ROLE_ID` = ur.`OSS_ROLE_ID`
+		WHERE ur.`USERNAME` = #userName# and PROJECT_ID=#projectId#
+		AND m.`type` = 0
+		GROUP BY m.`OSS_MENU_ID`
+		ORDER BY m.PARENT_MENU_ID,m.`OSS_MENU_ID`
+	</select>
+	
+    <select id="getUserOssMenuListsByUserNameAndProjectId" resultClass="OssMenu" parameterClass="java.util.Map" >
+		SELECT
+		m.`OSS_MENU_ID` AS ossMenuID,
+		m.`PARENT_MENU_ID`AS parentMenuID,
+		m.`NAME` AS NAME,
+		m.`PAGE_URL` AS pageUrl
+		FROM
+		t_oss_menu m
+		LEFT JOIN t_oss_role_menu rm
+		ON m.`OSS_MENU_ID` = rm.oss_menu_id
+		LEFT JOIN t_oss_user_role ur
+		ON rm.`OSS_ROLE_ID` = ur.`OSS_ROLE_ID`
+		WHERE ur.`USERNAME` = #userName# and PROJECT_ID=#projectId#
+		
+		<isNotNull prepend="AND" property="type">
+				m.`type`=#type#
+		</isNotNull>
+		
+		GROUP BY m.`OSS_MENU_ID`
+		ORDER BY m.PARENT_MENU_ID,m.`OSS_MENU_ID`
+	</select>
+	
+	
+	
+	<select id="getUserOssMenuListByUserName" resultClass="OssMenu" parameterClass="String">
+		SELECT
+		m.`OSS_MENU_ID` AS ossMenuID,
+		m.`PARENT_MENU_ID`AS parentMenuID,
+		m.`NAME` AS NAME,
+		m.`PAGE_URL` AS pageUrl
+		FROM
+		t_oss_menu m
+		LEFT JOIN t_oss_role_menu rm
+		ON m.`OSS_MENU_ID` = rm.oss_menu_id
+		LEFT JOIN t_oss_user_role ur
+		ON rm.`OSS_ROLE_ID` = ur.`OSS_ROLE_ID`
+		WHERE ur.`USERNAME` = #userName#
+		GROUP BY m.`OSS_MENU_ID`
+	</select>
+	
+	<select id="getOssMenuID" resultClass="String" parameterClass="java.util.Map">
+			<![CDATA[select Max(oss_menu_id)  as menu_id from t_oss_menu where project_id=#Project_id# 
+			  ]]>
+			  <isNotNull prepend="AND" property="parentMenuID">
+				PARENT_MENU_ID=#parentMenuID# 
+			</isNotNull>
+	</select>
+	
+		<select id="selectMenuParentList" resultClass="OssMenu" parameterClass="java.util.Map">
+			<![CDATA[	
+				SELECT OSS_MENU_ID AS ossMenuID, NAME AS name, PARENT_MENU_ID AS parentMenuID, type AS type, PAGE_URL AS pageUrl,PROJECT_ID AS projectId FROM T_OSS_MENU where project_id=#ProjectId# 
+				and PARENT_MENU_ID='0'
+				order by OSS_MENU_ID
+			 ]]>
+	</select>
+	
+	<select id="getOssMenuByPageUrl" parameterClass="java.util.Map" resultClass="OssMenu">
+		SELECT OSS_MENU_ID AS ossMenuID, NAME AS name, PARENT_MENU_ID AS parentMenuID, type AS type, PAGE_URL AS pageUrl,PROJECT_ID AS projectId FROM T_OSS_MENU
+		where PROJECT_ID=#projectId#
+		<isNotEmpty prepend="AND" property="pageUrl">
+				<![CDATA[ PAGE_URL like '%$pageUrl$%' ]]>  
+		</isNotEmpty>
+	</select>
+	
+</sqlMap>

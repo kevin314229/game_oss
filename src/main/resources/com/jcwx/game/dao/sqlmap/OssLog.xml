@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="OssLog">
+
+	<typeAlias alias="OssLog" type="com.jcwx.game.domain.OssLog" />
+
+	<insert id="createOssLog" parameterClass="OssLog">
+		INSERT INTO t_oss_log(id, name, login_ip, ip_address, operation_type, operation_msg, create_time, remark, server_id, server_name, business_id, business_name) VALUES(#id#, #name#, #loginIp#, #ipAddress#, #operationType#, #operationMsg#, #createTime#, #remark#, #serverId#, #serverName#, #businessId#, #businessName#)
+	</insert>
+
+	<update id="updateOssLog" parameterClass="OssLog">
+		UPDATE t_oss_log SET id=#id#, name=#name#, login_ip=#loginIp#, ip_address=#ipAddress#, operation_type=#operationType#, operation_msg=#operationMsg#, create_time=#createTime#, remark=#remark#, server_id=#serverId#, server_name=#serverName#, business_id=#businessId#, business_name=#businessName# WHERE id=#id#
+	</update>
+
+	<delete id="deleteOssLogByID" parameterClass="String">
+		DELETE FROM t_oss_log WHERE id=#id#
+	</delete>
+
+	<select id="getOssLogByID" parameterClass="String" resultClass="OssLog">
+		SELECT id AS id, name AS name, login_ip AS loginIp, ip_address AS ipAddress, operation_type AS operationType, operation_msg AS operationMsg, create_time AS createTime, remark AS remark, server_id AS serverId, server_name AS serverName, business_id AS businessId, business_name AS businessName FROM t_oss_log WHERE id=#id#
+	</select>
+
+	<select id="getOssLogList" resultClass="OssLog">
+		SELECT id AS id, name AS name, login_ip AS loginIp, ip_address AS ipAddress, operation_type AS operationType, operation_msg AS operationMsg, create_time AS createTime, remark AS remark, server_id AS serverId, server_name AS serverName, business_id AS businessId, business_name AS businessName FROM t_oss_log
+	</select>
+
+
+	<select id="getOssLogListByPage" resultClass="OssLog" parameterClass="java.util.Map">
+		SELECT id AS id, name AS name, login_ip AS loginIp, ip_address AS ipAddress, operation_type AS operationType, operation_msg AS operationMsg, create_time AS createTime, remark AS remark, server_id AS serverId, server_name AS serverName, business_id AS businessId, business_name AS businessName 
+		FROM t_oss_log
+		ORDER BY id DESC
+		LIMIT #beginNum#,#onePageNum#
+		
+	</select>
+	<select id="getOssLogListByQueryCondition" resultClass="OssLog" parameterClass="java.util.Map">
+		SELECT id AS id, name AS name, login_ip AS loginIp, ip_address AS ipAddress, operation_type AS operationType, operation_msg AS operationMsg, create_time AS createTime, remark AS remark, server_id AS serverId, server_name AS serverName, business_id AS businessId, business_name AS businessName 
+			FROM t_oss_log
+			<dynamic prepend="WHERE">
+			<isNotNull property="name" prepend="AND">
+					<![CDATA[name LIKE '%$name$%']]>
+			</isNotNull>
+			<isNotNull  property="beginTime" prepend="AND">
+					<![CDATA[   create_time >= #beginTime# ]]>
+			</isNotNull>
+			<isNotNull  property="endTime" prepend="AND">
+					<![CDATA[	create_time <= #endTime# ]]>
+			</isNotNull>
+			<isNotEqual property="ossServerId" compareValue="-1" prepend="AND">
+					server_id = #ossServerId# 
+			</isNotEqual>	
+			<isNotNull property="operationType" prepend="AND">
+					operation_type = #operationType# 
+			</isNotNull>
+			</dynamic>
+			ORDER BY id DESC
+			LIMIT #beginNum#,#onePageNum#
+	</select>
+	
+	<select id="getAllNumByQueryCondition" resultClass="Integer" parameterClass="java.util.Map">
+		SELECT COUNT(*) as allNum FROM t_oss_log
+			<dynamic prepend="WHERE">
+				<isNotNull property="name" prepend="AND">
+					<![CDATA[ name LIKE '%$name$%']]>
+				</isNotNull>
+				<isNotNull  property="beginTime" prepend="AND">
+						<![CDATA[   create_time >= #beginTime# ]]>
+				</isNotNull>
+				<isNotNull  property="endTime" prepend="AND">
+						<![CDATA[	create_time <= #endTime# ]]>
+				</isNotNull>
+				<isNotEqual property="ossServerId" compareValue="-1" prepend="AND">
+					server_id = #ossServerId# 
+				</isNotEqual>
+
+				<isNotNull property="operationType" prepend="AND">
+						operation_type = #operationType# 
+				</isNotNull>
+			</dynamic>
+	</select>
+	<select id="getOssLogCount" resultClass="Integer">
+		select count(*) from t_oss_log 
+	</select>
+
+</sqlMap>

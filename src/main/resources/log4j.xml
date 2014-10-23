@@ -1,0 +1,107 @@
+﻿<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE log4j:configuration SYSTEM "log4j.dtd">
+<log4j:configuration xmlns:log4j="http://jakarta.apache.org/log4j/">
+
+	<!-- ConsoleAppender 将日志打印到控制台（开发中使用这个） -->
+	<appender class="org.apache.log4j.ConsoleAppender" name="ConsoleAppender">
+		<param name="Encoding" value="GBK" />
+		<layout class="org.apache.log4j.PatternLayout">
+			<param name="ConversionPattern" value="%d %-5p %-5c{3}:%L -> %m%n" />
+		</layout>
+	</appender>
+
+	<!-- DailyRollingFileAppender 每日记录日志文件（一般部署环境中应用，但是不推荐） -->
+	<appender class="org.apache.log4j.DailyRollingFileAppender"
+		name="DailyRollingFileAppender">
+		<param name="DatePattern" value="'.'yyyy-MM-dd'.log'" />
+		<param name="File" value="logs/oss/log.log" />
+		<param name="Encoding" value="UTF-8" />
+		<layout class="org.apache.log4j.PatternLayout">
+			<param name="ConversionPattern" value="%d %-5p %-5c{3}:%L -> %m%n" />
+		</layout>
+	</appender>
+
+	<!-- RollingFileAppender 根据文件大小记录日志文件（部署环境中应用，推荐） -->
+	<appender name="RollingFileAppender" class="org.apache.log4j.RollingFileAppender">
+		<param name="Append" value="true" />
+		<param name="MaxFileSize" value="512KB" />
+		<param name="Encoding" value="UTF-8" />
+		<param name="File" value="D:\\log\\log.log" />
+		<param name="MaxBackupIndex" value="10" />
+		<layout class="org.apache.log4j.PatternLayout">
+			<param name="ConversionPattern" value="%d{yyyy-MM-dd hh:mm:ss}:%p %t %c - %m%n" />
+		</layout>
+	</appender>
+
+	<!-- JDBCAppender 将日志记录到数据库（不推荐应用到任何环境） -->
+	<appender name="JDBCAppender" class="org.apache.log4j.jdbc.JDBCAppender">
+		<param name="URL" value="jdbc:oracle:thin:@127.0.0.1:1521:test" />
+		<param name="user" value="oracle" />
+		<param name="password" value="*****" />
+		<param name="driver" value="oracle.jdbc.driver.OracleDriver" />
+		<layout class="org.apache.log4j.PatternLayout">
+			<param name="ConversionPattern"
+				value="insert into log4j(createdate,thread,level_,class,message) values(\'%d\',\'%t\',\'%-5p\',\'%c\',\'%m\')" />
+		</layout>
+	</appender>
+
+	<!-- SMTPAppender 将日志发送邮件（部署环境中应用，非常推荐，只要你可以收邮件，就可以监控服务器的异常） -->
+	<appender name="SMTPAppender" class="org.apache.log4j.net.SMTPAppender">
+		<param name="Threshold" value="ERROR" />
+		<param name="BufferSize" value="1" />
+		<param name="From" value="wuhui0915@163.com" />
+		<param name="SMTPHost" value="smtp.163.com" />
+		<param name="SMTPUsername" value="wuhui0915@163.com" />
+		<param name="SMTPPassword" value="********" />
+		<param name="Subject" value="Log4J Msg" />
+		<param name="To" value="wuhui0915@163.com" />
+		<layout class="org.apache.log4j.PatternLayout">
+			<param name="ConversionPattern" value="%d{yyyy-MM-dd hh:mm:ss}:%p %t %c - %m%n" />
+		</layout>
+	</appender>
+
+<logger name="com.ibatis"> 
+  <level value="debug" /> 
+ </logger> 
+  
+ <logger name="com.ibatis.common.jdbc.SimpleDataSource"> 
+  <level value="debug" /> 
+ </logger>   
+ <logger name="com.ibatis.common.jdbc.ScriptRunner"> 
+  <level value="debug" /> 
+ </logger> 
+  
+ <logger name="com.ibatis.common.jdbc.SqlMapClientDelegate"> 
+  <level value="debug" /> 
+ </logger> 
+  
+ <logger name="java.sql.Connection"> 
+  <level value="debug" /> 
+ </logger> 
+  
+ <logger name="java.sql.Statement"> 
+  <level value="debug" /> 
+ </logger> 
+  
+ <logger name="java.sql.PreparedStatement"> 
+  <level value="debug" /> 
+ </logger> 
+
+	<!-- log4j.logger.com.ibatis=debug log4j.logger.com.ibatis.common.jdbc.SimpleDataSource=debug 
+		log4j.logger.com.ibatis.common.jdbc.ScriptRunner=debug log4j.logger.com.ibatis.sqlmap.engine.impl.SqlMapClientDelegate=debug 
+		log4j.logger.java.sql.Connection=debug log4j.logger.java.sql.Statement=debug 
+		log4j.logger.java.sql.PreparedStatement=debug,stdout -->
+
+	<root>
+		<level value="INFO" />
+		<!-- 开发环境中推荐使用 ConsoleAppender 部署DailyRollingFileAppender -->
+		<appender-ref ref="ConsoleAppender" />
+
+		<appender-ref ref="DailyRollingFileAppender" />
+
+		<!-- 部署环境中推荐 ConsoleAppender 和 SMTPAppender 同时使用 -->
+		<!-- <appender-ref ref="RollingFileAppender" /> -->
+		<!-- <appender-ref ref="SMTPAppender" /> -->
+	</root>
+
+</log4j:configuration>

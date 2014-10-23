@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="OssRole">
+	<typeAlias alias="OssRole" type="com.jcwx.game.domain.OssRole" />
+
+	<insert id="createOssRole" parameterClass="OssRole">
+		INSERT INTO T_OSS_ROLE( ROLE_DESC,PARENT_ROLE_ID,ROLE_CODE, ROLE_NAME, ROLE_TYPE,PROJECT_ID) VALUES(#roleDesc#,#parentRoleId#, #roleCode#, #roleName#, #roleType#,#projectId#)
+		<selectKey resultClass="Integer" keyProperty="ossRoleID" >
+			SELECT @@IDENTITY AS ID
+		</selectKey> 
+	</insert>
+
+	<update id="updateOssRole" parameterClass="OssRole">
+		UPDATE T_OSS_ROLE SET OSS_ROLE_ID=#ossRoleID#,PARENT_ROLE_ID=#parentRoleId# ,ROLE_DESC=#roleDesc#, ROLE_CODE=#roleCode#, ROLE_NAME=#roleName#, ROLE_TYPE=#roleType#,PROJECT_ID=#projectId# WHERE OSS_ROLE_ID=#ossRoleID#
+	</update>
+
+	<delete id="deleteOssRoleByID" parameterClass="Integer">
+		DELETE FROM T_OSS_ROLE WHERE OSS_ROLE_ID=#ossRoleID#
+	</delete>
+
+	<select id="getOssRoleByID" parameterClass="Integer" resultClass="OssRole">
+		SELECT OSS_ROLE_ID AS ossRoleID,PARENT_ROLE_ID AS parentRoleId, ROLE_DESC AS roleDesc, ROLE_CODE AS roleCode, ROLE_NAME AS roleName, ROLE_TYPE AS roleType,PROJECT_ID AS projectId FROM T_OSS_ROLE WHERE OSS_ROLE_ID=#ossRoleID#
+	</select>
+
+	<select id="getOssRoleList" resultClass="OssRole">
+		SELECT OSS_ROLE_ID AS ossRoleID,PARENT_ROLE_ID AS parentRoleId,ROLE_DESC AS roleDesc, ROLE_CODE AS roleCode, ROLE_NAME AS roleName, ROLE_TYPE AS roleType ,PROJECT_ID AS projectId FROM T_OSS_ROLE
+	</select>
+	
+	<select id="getOssRoleListByProjectId" parameterClass="Integer" resultClass="OssRole">
+		SELECT OSS_ROLE_ID AS ossRoleID,PARENT_ROLE_ID AS parentRoleId,ROLE_DESC AS roleDesc, ROLE_CODE AS roleCode, ROLE_NAME AS roleName, ROLE_TYPE AS roleType ,PROJECT_ID AS projectId FROM T_OSS_ROLE where PROJECT_ID=#projectId# 
+	</select>
+	
+	<select id="getOssRoleByProjectIdAndUserName" parameterClass="java.util.HashMap" resultClass="OssRole">
+		SELECT OSS_ROLE_ID AS ossRoleID,PARENT_ROLE_ID AS parentRoleId,ROLE_DESC AS roleDesc, ROLE_CODE AS roleCode, ROLE_NAME AS roleName, ROLE_TYPE AS roleType ,PROJECT_ID AS projectId FROM T_OSS_ROLE where PROJECT_ID=#projectId# 
+		and OSS_ROLE_ID in (select r.OSS_ROLE_ID from t_oss_user_role r where r.USERNAME=#userName#) 
+	</select>
+
+</sqlMap>

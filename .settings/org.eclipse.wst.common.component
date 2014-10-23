@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project-modules id="moduleCoreId" project-version="1.5.0">
+    <wb-module deploy-name="fengmoOss">
+        <wb-resource deploy-path="/" source-path="/src/main/webapp" tag="defaultRootSource"/>
+        <wb-resource deploy-path="/WEB-INF/classes" source-path="/src/main/java"/>
+        <wb-resource deploy-path="/WEB-INF/classes" source-path="/src/main/resources"/>
+        <wb-resource deploy-path="/WEB-INF/classes" source-path="/src/main/server"/>
+        <wb-resource deploy-path="/WEB-INF/classes" source-path="/src/main/zhxy"/>
+        <wb-resource deploy-path="/WEB-INF/classes" source-path="/src/main/zhxyresources"/>
+        <property name="context-root" value="fengmoOss"/>
+        <property name="java-output-path" value="/fengmoOss/target/classes"/>
+    </wb-module>
+</project-modules>

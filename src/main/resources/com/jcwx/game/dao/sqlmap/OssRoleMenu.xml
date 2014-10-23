@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="OssRoleMenu">
+	<typeAlias alias="OssRoleMenu" type="com.jcwx.game.domain.OssRoleMenu" />
+	<typeAlias alias="OssMenu" type="com.jcwx.game.domain.OssMenu" />
+
+	<insert id="createOssRoleMenu" parameterClass="OssRoleMenu">
+		INSERT INTO T_OSS_ROLE_MENU(OSS_ROLE_ID, OSS_MENU_ID) VALUES(#ossRoleID#, #ossMenuID#)
+	</insert>
+
+	<update id="updateOssRoleMenu" parameterClass="OssRoleMenu">
+		UPDATE T_OSS_ROLE_MENU SET OSS_ROLE_ID=#ossRoleID#, OSS_MENU_ID=#ossMenuID# WHERE  OSS_MENU_ID=#menuId#  
+	</update>
+
+	<delete id="deleteOssRoleMenu" parameterClass="OssRoleMenu">
+		DELETE FROM T_OSS_ROLE_MENU WHERE OSS_ROLE_ID=#ossRoleID# AND OSS_MENU_ID=#ossMenuID#  
+	</delete>
+	
+	<delete id="deleteOssRoleMenuByRoleId" parameterClass="Integer">
+		DELETE FROM T_OSS_ROLE_MENU WHERE OSS_ROLE_ID=#ossRoleID# 
+	</delete>
+
+	<select id="getOssMenuByRoleId" parameterClass="Integer" resultClass="OssMenu">
+		SELECT b.OSS_MENU_ID AS ossMenuID, b.NAME AS name, b.PARENT_MENU_ID AS parentMenuID, b.PAGE_URL AS pageUrl FROM t_oss_role_menu a 
+		INNER JOIN t_oss_menu b ON a.OSS_MENU_ID = b.OSS_MENU_ID 
+		WHERE a.OSS_ROLE_ID = #ossRoleID# 
+		ORDER BY b.OSS_MENU_ID ASC
+	</select>
+	
+
+
+	<select id="getOssRoleMenuList" resultClass="OssRoleMenu">
+		SELECT OSS_ROLE_ID AS ossRoleID, OSS_MENU_ID AS ossMenuID FROM T_OSS_ROLE_MENU
+	</select>
+
+</sqlMap>

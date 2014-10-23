@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="Message">
+
+	<typeAlias alias="Message" type="com.jcwx.game.domain.Message" />
+
+	<insert id="createMessage" parameterClass="Message">
+		INSERT INTO T_MESSAGE(message_id, receive_id, sender, title, content, msg_type, msg_cost, msg_item, send_time, msg_read) VALUES(#messageId#, #receiveId#, #sender#, #title#, #content#, #msgType#, #msgCost#, #msgItem#, #sendTime#, #msgRead#)
+	</insert>
+
+	<update id="updateMessage" parameterClass="Message">
+		UPDATE T_MESSAGE SET message_id=#messageId#, receive_id=#receiveId#, sender=#sender#, title=#title#, content=#content#, msg_type=#msgType#, msg_cost=#msgCost#, msg_item=#msgItem#, send_time=#sendTime#, msg_read=#msgRead# WHERE message_id=#messageId#
+	</update>
+
+	<delete id="deleteMessageByID" parameterClass="String">
+		DELETE FROM T_MESSAGE WHERE message_id=#messageId#
+	</delete>
+
+	<select id="getMessageByID" parameterClass="String" resultClass="Message">
+		SELECT message_id AS messageId, receive_id AS receiveId, sender AS sender, title AS title, content AS content, msg_type AS msgType, msg_cost AS msgCost, msg_item AS msgItem, send_time AS sendTime, msg_read AS msgRead FROM T_MESSAGE WHERE message_id=#messageId#
+	</select>
+
+	<select id="getMessageList" resultClass="Message">
+		SELECT message_id AS messageId, receive_id AS receiveId, sender AS sender, title AS title, content AS content, msg_type AS msgType, msg_cost AS msgCost, msg_item AS msgItem, send_time AS sendTime, msg_read AS msgRead FROM T_MESSAGE
+	</select>
+
+</sqlMap>

@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans 
+	http://www.springframework.org/schema/beans/spring-beans-3.0.xsd" >
+	<bean id="S_LoginAction" class="com.jcwx.game.admin.LoginAction" scope="prototype"/>
+	<bean id="S_UpdateUserPasswordAction" class="com.jcwx.game.admin.system.UpdateUserPasswordAction" scope="prototype"/>
+	<bean id="S_QueryPayAction" class="com.jcwx.game.admin.pay.QueryPayAction" scope="prototype"/>
+	<bean id="S_PayStatAction" class="com.jcwx.game.admin.pay.PayStatAction" scope="prototype"/>
+	<bean id="S_QueryMoneyConsumeAction" class="com.jcwx.game.admin.pay.QueryMoneyConsumeAction" scope="prototype"/>
+	<bean id="S_QueryPayRankAction" class="com.jcwx.game.admin.pay.QueryPayRankAction"/>
+	<bean id="S_QueryOnlinePlayerAction" class="com.jcwx.game.admin.online.QueryOnlinePlayerAction"/>
+	<bean id="S_QueryAllPlayerAction" class="com.jcwx.game.admin.online.QueryAllPlayerAction"/>
+	<bean id="S_QueryPlayerRegisterStatByDayAction" class="com.jcwx.game.admin.online.QueryPlayerRegisterStatByDayAction"/>
+	<bean id="S_QueryPlayerRegisterStatByHourAction" class="com.jcwx.game.admin.online.QueryPlayerRegisterStatByHourAction"/>
+	<!--  <bean id="S_QueryTodayOnlineInfo" class="com.jcwx.game.admin.online.QueryTodayOnlineInfo"/>
+	<bean id="S_QueryBeforeOnlineInfo" class="com.jcwx.game.admin.online.QueryBeforeOnlineInfo"/>-->
+	
+	<bean id="S_SendSysMsgAction" class="com.jcwx.game.admin.message.SendSysMsgAction"/>
+	<bean id="S_AdminSysMsgAction" class="com.jcwx.game.admin.message.AdminSysMsgAction"/>
+	<bean id="S_SendMsgToPlayerAction" class="com.jcwx.game.admin.message.SendMsgToPlayerAction"/>
+	<bean id="S_SendMsgToMorePlayerAction" class="com.jcwx.game.admin.message.SendMsgToMorePlayerAction"/>
+	<bean id="S_SendStageAction" class="com.jcwx.game.admin.message.SendStageAction"/>
+	<bean id="S_PlayerBanChatAction" class="com.jcwx.game.admin.player.PlayerBanChatAction" scope="prototype"/>
+	<bean id="S_AdminBlackIpAction" class="com.jcwx.game.admin.player.AdminBlackIpAction"/>
+	
+	<bean id="S_CommentAction" class="com.jcwx.game.admin.comment.CommentAction" scope="prototype"/>
+	<bean id="S_AnswerAction" class="com.jcwx.game.admin.answer.AnswerAction" scope="prototype"/>
+	<bean id="S_BanAccountsAction" class="com.jcwx.game.admin.player.BanAccountsAction" scope="prototype"/>
+	
+	<bean id="S_ModifyCacheAction" class="com.jcwx.game.admin.system.ModifyCacheAction" scope="prototype"/>
+	
+	<bean id="S_BanIPAction" class="com.jcwx.game.admin.player.BanIPAction" scope="prototype"/>
+	<!--  <bean id="S_LoginLogAction" class="com.jcwx.game.admin.player.LoginLogAction" scope="prototype"/>-->
+	<bean id="S_PlayerRenameAction" class="com.jcwx.game.admin.player.PlayerRenameAction" scope="prototype"/>
+	<bean id="S_PlayerInfoAction" class="com.jcwx.game.admin.player.PlayerInfoAction" scope="prototype"/>
+	<bean id="S_IPStatsAction" class="com.jcwx.game.admin.player.IPStatsAction" scope="prototype"/>
+	<!-- <bean id="S_HistoryOnlineStatistics" class="com.jcwx.game.admin.online.HistoryOnlineStatistics" scope="prototype"/> -->
+	<bean id="S_OssRoleAction" class="com.jcwx.game.admin.system.OssRoleAction" scope="prototype"/>
+	<bean id="S_OssUserAction" class="com.jcwx.game.admin.system.OssUserAction" scope="prototype"/>
+	<bean id="S_OssMenuAction" class="com.jcwx.game.admin.system.OssMenuAction" scope="prototype"/>
+	<bean id="S_MemoryMonitorAction" class="com.jcwx.game.admin.monitor.MemoryMonitorAction" scope="prototype"/>
+	<bean id="S_RemoteLoginAction" class="com.jcwx.game.admin.RemoteLoginAction" scope="prototype"/>
+	<bean id="S_SystemConfigAction" class="com.jcwx.game.admin.system.SystemConfigAction" scope="prototype"/>
+	<bean id="S_ResourcesProvideAction" class="com.jcwx.game.admin.player.ResourcesProvideAction" scope="prototype"/>
+</beans>

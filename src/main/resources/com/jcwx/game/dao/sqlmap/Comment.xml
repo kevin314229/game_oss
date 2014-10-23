@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="Comment">
+	<typeAlias alias="Comment" type="com.jcwx.game.domain.Comment" />
+
+	<insert id="createComment" parameterClass="Comment">
+		INSERT INTO T_COMMENT(COMMENT_ID, PLAYER_ID, TITLE, QUESTION, QUE_DATE, FLAG, STATE) VALUES(#commentID#, #playerID#, #title#, #question#, #queDate#, #flag#, #state#)
+		<selectKey resultClass="Integer" keyProperty="commentID" >
+			SELECT @@IDENTITY AS ID
+		</selectKey> 
+	</insert>
+
+	<update id="updateComment" parameterClass="Comment">
+		UPDATE T_COMMENT SET COMMENT_ID=#commentID#, PLAYER_ID=#playerID#, TITLE=#title#, QUESTION=#question#, QUE_DATE=#queDate#, FLAG=#flag#, STATE=#state# WHERE Comment_ID=#commentID#
+	</update>
+
+	<delete id="deleteCommentByID" parameterClass="Integer">
+		DELETE FROM T_COMMENT WHERE Comment_ID=#commentID#
+	</delete>
+
+	<select id="getCommentByID" parameterClass="Integer" resultClass="Comment">
+		SELECT COMMENT_ID AS commentID, PLAYER_ID AS playerID, TITLE AS title, QUESTION AS question, QUE_DATE AS queDate, FLAG AS flag, STATE AS state FROM T_COMMENT WHERE Comment_ID=#commentID#
+	</select>
+
+	<select id="getCommentList" resultClass="Comment" parameterClass="java.util.Map">
+		SELECT COMMENT_ID AS commentID, PLAYER_ID AS playerID, TITLE AS title, QUESTION AS question, QUE_DATE AS queDate, FLAG AS flag, STATE AS state FROM T_COMMENT
+		<dynamic prepend="WHERE">
+			<isNotNull property="flag" prepend="AND">
+				<![CDATA[ FLAG = #flag# ]]>
+			</isNotNull>
+			<isNotNull property="state" prepend="AND">
+				<![CDATA[ STATE = #state# ]]>
+			</isNotNull>
+			<isNotNull property="beginDate"  prepend="AND">
+				<![CDATA[ QUE_DATE >= #beginDate# ]]>
+			</isNotNull>
+			<isNotNull property="endDate"  prepend="AND">
+				<![CDATA[ QUE_DATE <= #endDate# ]]>
+			</isNotNull>
+			<isNotNull property="orderFlag" >
+		      order by queDate $orderFlag$
+		    </isNotNull>
+	 	    <isNotNull property="beginNum">
+	          limit #beginNum:INTEGER#, #pageNum:INTEGER#
+	        </isNotNull> 
+		</dynamic>
+	</select>
+	
+	<select id="getCommentListCountNum" resultClass="Long" parameterClass="java.util.Map">
+		SELECT COUNT(COMMENT_ID) FROM T_COMMENT
+		<dynamic prepend="WHERE">
+			<isNotNull property="flag" prepend="AND">
+				<![CDATA[ FLAG = #flag# ]]>
+			</isNotNull>
+			<isNotNull property="state" prepend="AND">
+				<![CDATA[ STATE = #state# ]]>
+			</isNotNull>
+			<isNotNull property="beginDate"  prepend="AND">
+				<![CDATA[ QUE_DATE >= #beginDate# ]]>
+			</isNotNull>
+			<isNotNull property="endDate"  prepend="AND">
+				<![CDATA[ QUE_DATE <= #endDate# ]]>
+			</isNotNull>
+		</dynamic>
+	</select>
+	
+	<select id="getUserBetweenDayPutCountNum" resultClass="Integer" parameterClass="java.util.Map">
+		<![CDATA[ SELECT COUNT(COMMENT_ID) FROM T_COMMENT WHERE PLAYER_ID=#playerID# AND  QUE_DATE >= #beginDate# AND QUE_DATE <= #endDate# ]]>
+	</select>
+	
+	
+	<select id="queryCommentByPlayerID" resultClass="Comment" parameterClass="java.util.Map">
+		SELECT COMMENT_ID AS commentID, PLAYER_ID AS playerID, TITLE AS title, QUESTION AS question, QUE_DATE AS queDate, FLAG AS flag, STATE AS state FROM T_COMMENT
+		<dynamic prepend="WHERE">
+			<isNotNull property="playerID" prepend="AND">
+				<![CDATA[ PLAYER_ID = #playerID# ]]>
+			</isNotNull>
+			<isNotNull property="flag" prepend="AND">
+				<![CDATA[ FLAG = #flag# ]]>
+			</isNotNull>
+			<isNotNull property="state" prepend="AND">
+				<![CDATA[ STATE = #state# ]]>
+			</isNotNull>
+		      order by queDate DESC 
+	 	    <isNotNull property="beginNum">
+	          limit #beginNum:INTEGER#, #pageNum:INTEGER#
+	        </isNotNull> 
+		</dynamic>
+	</select>
+	
+	<select id="queryCommentByPlayerIDCountNum" resultClass="Integer" parameterClass="java.util.Map">
+		SELECT COUNT(COMMENT_ID) FROM T_COMMENT
+		<dynamic prepend="WHERE">
+			<isNotNull property="playerID" prepend="AND">
+				<![CDATA[ PLAYER_ID = #playerID# ]]>
+			</isNotNull>
+			<isNotNull property="flag" prepend="AND">
+				<![CDATA[ FLAG = #flag# ]]>
+			</isNotNull>
+			<isNotNull property="state" prepend="AND">
+				<![CDATA[ STATE = #state# ]]>
+			</isNotNull>
+		</dynamic>
+	</select>
+	
+	
+	
+	
+
+	
+	
+	
+	
+	
+	
+	
+
+</sqlMap>

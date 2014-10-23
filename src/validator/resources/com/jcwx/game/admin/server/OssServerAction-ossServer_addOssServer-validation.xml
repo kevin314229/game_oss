@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE validators PUBLIC "-//Apache Struts//XWork Validator 1.0.2//EN" "http://struts.apache.org/dtds/xwork-validator-1.0.2.dtd">
+
+<validators>
+	<field name="ossServer.id">
+		<field-validator type="requiredstring">
+			<param name="trim">true</param>
+			<message>请输入大区ID</message>
+		</field-validator>
+		<field-validator type="int">
+			<param name="trim">true</param>
+			<message>大区ID必须为 正数(int类型)</message>
+		</field-validator>
+	</field>
+</validators>

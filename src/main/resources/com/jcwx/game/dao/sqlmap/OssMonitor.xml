@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="OssMonitor">
+	<typeAlias alias="OssMonitor" type="com.jcwx.game.domain.OssMonitor" />
+
+	<insert id="createOssMonitor" parameterClass="OssMonitor">
+		INSERT INTO T_OSS_MONITOR(OSS_MONITOR_ID, TOTAL_MEMORY, FREE_MEMORY, MAX_MEMORY, OS_TOTAL_MEMORY_SIZE, OSS_FREE_PHYSICAL_MEMORY, TOTAL_THREAD, CUP_RATIO) VALUES(#ossMonitorID#, #totalMemory#, #freeMemory#, #maxMemory#, #osTotalMemorySize#, #ossFreePhysicalMemory#, #totalThread#, #cupRatio#)
+	</insert>
+
+	<update id="updateOssMonitor" parameterClass="OssMonitor">
+		UPDATE T_OSS_MONITOR SET OSS_MONITOR_ID=#ossMonitorID#, TOTAL_MEMORY=#totalMemory#, FREE_MEMORY=#freeMemory#, MAX_MEMORY=#maxMemory#, OS_TOTAL_MEMORY_SIZE=#osTotalMemorySize#, OSS_FREE_PHYSICAL_MEMORY=#ossFreePhysicalMemory#, TOTAL_THREAD=#totalThread#, CUP_RATIO=#cupRatio# WHERE OssMonitor_ID=#ossMonitorID#
+	</update>
+
+	<delete id="deleteOssMonitorByID" parameterClass="Integer">
+		DELETE FROM T_OSS_MONITOR WHERE OssMonitor_ID=#ossMonitorID#
+	</delete>
+
+	<select id="getOssMonitorByID" parameterClass="Integer" resultClass="OssMonitor">
+		SELECT OSS_MONITOR_ID AS ossMonitorID, TOTAL_MEMORY AS totalMemory, FREE_MEMORY AS freeMemory, MAX_MEMORY AS maxMemory, OS_TOTAL_MEMORY_SIZE AS osTotalMemorySize, OSS_FREE_PHYSICAL_MEMORY AS ossFreePhysicalMemory, TOTAL_THREAD AS totalThread, CUP_RATIO AS cupRatio FROM T_OSS_MONITOR WHERE OssMonitor_ID=#ossMonitorID#
+	</select>
+
+	<select id="getOssMonitorList" resultClass="OssMonitor">
+		SELECT OSS_MONITOR_ID AS ossMonitorID, TOTAL_MEMORY AS totalMemory, FREE_MEMORY AS freeMemory, MAX_MEMORY AS maxMemory, OS_TOTAL_MEMORY_SIZE AS osTotalMemorySize, OSS_FREE_PHYSICAL_MEMORY AS ossFreePhysicalMemory, TOTAL_THREAD AS totalThread, CUP_RATIO AS cupRatio FROM T_OSS_MONITOR
+	</select>
+	
+	<select id="getOssMonitorMinutesListByMinute" resultClass="OssMonitor">
+		<![CDATA[
+			SELECT OSS_MONITOR_ID AS ossMonitorID, TOTAL_MEMORY AS totalMemory, FREE_MEMORY AS freeMemory, MAX_MEMORY AS maxMemory, OS_TOTAL_MEMORY_SIZE AS osTotalMemorySize, OSS_FREE_PHYSICAL_MEMORY AS ossFreePhysicalMemory, TOTAL_THREAD AS totalThread, CUP_RATIO AS cupRatio FROM T_OSS_MONITOR a
+			WHERE LEFT(a.OSS_MONITOR_ID,8)>= LEFT(#begin#,8) AND LEFT(a.OSS_MONITOR_ID,8)<= LEFT(#end#,8)
+		]]>
+	</select>
+	
+	
+
+</sqlMap>

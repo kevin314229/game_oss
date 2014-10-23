@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="PayHistory">
+
+	<typeAlias alias="PayHistory" type="com.jcwx.game.domain.PayHistory" />
+	<typeAlias alias="PayHistorySta" type="com.jcwx.game.domain.PayHistorySta" />
+
+	<insert id="createPayHistory" parameterClass="PayHistory">
+		INSERT INTO STA_PAY_HISTORY(pay_history_id, game_id, pt_id, area_id, player_id, login_name, player_base_id, pt_area, pt_order, currency, pt_money_num, money_num, complete_time) VALUES(#payHistoryId#, #gameId#, #ptId#, #areaId#, #playerId#, #loginName#, #playerBaseId#, #ptArea#, #ptOrder#, #currency#, #ptMoneyNum#, #moneyNum#, #completeTime#)
+	</insert>
+
+	<update id="updatePayHistory" parameterClass="PayHistory">
+		UPDATE STA_PAY_HISTORY SET pay_history_id=#payHistoryId#, game_id=#gameId#, pt_id=#ptId#, area_id=#areaId#, player_id=#playerId#, login_name=#loginName#, player_base_id=#playerBaseId#, pt_area=#ptArea#, pt_order=#ptOrder#, currency=#currency#, pt_money_num=#ptMoneyNum#, money_num=#moneyNum#, complete_time=#completeTime# WHERE pay_history_id=#payHistoryId#
+	</update>
+
+	<delete id="deletePayHistoryByID" parameterClass="String">
+		DELETE FROM STA_PAY_HISTORY WHERE pay_history_id=#payHistoryId#
+	</delete>
+
+	<select id="getPayHistoryByID" parameterClass="String" resultClass="PayHistory">
+		SELECT pay_history_id AS payHistoryId, game_id AS gameId, pt_id AS ptId, area_id AS areaId, player_id AS playerId, login_name AS loginName, player_base_id AS playerBaseId, pt_area AS ptArea, pt_order AS ptOrder, currency AS currency, pt_money_num AS ptMoneyNum, money_num AS moneyNum, complete_time AS completeTime FROM STA_PAY_HISTORY WHERE pay_history_id=#payHistoryId#
+	</select>
+
+	<select id="getPayHistoryList" resultClass="PayHistory">
+		SELECT pay_history_id AS payHistoryId, game_id AS gameId, pt_id AS ptId, area_id AS areaId, player_id AS playerId, login_name AS loginName, player_base_id AS playerBaseId, pt_area AS ptArea, pt_order AS ptOrder, currency AS currency, pt_money_num AS ptMoneyNum, money_num AS moneyNum, complete_time AS completeTime FROM STA_PAY_HISTORY
+	</select>
+	
+	<select id="getPayHistorySta"  parameterClass="java.util.Map" resultClass="PayHistorySta">
+		select '0-50' as 'interval',COUNT(1) as payNum, COUNT(DISTINCT player_id) as payPlayerNum ,SUM(money_num) as amountSum
+		from sta_pay_history p where 
+		<![CDATA[ complete_time >=#beginDate# and complete_time< #endDate#  ]]>
+		<isNotEmpty prepend="AND" property="gameID">
+				 game_id =#gameID#   
+		</isNotEmpty>
+		<isNotEmpty prepend="AND" property="ptID">
+				 pt_id =#ptID#   
+		</isNotEmpty>
+		<isNotEmpty prepend="AND" property="areaID">
+				 area_id IN ($areaID$)   
+		</isNotEmpty>
+ 		<![CDATA[ and money_num<50 UNION ALL ]]>
+		select '50-100' as 'interval', COUNT(1) as payNum, COUNT(DISTINCT player_id) as payPlayerNum ,SUM(money_num) as amountSum
+		from sta_pay_history p where 
+		<![CDATA[ complete_time >=#beginDate# and complete_time< #endDate#  ]]>
+		<isNotEmpty prepend="AND" property="gameID">
+				 game_id =#gameID#   
+		</isNotEmpty>
+		<isNotEmpty prepend="AND" property="ptID">
+				 pt_id =#ptID#   
+		</isNotEmpty>
+		<isNotEmpty prepend="AND" property="areaID">
+				 area_id in ($areaID$)   
+		</isNotEmpty>
+		<![CDATA[  and money_num>=50 and money_num<100  ]]> UNION ALL
+		select '100-300' as 'interval', COUNT(1) as payNum, COUNT(DISTINCT player_id) as payPlayerNum ,SUM(money_num) as amountSum
+		from sta_pay_history p where 
+		<![CDATA[ complete_time >=#beginDate# and complete_time< #endDate#  ]]>
+		<isNotEmpty prepend="AND" property="gameID">
+				 game_id =#gameID#   
+		</isNotEmpty>
+		<isNotEmpty prepend="AND" property="ptID">
+				 pt_id =#ptID#   
+		</isNotEmpty>
+		<isNotEmpty prepend="AND" property="areaID">
+				 area_id in ($areaID$)   
+		</isNotEmpty> 
+ 		<![CDATA[  and money_num>=100 and money_num<300 ]]> UNION ALL 
+		select '300-500' as 'interval',COUNT(1) as payNum, COUNT(DISTINCT player_id) as payPlayerNum ,SUM(money_num) as amountSum
+		from sta_pay_history p where 
+		<![CDATA[ complete_time >=#beginDate# and complete_time< #endDate#  ]]>
+		<isNotEmpty prepend="AND" property="gameID">
+				 game_id =#gameID#   
+		</isNotEmpty>
+		<isNotEmpty prepend="AND" property="ptID">
+				 pt_id =#ptID#   
+		</isNotEmpty>
+		<isNotEmpty prepend="AND" property="areaID">
+				 area_id in ($areaID$)   
+		</isNotEmpty> 
+		<![CDATA[  and money_num>=300 and money_num<500  ]]> UNION ALL
+		select '500-1000' as 'interval',COUNT(1) as payNum, COUNT(DISTINCT player_id) as payPlayerNum ,SUM(money_num) as amountSum
+		from sta_pay_history p where 
+		<![CDATA[ complete_time >=#beginDate# and complete_time< #endDate#  ]]> 
+		<isNotEmpty prepend="AND" property="gameID">
+				 game_id =#gameID#   
+		</isNotEmpty>
+		<isNotEmpty prepend="AND" property="ptID">
+				 pt_id =#ptID#   
+		</isNotEmpty>
+		<isNotEmpty prepend="AND" property="areaID">
+				 area_id in ($areaID$)   
+		</isNotEmpty>
+		<![CDATA[  and money_num>=500 and money_num<1000]]> UNION ALL 
+		select '>=1000' as 'interval',COUNT(1) as payNum, COUNT(DISTINCT player_id) as payPlayerNum ,SUM(money_num) as amountSum
+		from sta_pay_history p where 
+		<![CDATA[ complete_time >=#beginDate# and complete_time< #endDate#  ]]>
+		<isNotEmpty prepend="AND" property="gameID">
+				 game_id =#gameID#   
+		</isNotEmpty>
+		<isNotEmpty prepend="AND" property="ptID">
+				 pt_id =#ptID#   
+		</isNotEmpty>
+		<isNotEmpty prepend="AND" property="areaID">
+				 area_id in ($areaID$)   
+		</isNotEmpty> 
+		<![CDATA[  and money_num>=1000 ]]>
+	</select>
+
+</sqlMap>

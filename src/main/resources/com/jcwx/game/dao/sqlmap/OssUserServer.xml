@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="OssUserServer">
+
+	<typeAlias alias="OssUserServer" type="com.jcwx.game.domain.OssUserServer" />
+	
+	<insert id="createOssUserServer" parameterClass="OssUserServer">
+		INSERT INTO T_OSS_USER_SERVER(id, username,operation_id, server_id, create_time, create_user) VALUES(#id#, #username#, #operationId#,#serverId#, #createTime#, #createUser#)
+		<selectKey resultClass="Integer" keyProperty="id" >
+			SELECT @@IDENTITY AS ID
+		</selectKey>
+	</insert>
+	
+    
+    <update id="updateOssUserServer" parameterClass="OssUserServer">
+		UPDATE T_OSS_USER_SERVER SET id=#id#, username=#username#,operation_id = #operationId#,server_id=#serverId#, create_time=#createTime#, create_user=#createUser# WHERE id=#id#
+	</update>
+
+	<delete id="deleteOssUserServerByID" parameterClass="Integer">
+		DELETE FROM T_OSS_USER_SERVER WHERE id=#id#
+	</delete>
+	<delete id="deleteOssUserServerByUsername" parameterClass="java.lang.String">
+		DELETE FROM T_OSS_USER_SERVER WHERE username=#username#
+	</delete>
+	
+
+	<select id="getOssUserServerByID" parameterClass="Integer" resultClass="OssUserServer">
+		SELECT id AS id, username AS username, operation_id AS operationId,server_id AS serverId,create_time AS createTime, create_user AS createUser FROM T_OSS_USER_SERVER WHERE id=#id#
+	</select>
+
+	<select id="getOssUserServerList" resultClass="OssUserServer">
+		SELECT id AS id, username AS username, operation_id AS operationId,server_id AS serverId, create_time AS createTime, create_user AS createUser FROM T_OSS_USER_SERVER
+	</select>
+	<select id="getOssUserServerListGrouyById" resultClass="OssUserServer">
+		SELECT id AS id, username AS username, operation_id AS operationId,server_id AS serverId, create_time AS createTime, create_user AS createUser FROM T_OSS_USER_SERVER where server_id=#id#
+	</select>
+	
+	<select id="getOssUserServerListByUsername" resultClass="OssUserServer">
+		SELECT id AS id, username AS username, operation_id AS operationId,server_id AS serverId, create_time AS createTime, create_user AS createUser FROM T_OSS_USER_SERVER where username=#username#
+	</select>
+	<select id="getOssUserByServerUserID" parameterClass="String" resultClass="OssUserServer">
+		SELECT id AS id, username AS username, operation_id AS operationId,server_id AS serverId, create_time AS createTime, create_user AS createUser FROM T_OSS_USER_SERVER WHERE id=#id#
+	</select>
+		<delete id="deleteOssUserServerByServerID" parameterClass="Integer">
+		DELETE FROM T_OSS_USER_SERVER WHERE server_id=#server_id#
+	</delete>
+</sqlMap>

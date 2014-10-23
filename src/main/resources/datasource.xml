@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans 
+	http://www.springframework.org/schema/beans/spring-beans-3.0.xsd" >
+
+	<!-- 游戏数据源 -->	
+	<bean id="dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource" destroy-method="close">
+		<property name="driverClass" value="com.mysql.jdbc.Driver" />
+		<property name="jdbcUrl" value="${dataSource.jdbcUrl}" />
+		<property name="user" value="${dataSource.user}" />
+		<property name="password" value="${dataSource.password}" />
+		<property name="acquireIncrement" value="${dataSource.acquireIncrement}" />
+		<property name="maxIdleTime" value="${dataSource.maxIdleTime}" />
+		<property name="initialPoolSize" value="${dataSource.initialPoolSize}" />
+		<property name="minPoolSize" value="${dataSource.minPoolSize}" />
+		<property name="maxPoolSize" value="${dataSource.maxPoolSize}" />
+		<property name="numHelperThreads" value="${dataSource.numHelperThreads}" />
+		<property name="maxStatements" value="${dataSource.maxStatements}" />
+		
+		<!-- <property name="automaticTestTable" value="Test"/> -->
+	</bean>
+	<!-- 如果没有大数据库数据源，注释掉property就可以 -->
+	<bean id="dataSourceSta" class="com.mchange.v2.c3p0.ComboPooledDataSource" destroy-method="close">
+		<property name="driverClass" value="com.mysql.jdbc.Driver" />
+		<property name="jdbcUrl" value="${dataSourceLog.jdbcUrl}" />
+		<property name="user" value="${dataSourceLog.user}" />
+		<property name="password" value="${dataSourceLog.password}" />
+		<property name="acquireIncrement" value="${dataSourceLog.acquireIncrement}" />
+		<property name="maxIdleTime" value="${dataSourceLog.maxIdleTime}" />
+		<property name="initialPoolSize" value="${dataSourceLog.initialPoolSize}" />
+		<property name="minPoolSize" value="${dataSourceLog.minPoolSize}" />
+		<property name="maxPoolSize" value="${dataSourceLog.maxPoolSize}" />
+		<property name="numHelperThreads" value="${dataSourceLog.numHelperThreads}" />
+		<property name="maxStatements" value="${dataSourceLog.maxStatements}" />
+	</bean>
+	<!-- 如果没有中心数据库数据源，注释掉property就可以 -->
+	<bean id="dataSourceCenter" class="com.mchange.v2.c3p0.ComboPooledDataSource" destroy-method="close">
+		<property name="driverClass" value="com.mysql.jdbc.Driver" />
+		<property name="jdbcUrl" value="${dataSourceCenter.jdbcUrl}" />
+		<property name="user" value="${dataSourceCenter.user}" />
+		<property name="password" value="${dataSourceCenter.password}" />
+		<property name="acquireIncrement" value="${dataSourceCenter.acquireIncrement}" />
+		<property name="maxIdleTime" value="${dataSourceCenter.maxIdleTime}" />
+		<property name="initialPoolSize" value="${dataSourceCenter.initialPoolSize}" />
+		<property name="minPoolSize" value="${dataSourceCenter.minPoolSize}" />
+		<property name="maxPoolSize" value="${dataSourceCenter.maxPoolSize}" />
+		<property name="numHelperThreads" value="${dataSourceCenter.numHelperThreads}" />
+		<property name="maxStatements" value="${dataSourceCenter.maxStatements}" />
+	</bean>
+	
+</beans>
+ 

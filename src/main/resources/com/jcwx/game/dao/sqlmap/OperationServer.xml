@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="OperationServer">
+
+	<typeAlias alias="OperationServer" type="com.jcwx.game.domain.OperationServer" />
+
+	<insert id="createOperationServer" parameterClass="OperationServer">
+		INSERT INTO T_OPERATION_SERVER(operation_server_id, operation_id, server_id, create_time, modify_time) VALUES(#operationServerId#, #operationId#, #serverId#, #createTime#, #modifyTime#)
+	</insert>
+
+	<update id="updateOperationServer" parameterClass="OperationServer">
+		UPDATE T_OPERATION_SERVER SET operation_server_id=#operationServerId#, operation_id=#operationId#, server_id=#serverId#, create_time=#createTime#, modify_time=#modifyTime# WHERE operation_server_id=#operationServerId#
+	</update>
+
+	<delete id="deleteOperationServerByID" parameterClass="String">
+		DELETE FROM T_OPERATION_SERVER WHERE operation_server_id=#operationServerId#
+	</delete>
+
+	<delete id="deleteOperationServerByoperationID" parameterClass="String">
+		DELETE FROM T_OPERATION_SERVER WHERE operation_id=#operationId#
+	</delete>
+	
+
+	<select id="getOperationServerListByOperationID" parameterClass="Integer" resultClass="java.util.HashMap">
+		SELECT o.operation_server_id AS operationServerId, o.operation_id AS operationId, o.server_id AS serverId,t.`name` as serverName FROM T_OPERATION_SERVER o, t_oss_server t WHERE o.server_id=t.id and o.operation_id=#operationId#
+	</select>
+
+
+
+</sqlMap>

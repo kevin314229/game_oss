@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE struts PUBLIC
+    "-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"
+    "http://struts.apache.org/dtds/struts-2.0.dtd">
+
+<struts>
+
+	<!-- 指定Struts 2默认的ObjectFactory Bean，该属性默认值是spring -->
+	<constant name="struts.objectFactory" value="spring" />
+	<!-- 该属性指定整合Spring框架时，是否缓存Bean实例，该属性只允许使用true和 false两个属性值，它的默认值是true。通常不建议修改该属性值 -->
+	<constant name="struts.objectFactory.spring.useClassCache"
+		value="true" />
+	<!-- 指定spring框架的装配模式装配方式有: name, type, auto, and constructor (name 是默认装配模式) -->
+	<constant name="struts.objectFactory.spring.autoWire" value="name" />
+	<!--（默认false）是否支持动态的方法调用,在URL上通过!method指定方法。-->
+	<constant name="struts.enable.DynamicMethodInvocation" value="false" />
+
+	<constant name="struts.configuration.xml.reload" value="true" />   
+	<!-- 访问静态方法 -->
+	<constant name="struts.ognl.allowStaticMethodAccess" value="true" />
+	
+	<!-- 把它设置为开发模式，发布时要设置为false -->	
+	<constant name="struts.devMode" value="true" />
+	 <!-- 设置在class被修改时是否热加载，发布时要设置为false -->
+    <constant name="struts.convention.classes.reload" value="true"/>
+    <!-- 用于配置类名后缀，默认为Action，设置后，Struts2只会去找这种后缀名的类做映射 -->
+    <constant name="struts.convention.action.suffix" value="Action"/>
+    <!-- 主题，将值设置为simple，即不使用UI模板。这将不会生成额外的html标签 -->
+    <constant name="struts.ui.theme" value="simple" />
+     <!-- 用于配置包名后缀。默认为action、actions、struts-->
+	<constant name="struts.convention.package.locators" value="admin, web" />
+	<!-- 国际化资源文件名称 -->
+	<constant name="struts.custom.i18n.resources" value="resource,language/menu" />
+	<!--
+	当设置为true，资源包将重新_every_请求。  
+	这是在良好的发展，但绝不应在生产中使用
+	 -->
+	<constant name="struts.i18n.reload" value="TRUE" />
+	
+	<!-- 设置struts2默认的locale，决定使用哪个资源文件。 -->
+	<constant name="struts.locale" value="zh_CN" />
+	
+	<!--日志警告，都没有发现属性（非常详细）  -->
+	<constant name="struts.ognl.logMissingProperties" value="TRUE" />
+	
+ 
+	<!-- <include file="example.xml"/> -->
+
+
+
+	<package name="base" extends="struts-default">
+		<!-- 自定义JFreeChar插件扩展 -->
+		<result-types>
+			<result-type name="chart"
+				class="org.apache.struts2.dispatcher.ChartResult">
+				<param name="height">150</param>
+				<param name="width">200</param>
+			</result-type>
+
+			<result-type name="json" class="org.apache.struts2.json.JSONResult" />
+		</result-types>
+		<interceptors>
+			<interceptor name="json"
+				class="org.apache.struts2.json.JSONInterceptor" />
+				
+			<interceptor name="validateExceptionInterceptor"  
+                class="com.jcwx.game.web.ActionValidateInterceptor"/>  
+                 
+            <!-- 拦截器栈 -->  
+            <interceptor-stack name="mydefault">  
+            	
+            	<!-- 安全漏洞 --> 
+                <interceptor-ref name="defaultStack">
+                 <param name="params.excludeParams">(.*\.|^|.*|\[('|"))(c|C)lass(\.|('|")]|\[).*,^dojo\..*,^struts\..*,^session\..*,^request\..*,^application\..*,^servlet(Request|Response)\..*,^parameters\..*,^action:.*,^method:.*</param>
+             	</interceptor-ref>
+            	
+                <interceptor-ref name="json" />  
+                <interceptor-ref name="validateExceptionInterceptor" />  
+                
+            </interceptor-stack>
+		</interceptors>
+		
+		<default-interceptor-ref name="mydefault" />  
+		
+		<global-results>
+			<result name="input"  type="redirect">/admin/logout.action</result>
+			<result name="ajaxOperationDone" type="chain">ajaxDwz</result>
+			<result name="nopurview">/admin/nopurview.jsp</result>
+			<!-- <result name="netException">/admin/error1.jsp</result> -->
+			<result name="timeOutException">/admin/errorpage/timeout.jsp</result>
+			<result name="netException">/admin/errorpage/netconnect.jsp</result>
+			<result name="invocationTargetException">/admin/errorpage/error.jsp</result> 
+			<result name="exception">/admin/errorpage/error.jsp</result> 
+		</global-results>
+		
+		
+		<!-- 定义全局异常  -->
+		<global-exception-mappings>
+			<exception-mapping result="timeOutException" exception="java.net.SocketTimeOutException"></exception-mapping>
+			<exception-mapping result="netException" exception="com.jcwx.game.exception.GameException"></exception-mapping>
+			<exception-mapping result="invocationTargetException" exception="java.lang.reflect.InvocationTargetException"></exception-mapping>
+			<exception-mapping result="exception" exception="java.lang.Exception"></exception-mapping>
+		</global-exception-mappings>
+		
+		<action name="ajaxDwz" class="com.jcwx.game.admin.dwz.DwzPageAction" method="ajaxResult">
+
+		</action>
+	</package>
+
+</struts>

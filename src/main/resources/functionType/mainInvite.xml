@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bean>
+	<!-- 主邀请加入 -->
+	<KeyList value="5">
+		<Key>
+			<required>true</required>
+			<value>award</value>
+		</Key>
+	</KeyList>
+	<!-- 被邀请加入 -->
+	<KeyList value="6">
+		<Key>
+			<required>true</required>
+			<value>award</value>
+		</Key>
+	</KeyList>
+	<!-- 邀请等级 -->
+	<KeyList value="7">
+		<Key>
+			<required>true</required>
+			<value>condition</value>
+		</Key>
+	</KeyList>
+	<!-- 邀请数量 -->
+	<KeyList value="8">
+		<Key>
+			<required>true</required>
+			<value>condition</value>
+		</Key>
+	</KeyList>
+	<!-- 灵药园种子概率 -->
+	<KeyList value="9">
+		<Key>
+			<required>true</required>
+			<value>quality</value>
+		</Key>
+		<Key>
+			<required>true</required>
+			<value>odds</value>
+		</Key>
+	</KeyList>
+	<!-- 灵药园种子价格 -->
+	<KeyList value="10">
+		<Key>
+			<required>true</required>
+			<value>quality</value>
+		</Key>
+		<Key>
+			<required>true</required>
+			<value>odds</value>
+		</Key>
+	</KeyList>
+	<!-- 灵药园刷新消耗 -->
+	<KeyList value="11">
+		<Key>
+			<required>true</required>
+			<value>cishu</value>
+		</Key>
+		<Key>
+			<required>true</required>
+			<value>money</value>
+		</Key>
+	</KeyList>
+
+	<KeyList value="12">
+		<Key>
+			<required>true</required>
+			<value>time</value>
+		</Key>
+		<Key>
+			<required>true</required>
+			<value>award</value>
+		</Key>
+	</KeyList>
+
+	<KeyList value="13">
+		<Key>
+			<required>true</required>
+			<value>time</value>
+		</Key>
+		<Key>
+			<required>true</required>
+			<value>award</value>
+		</Key>
+	</KeyList>
+
+	<KeyList value="14">
+		<Key>
+			<required>true</required>
+			<value>time</value>
+		</Key>
+		<Key>
+			<required>true</required>
+			<value>award</value>
+		</Key>
+	</KeyList>
+
+	<KeyList value="15">
+		<Key>
+			<required>true</required>
+			<value>time</value>
+		</Key>
+		<Key>
+			<required>true</required>
+			<value>award</value>
+		</Key>
+	</KeyList>
+
+	<KeyList value="16">
+		<Key>
+			<required>true</required>
+			<value>time</value>
+		</Key>
+		<Key>
+			<required>true</required>
+			<value>award</value>
+		</Key>
+	</KeyList>
+
+	<KeyList value="17">
+		<Key>
+			<required>true</required>
+			<value>time</value>
+		</Key>
+		<Key>
+			<required>true</required>
+			<value>award</value>
+		</Key>
+	</KeyList>
+
+
+
+
+</bean>

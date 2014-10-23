@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="ALoginLog">
+
+	<typeAlias alias="ALoginLog" type="com.jcwx.game.domain.ALoginLog" />
+	
+	<typeAlias alias="LoginReport" type="com.jcwx.game.domain.LoginReport" />
+	<typeAlias alias="IpReport" type="com.jcwx.game.domain.IpReport"/>
+	<insert id="createALoginLog" parameterClass="ALoginLog">
+		INSERT INTO STA_LOGIN_LOG(login_log_id, game_id, pt_id, area_id, player_id, login_name, level, player_base_id, nick_name, ip, ip_addr, login_time, login_out_time, online_time) VALUES(#loginLogId#, #gameId#, #ptId#, #areaId#, #playerId#, #loginName#, #level#, #playerBaseId#, #nickName#, #ip#, #ipAddr#, #loginTime#, #loginOutTime#, #onlineTime#)
+	</insert>
+
+	<update id="updateALoginLog" parameterClass="ALoginLog">
+		UPDATE STA_LOGIN_LOG SET login_log_id=#loginLogId#, game_id=#gameId#, pt_id=#ptId#, area_id=#areaId#, player_id=#playerId#, login_name=#loginName#, level=#level#, player_base_id=#playerBaseId#, nick_name=#nickName#, ip=#ip#, ip_addr=#ipAddr#, login_time=#loginTime#, login_out_time=#loginOutTime#, online_time=#onlineTime# WHERE login_log_id=#loginLogId#
+	</update>
+
+	<delete id="deleteALoginLogByID" parameterClass="String">
+		DELETE FROM STA_LOGIN_LOG WHERE login_log_id=#loginLogId#
+	</delete>
+
+	<select id="getALoginLogByID" parameterClass="String" resultClass="ALoginLog">
+		SELECT login_log_id AS loginLogId, game_id AS gameId, pt_id AS ptId, area_id AS areaId, player_id AS playerId, login_name AS loginName, level AS level, player_base_id AS playerBaseId, nick_name AS nickName, ip AS ip, ip_addr AS ipAddr, login_time AS loginTime, login_out_time AS loginOutTime, online_time AS onlineTime FROM STA_LOGIN_LOG WHERE login_log_id=#loginLogId#
+	</select>
+
+	<select id="getALoginLogList" resultClass="ALoginLog">
+		SELECT login_log_id AS loginLogId, game_id AS gameId, pt_id AS ptId, area_id AS areaId, player_id AS playerId, login_name AS loginName, level AS level, player_base_id AS playerBaseId, nick_name AS nickName, ip AS ip, ip_addr AS ipAddr, login_time AS loginTime, login_out_time AS loginOutTime, online_time AS onlineTime FROM STA_LOGIN_LOG
+	</select>
+	
+	<select id="getOnlineCountTime" parameterClass="java.util.Map" resultClass="java.util.HashMap">
+		select date_format(login_time,'%Y-%c-%d')as everyday,SUM(online_time)as average,COUNT(DISTINCT login_name) as loginname,COUNT(DISTINCT player_base_id) as playerId from  sta_login_log 
+		where 1=1
+		<dynamic>
+			<isNotEmpty  property="beginDate" prepend="AND">
+				<![CDATA[	login_time >= #beginDate# ]]>
+			</isNotEmpty>
+			<isNotEmpty  property="endDate" prepend="AND">
+				<![CDATA[		login_time <= #endDate#  ]]>
+			</isNotEmpty>
+			<isNotEmpty property="projectId" prepend="AND">
+					game_id = #projectId#
+			</isNotEmpty>		
+				
+			<isNotEmpty  property="ossServerId" prepend="AND">
+					area_id IN ($ossServerId$)
+			</isNotEmpty>
+			
+			<isNotEmpty property="ptCode" prepend="AND">
+					pt_id=#ptCode#
+			</isNotEmpty>
+		</dynamic>
+		GROUP BY everyday
+	</select>
+	
+	<!-- 分时段统计总登录数,年     -->
+	<select id="getIpreport" parameterClass="java.util.Map"  resultClass="IpReport">
+		SELECT  COUNT(1) as loginNum,count(DISTINCT ip) as ipNum,pt_id as ptCode FROM sta_login_log 
+		 where login_time BETWEEN #beginDate# and #endDate# and game_id=#gameId#
+		<isNotEmpty  property="areaId" prepend="AND">
+				area_id IN ($areaId$)
+		</isNotEmpty>
+		<isNotEmpty  property="ptId" prepend="AND">
+			    pt_id = #ptId# 
+		</isNotEmpty>
+		 GROUP BY pt_id
+	</select>
+	
+	<select id="queryLoginReport" parameterClass="java.util.Map" resultClass="LoginReport">
+		select date_format(login_time,'%Y-%m-%d')as loginTime,count(DISTINCT game_id,area_id,login_name) as loginNum,count(DISTINCT  game_id,area_id,player_base_id) as playerNum
+		from sta_login_log where 1=1 
+		<dynamic>
+			<isNotEmpty  property="beginDate" prepend="AND">
+				<![CDATA[	login_time >= #beginDate# ]]>
+			</isNotEmpty>
+			<isNotEmpty  property="endDate" prepend="AND">
+				<![CDATA[		login_time <= #endDate#  ]]>
+			</isNotEmpty>
+			<isNotEmpty property="projectId" prepend="AND">
+					game_id = #projectId#
+			</isNotEmpty>			
+			<isNotEmpty  property="ossServerId" prepend="AND">
+					area_id IN ($ossServerId$)
+			</isNotEmpty>
+			<isNotEmpty property="ptCode" prepend="AND">
+					pt_id=#ptCode#
+			</isNotEmpty>
+		</dynamic>
+		GROUP BY loginTime
+	</select>
+	
+	
+	<select id="getPlayerBehavior" parameterClass="java.util.Map" resultClass="java.util.HashMap">
+	
+		select sum(t.num1) as num1,sum(t2.num2) as num2,sum(t2.num3 ) as num3 
+		from (select t.area_id,t.game_id,count(t.login_name) as num1 from sta_login_log t 
+		where EXISTS (select 1 from sta_player t2 where
+		t.area_id=t2.area_id and t.game_id=t2.game_id 
+		<isNotEmpty  property="ossServerId" prepend="AND">
+					t.area_id IN ($ossServerId$)
+		</isNotEmpty>
+		<isNotEmpty  property="beginDate" prepend="AND">
+				<![CDATA[t2.first_login_time >= #beginDate# ]]>
+		</isNotEmpty>
+		<isNotEmpty  property="endDate" prepend="AND">
+				<![CDATA[t2.first_login_time <= #endDate# ]]>
+		</isNotEmpty>
+		and t.login_name=t2.login_name) 
+		<isNotEmpty  property="beginDate2" prepend="AND">
+				<![CDATA[ t.login_time >= #beginDate2# ]]>
+		</isNotEmpty>
+		<isNotEmpty  property="endDate2" prepend="AND">
+				<![CDATA[ t.login_time <= #endDate2# ]]>
+		</isNotEmpty> 
+		GROUP BY t.area_id,t.game_id ) t LEFT JOIN
+		(select t.area_id,t.game_id,count(t.login_name)as num2,sum(money_num) as num3 from sta_pay_history t where EXISTS(select 1 from sta_player t2 where 
+		t.area_id=t2.area_id and t.game_id=t2.game_id 
+		<isNotEmpty  property="ossServerId" prepend="AND">
+					t.area_id IN ($ossServerId$)
+		</isNotEmpty>
+		<isNotEmpty  property="beginDate" prepend="AND">
+				<![CDATA[t2.first_login_time >= #beginDate# ]]>
+		</isNotEmpty>
+		<isNotEmpty  property="endDate" prepend="AND">
+				<![CDATA[t2.first_login_time <= #endDate# ]]>
+		</isNotEmpty>
+		and t.login_name=t2.login_name)  
+		<isNotEmpty  property="beginDate2" prepend="AND">
+				<![CDATA[ t.complete_time >= #beginDate2# ]]>
+		</isNotEmpty>
+		<isNotEmpty  property="endDate2" prepend="AND">
+				<![CDATA[ t.complete_time <= #endDate2# ]]>
+		</isNotEmpty>
+		GROUP BY t.area_id,t.game_id) t2 on t.game_id=t2.game_id and t.area_id=t2.area_id 
+		
+	</select>
+	
+	
+</sqlMap>

@@ -1,0 +1,2 @@
+这个包，不应该在增加模型类。
+用JSONObject和JSONArray代替。

@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="PtUser">
+
+	<typeAlias alias="PtUser" type="com.jcwx.game.domain.PtUser" />
+
+	<insert id="createPtUser" parameterClass="PtUser">
+		INSERT INTO T_PT_USER(id, user_name, pt_flag, phone_id, pw, uid, nick_name, last_login_time, last_area, act_flag, sex, email, identity_card, login_times, create_time, recent_login, user_type, bind_flag) VALUES(#id#, #userName#, #ptFlag#, #phoneId#, #pw#, #uid#, #nickName#, #lastLoginTime#, #lastArea#, #actFlag#, #sex#, #email#, #identityCard#, #loginTimes#, #createTime#, #recentLogin#, #userType#, #bindFlag#)
+	</insert>
+
+	<update id="updatePtUser" parameterClass="PtUser">
+		UPDATE T_PT_USER SET id=#id#, user_name=#userName#, pt_flag=#ptFlag#, phone_id=#phoneId#, pw=#pw#, uid=#uid#, nick_name=#nickName#, last_login_time=#lastLoginTime#, last_area=#lastArea#, act_flag=#actFlag#, sex=#sex#, email=#email#, identity_card=#identityCard#, login_times=#loginTimes#, create_time=#createTime#, recent_login=#recentLogin#, user_type=#userType#, bind_flag=#bindFlag# WHERE id=#id#
+	</update>
+
+	<delete id="deletePtUserByID" parameterClass="String">
+		DELETE FROM T_PT_USER WHERE id=#id#
+	</delete>
+
+	<select id="getPtUserByID" parameterClass="String" resultClass="PtUser">
+		SELECT id AS id, user_name AS userName, pt_flag AS ptFlag, phone_id AS phoneId, pw AS pw, uid AS uid, nick_name AS nickName, last_login_time AS lastLoginTime, last_area AS lastArea, act_flag AS actFlag, sex AS sex, email AS email, identity_card AS identityCard, login_times AS loginTimes, create_time AS createTime, recent_login AS recentLogin, user_type AS userType, bind_flag AS bindFlag FROM T_PT_USER WHERE id=#id#
+	</select>
+
+	<select id="getPtUserList" resultClass="PtUser">
+		SELECT id AS id, user_name AS userName, pt_flag AS ptFlag, phone_id AS phoneId, pw AS pw, uid AS uid, nick_name AS nickName, last_login_time AS lastLoginTime, last_area AS lastArea, act_flag AS actFlag, sex AS sex, email AS email, identity_card AS identityCard, login_times AS loginTimes, create_time AS createTime, recent_login AS recentLogin, user_type AS userType, bind_flag AS bindFlag FROM T_PT_USER
+	</select>
+	
+	<select id="getPtregister" parameterClass="java.util.Map" resultClass="java.util.HashMap">
+		<![CDATA[  SELECT  pt_flag AS pt, count(1) AS nub from pt_user  p where p.create_time >#beginDate# and p.create_time <#endDate#  GROUP BY pt_flag ]]>
+	</select>
+
+</sqlMap>

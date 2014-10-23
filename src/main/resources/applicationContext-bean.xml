@@ -1,0 +1,83 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:mvc="http://www.springframework.org/schema/mvc" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:tx="http://www.springframework.org/schema/tx" xmlns:aop="http://www.springframework.org/schema/aop"
+	xsi:schemaLocation="
+        http://www.springframework.org/schema/beans     
+        http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
+        http://www.springframework.org/schema/context
+        http://www.springframework.org/schema/context/spring-context-4.0.xsd
+        http://www.springframework.org/schema/aop
+    	http://www.springframework.org/schema/aop/spring-aop-4.0.xsd
+    	http://www.springframework.org/schema/tx
+    	http://www.springframework.org/schema/tx/spring-tx-4.0.xsd
+        ">
+	<context:annotation-config />
+	<aop:aspectj-autoproxy proxy-target-class="true" expose-proxy="true" />
+
+	<context:component-scan base-package="com.jcwx" use-default-filters="true" />
+	
+	<!-- 系统配置文件 -->
+	<bean id="configProperties" class="org.springframework.beans.factory.config.PropertiesFactoryBean">
+		<property name="location" value="classpath:config/config.xml" />
+	</bean>
+
+	<!-- 加密 -->
+	<bean id="environmentVariablesConfiguration" class="com.jcwx.game.common.security.EnvironmentStringPBEConfig">
+	</bean>
+
+	<bean id="configurationEncryptor" class="org.jasypt.encryption.pbe.StandardPBEStringEncryptor">
+		<property name="config" ref="environmentVariablesConfiguration" />
+	</bean>
+
+	<bean id="propertyConfigurer" class="org.jasypt.spring.properties.EncryptablePropertyPlaceholderConfigurer">
+		<constructor-arg ref="configurationEncryptor" />
+		<property name="properties" ref="configProperties" />
+	</bean>
+
+	<import resource="datasource.xml" />
+
+	<aop:aspectj-autoproxy proxy-target-class="true" />
+	<bean id="MyInterceptor" class="com.jcwx.game.web.MyInterceptor" />
+	<!-- 本地数据源 -->
+	<bean id="sqlMapClient" class="org.springframework.orm.ibatis.SqlMapClientFactoryBean">
+		<property name="configLocation" value="classpath:sqlMapConfig.xml" />
+		<property name="dataSource" ref="dataSource" />
+	</bean>
+	<!-- 大数据数据源 -->
+	<bean id="staSqlMapClient" class="org.springframework.orm.ibatis.SqlMapClientFactoryBean">
+		<property name="configLocation" value="classpath:staSqlMapConfig.xml" />
+		<property name="dataSource" ref="dataSourceSta" />
+	</bean>
+	<!-- 中转数据源 -->
+	<bean id="centerSqlMapClient" class="org.springframework.orm.ibatis.SqlMapClientFactoryBean">
+		<property name="configLocation" value="classpath:centerSqlMapConfig.xml" />
+		<property name="dataSource" ref="dataSourceCenter" />
+	</bean>
+
+	<bean id="baseCenterDao" class="com.jcwx.game.dao.impl.BaseCenterDAO">
+		<property name="dataSource" ref="dataSourceCenter" />
+	</bean>
+
+	<bean id="baseDao" class="com.jcwx.game.dao.impl.BaseDAO">
+		<property name="dataSource" ref="dataSource" />
+	</bean>
+	<bean id="BaseStaDAO" class="com.jcwx.game.dao.impl.BaseStaDAO">
+		<property name="dataSource" ref="dataSourceSta" />
+	</bean>
+
+
+	<bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+		<property name="dataSource" ref="dataSource" />
+	</bean>
+
+
+	<bean class="org.springframework.transaction.aspectj.AnnotationTransactionAspect"
+		factory-method="aspectOf">
+		<property name="transactionManager" ref="transactionManager" />
+	</bean>
+
+	<bean class="com.jcwx.game.common.SpringService" />
+
+
+</beans>

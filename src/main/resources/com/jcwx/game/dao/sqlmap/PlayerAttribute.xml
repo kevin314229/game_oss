@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="PlayerAttribute">
+
+	<typeAlias alias="PlayerAttribute" type="com.jcwx.game.domain.PlayerAttribute" />
+
+	<insert id="createPlayerAttribute" parameterClass="PlayerAttribute">
+		INSERT INTO T_PLAYER_ATTRIBUTE(player_attribute_id, player_base_id, strength, sharp, clever, body, hp, mp, physical_attack, magic_attack, physical_defend, magic_defend, critical, avoid) VALUES(#playerAttributeId#, #playerBaseId#, #strength#, #sharp#, #clever#, #body#, #hp#, #mp#, #physicalAttack#, #magicAttack#, #physicalDefend#, #magicDefend#, #critical#, #avoid#)
+	</insert>
+
+	<update id="updatePlayerAttribute" parameterClass="PlayerAttribute">
+		UPDATE T_PLAYER_ATTRIBUTE SET player_attribute_id=#playerAttributeId#, player_base_id=#playerBaseId#, strength=#strength#, sharp=#sharp#, clever=#clever#, body=#body#, hp=#hp#, mp=#mp#, physical_attack=#physicalAttack#, magic_attack=#magicAttack#, physical_defend=#physicalDefend#, magic_defend=#magicDefend#, critical=#critical#, avoid=#avoid# WHERE player_attribute_id=#playerAttributeId#
+	</update>
+
+	<delete id="deletePlayerAttributeByID" parameterClass="String">
+		DELETE FROM T_PLAYER_ATTRIBUTE WHERE player_attribute_id=#playerAttributeId#
+	</delete>
+
+	<select id="getPlayerAttributeByID" parameterClass="String" resultClass="PlayerAttribute">
+		SELECT player_attribute_id AS playerAttributeId, player_base_id AS playerBaseId, strength AS strength, sharp AS sharp, clever AS clever, body AS body, hp AS hp, mp AS mp, physical_attack AS physicalAttack, magic_attack AS magicAttack, physical_defend AS physicalDefend, magic_defend AS magicDefend, critical AS critical, avoid AS avoid FROM T_PLAYER_ATTRIBUTE WHERE player_attribute_id=#playerAttributeId#
+	</select>
+
+	<select id="getPlayerAttributeList" resultClass="PlayerAttribute">
+		SELECT player_attribute_id AS playerAttributeId, player_base_id AS playerBaseId, strength AS strength, sharp AS sharp, clever AS clever, body AS body, hp AS hp, mp AS mp, physical_attack AS physicalAttack, magic_attack AS magicAttack, physical_defend AS physicalDefend, magic_defend AS magicDefend, critical AS critical, avoid AS avoid FROM T_PLAYER_ATTRIBUTE
+	</select>
+
+	<select id="getPlayerAttributeByPlayerBaseId" parameterClass="String" resultClass="PlayerAttribute">
+		SELECT player_attribute_id AS playerAttributeId, player_base_id AS playerBaseId, strength AS strength, sharp AS sharp, clever AS clever, body AS body, hp AS hp, mp AS mp, physical_attack AS physicalAttack, magic_attack AS magicAttack, physical_defend AS physicalDefend, magic_defend AS magicDefend, critical AS critical, avoid AS avoid FROM T_PLAYER_ATTRIBUTE WHERE player_base_id=#playerBaseId#
+	</select>
+
+</sqlMap>

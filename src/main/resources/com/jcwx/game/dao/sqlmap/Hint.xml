@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="Hint">
+
+	<typeAlias alias="Hint" type="com.jcwx.game.domain.Hint" />
+
+	<insert id="createHint" parameterClass="Hint">
+		INSERT INTO T_HINT(hint_id, menu_id, hint_key, hint_value) VALUES(#hintId#, #menuId#, #hintKey#, #hintValue#)
+	</insert>
+
+	<update id="updateHint" parameterClass="Hint">
+		UPDATE T_HINT SET hint_id=#hintId#, menu_id=#menuId#, hint_key=#hintKey#, hint_value=#hintValue# WHERE hint_id=#hintId#
+	</update>
+
+	<delete id="deleteHintByID" parameterClass="String">
+		DELETE FROM T_HINT WHERE hint_id=#hintId#
+	</delete>
+
+	<select id="getHintByID" parameterClass="String" resultClass="Hint">
+		SELECT hint_id AS hintId, menu_id AS menuId, hint_key AS hintKey, hint_value AS hintValue FROM T_HINT WHERE hint_id=#hintId#
+	</select>
+
+	<select id="getHintList" resultClass="Hint">
+		SELECT hint_id AS hintId, menu_id AS menuId, hint_key AS hintKey, hint_value AS hintValue,t_oss_menu.PROJECT_ID AS projectId FROM T_HINT
+		LEFT JOIN t_oss_menu on t_hint.menu_id=t_oss_menu.OSS_MENU_ID  order by t_oss_menu.PROJECT_ID, t_hint.menu_id 
+	</select>
+	
+	<select id="getHintListByMenuId" resultClass="Hint" parameterClass="String">
+		SELECT hint_id AS hintId, menu_id AS menuId, hint_key AS hintKey, hint_value AS hintValue FROM T_HINT where menu_id=#menuId#
+	</select>
+
+</sqlMap>

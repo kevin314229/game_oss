@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="DataHistory">
+	<typeAlias alias="DataHistory" type="com.jcwx.game.domain.DataHistory" />
+	
+	<insert id="createDataHistory" parameterClass="DataHistory">
+		INSERT INTO T_DATA_HISTORY(DATA_HISTORY_ID, ONLINE_PLAYER_NUM) VALUES(#dataHistoryID#, #onlinePlayerNum#)
+	</insert>
+	
+	<update id="updateDataHistory" parameterClass="DataHistory">
+		UPDATE T_DATA_HISTORY SET DATA_HISTORY_ID=#dataHistoryID#, ONLINE_PLAYER_NUM=#onlinePlayerNum# WHERE DATA_HISTORY_ID=#dataHistoryID#
+	</update>
+	
+	<delete id="deleteDataHistoryByID" parameterClass="Long">
+		DELETE FROM T_DATA_HISTORY WHERE DATA_HISTORY_ID=#dataHistoryID#
+	</delete>
+	
+	<select id="getAvgOnlinePlayerNum" resultClass="Integer">
+		SELECT AVG(ONLINE_PLAYER_NUM) AS num FROM T_DATA_HISTORY
+	</select>
+
+	<select id="getAvgOnlinePlayerNumByTime" parameterClass="java.util.Map" resultClass="Integer">
+		<![CDATA[  SELECT AVG(ONLINE_PLAYER_NUM) AS num FROM T_DATA_HISTORY WHERE DATA_HISTORY_ID>=#begin# AND DATA_HISTORY_ID<=#end# ]]>
+	</select>
+	
+	<select id="getMaxOnlinePlayerNum" resultClass="Integer">
+		SELECT MAX(ONLINE_PLAYER_NUM) AS num FROM T_DATA_HISTORY
+	</select>
+
+	<select id="getMaxOnlinePlayerNumByTime" parameterClass="java.util.Map" resultClass="Integer" >
+		<![CDATA[  SELECT MAX(ONLINE_PLAYER_NUM) AS num FROM T_DATA_HISTORY WHERE DATA_HISTORY_ID>=#begin# AND DATA_HISTORY_ID<=#end# ]]> 
+	</select>
+	
+	<select id="getOnlinePlayerNumInfo" resultClass="java.util.HashMap">
+		SELECT MAX(ONLINE_PLAYER_NUM) maxNum, MIN(ONLINE_PLAYER_NUM) AS minNum, AVG(ONLINE_PLAYER_NUM) AS avgNum FROM T_DATA_HISTORY
+	</select>
+
+	<select id="getOnlinePlayerNumInfoByTime" parameterClass="java.util.Map" resultClass="java.util.HashMap" >
+		<![CDATA[  SELECT MAX(ONLINE_PLAYER_NUM) maxNum, MIN(ONLINE_PLAYER_NUM) AS minNum, AVG(ONLINE_PLAYER_NUM) AS avgNum FROM T_DATA_HISTORY WHERE DATA_HISTORY_ID>=#begin# AND DATA_HISTORY_ID<=#end# ]]> 
+	</select>
+	
+	<select id="getDataHistoryByID" parameterClass="Long" resultClass="DataHistory">
+		SELECT DATA_HISTORY_ID AS dataHistoryID, ONLINE_PLAYER_NUM AS onlinePlayerNum FROM T_DATA_HISTORY WHERE DATA_HISTORY_ID=#dataHistoryID#
+	</select>
+	
+	<select id="getDataHistoryList" resultClass="DataHistory">
+		SELECT DATA_HISTORY_ID AS dataHistoryID, ONLINE_PLAYER_NUM AS onlinePlayerNum FROM T_DATA_HISTORY
+	</select>
+	
+	<select id="getDataHistoryListByTime" resultClass="DataHistory" parameterClass="java.util.Map">
+		<![CDATA[ SELECT DATA_HISTORY_ID AS dataHistoryID, ONLINE_PLAYER_NUM AS onlinePlayerNum FROM T_DATA_HISTORY WHERE DATA_HISTORY_ID>=#begin# AND DATA_HISTORY_ID<=#end# ORDER BY DATA_HISTORY_ID DESC ]]>
+	</select>
+	
+	<select id="getDataHistoryListByTimeAndOnePage" resultClass="DataHistory" parameterClass="java.util.Map">
+		<![CDATA[ SELECT DATA_HISTORY_ID AS dataHistoryID, ONLINE_PLAYER_NUM AS onlinePlayerNum FROM T_DATA_HISTORY WHERE DATA_HISTORY_ID>=#begin# AND DATA_HISTORY_ID<=#end# ORDER BY DATA_HISTORY_ID $orderFlag$ LIMIT #beginNum#,#pageNum# ]]>
+	</select>
+	
+	<select id="getDataHistoryListNumByTimeAndOnePage" resultClass="Integer" parameterClass="java.util.Map">
+		<![CDATA[ SELECT COUNT(*) FROM T_DATA_HISTORY WHERE DATA_HISTORY_ID>=#begin# AND DATA_HISTORY_ID<=#end# ]]>
+	</select>
+	
+	<!-- 在线数据统计，分时段 天 -->
+	<select id="DataHistoryListByDay" parameterClass="java.util.Map" resultClass="java.util.HashMap" remapResults="true">
+	<![CDATA[
+		SELECT LEFT(a.DATA_HISTORY_ID,8) AS d, 
+	    (SELECT SUM(b.ONLINE_PLAYER_NUM)  FROM t_data_history b WHERE LEFT(b.DATA_HISTORY_ID,8)=LEFT(a.DATA_HISTORY_ID,8) )/COUNT(a.DATA_HISTORY_ID) AS num
+		FROM t_data_history a 
+		WHERE LEFT(a.DATA_HISTORY_ID,8)>= LEFT(#begin#,8) AND LEFT(a.DATA_HISTORY_ID,8)<= LEFT(#end#,8)
+		GROUP BY LEFT(a.DATA_HISTORY_ID,8)
+		ORDER BY LEFT(a.DATA_HISTORY_ID,8) ASC
+	]]>
+	</select>
+	
+	<!-- 在线数据统计，分时段 时 -->
+	<select id="DataHistoryListByHour" parameterClass="java.util.Map" resultClass="java.util.HashMap" remapResults="true">
+	<![CDATA[
+		SELECT LEFT(a.DATA_HISTORY_ID,10) AS d, 
+	    (SELECT SUM(b.ONLINE_PLAYER_NUM)  FROM t_data_history b WHERE LEFT(b.DATA_HISTORY_ID,10)=LEFT(a.DATA_HISTORY_ID,10) )/COUNT(a.DATA_HISTORY_ID) AS num
+		FROM t_data_history a 
+		WHERE LEFT(a.DATA_HISTORY_ID,10)>=  LEFT(#begin#,10) AND LEFT(a.DATA_HISTORY_ID,10)<=  LEFT(#end#,10)
+		GROUP BY LEFT(a.DATA_HISTORY_ID,10)
+		ORDER BY LEFT(a.DATA_HISTORY_ID,10) ASC
+	]]>
+	</select>
+	
+	
+	
+</sqlMap>

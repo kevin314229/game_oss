@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="OssOperation">
+
+	<typeAlias alias="OssOperation" type="com.jcwx.game.domain.OssOperation" />
+
+	<insert id="createOssOperation" parameterClass="OssOperation">
+		INSERT INTO T_OSS_OPERATION(id, operation_name,carrier_operator, operation_detail, dividend_rate) VALUES(#id#, #operationName#,#carrierOperator#, #operationDetail#, #dividendRate#)
+		<selectKey resultClass="Integer" keyProperty="id">
+			SELECT
+			@@idENTITY AS id
+		</selectKey>
+	</insert>
+
+	<update id="updateOssOperation" parameterClass="OssOperation">
+		UPDATE T_OSS_OPERATION SET  operation_name=#operationName#,carrier_operator=#carrierOperator#, operation_detail=#operationDetail#, dividend_rate=#dividendRate# WHERE id=#id#
+	</update>
+
+	<delete id="deleteOssOperationByID" parameterClass="Integer">
+		DELETE FROM
+		T_OSS_OPERATION WHERE id=#id#
+	</delete>
+	
+	<select id="getOssOperationByID" parameterClass="Integer"  resultClass="OssOperation">
+		SELECT id AS id, operation_name AS operationName,carrier_operator AS carrierOperator, operation_detail AS operationDetail, dividend_rate AS dividendRate FROM T_OSS_OPERATION WHERE id=#id#
+	</select>
+	
+	<select id="getOssOperationList" resultClass="OssOperation">
+		SELECT id AS id, operation_name AS operationName,carrier_operator AS carrierOperator, operation_detail AS operationDetail, dividend_rate AS dividendRate FROM T_OSS_OPERATION
+	</select>
+
+</sqlMap>

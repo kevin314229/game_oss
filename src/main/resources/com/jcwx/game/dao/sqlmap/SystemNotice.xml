@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="SystemNotice">
+
+	<typeAlias alias="SystemNotice" type="com.jcwx.game.domain.SystemNotice" />
+
+	<insert id="createSystemNotice" parameterClass="SystemNotice">
+		INSERT INTO T_SYSTEM_NOTICE(system_notice_id, server_id,server_name, type,content, create_time, delay, notice_time,start_time) VALUES(#systemNoticeId#,#serverId#,#serverName#,#type#, #content#, #createTime#, #delay#, #noticeTime#,#startTime#)
+		<selectKey resultClass="Integer" keyProperty="systemNoticeId" >
+			SELECT @@IDENTITY AS ID
+		</selectKey> 
+	</insert>
+
+	<update id="updateSystemNotice" parameterClass="SystemNotice">
+		UPDATE T_SYSTEM_NOTICE SET system_notice_id=#systemNoticeId#, server_id = #serverId#,server_name = #serverName#,type = #type#,content=#content#, create_time=#createTime#, delay=#delay#, notice_time=#noticeTime# ,start_time=#startTime# WHERE system_notice_id=#systemNoticeId#
+	</update>
+
+	<delete id="deleteSystemNoticeByID" parameterClass="Integer">
+		DELETE FROM T_SYSTEM_NOTICE WHERE system_notice_id=#systemNoticeId#
+	</delete>
+
+	<select id="getSystemNoticeByID" parameterClass="Integer" resultClass="SystemNotice">
+		SELECT system_notice_id AS systemNoticeId, server_id AS serverId,server_name AS serverName,type AS type,content AS content, create_time AS createTime, delay AS delay,  notice_time AS noticeTime,start_time as startTime FROM T_SYSTEM_NOTICE WHERE system_notice_id=#systemNoticeId#
+	</select>
+
+	<select id="getSystemNoticeList" resultClass="SystemNotice">
+		SELECT system_notice_id AS systemNoticeId, server_id AS serverId,server_name AS serverName,type AS type,content AS content, create_time AS createTime, delay AS delay, notice_time AS noticeTime,start_time as startTime FROM T_SYSTEM_NOTICE WHERE notice_time > NOW() order by systemNoticeId desc
+	</select>
+	
+	<select id="getSystemNoticeListByServerId" resultClass="SystemNotice" parameterClass="Integer">
+		SELECT system_notice_id AS systemNoticeId, server_id AS serverId,server_name AS serverName,type AS type,content AS content, create_time AS createTime, delay AS delay, notice_time AS noticeTime ,start_time as startTime FROM T_SYSTEM_NOTICE 
+		WHERE server_id = #server_id#  order by systemNoticeId desc
+	</select>
+
+</sqlMap>

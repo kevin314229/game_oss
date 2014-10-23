@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="BaseProperty">
+
+	<typeAlias alias="BaseProperty" type="com.jcwx.game.domain.BaseProperty" />
+
+	<insert id="createBaseProperty" parameterClass="BaseProperty">
+		INSERT INTO T_BASE_PROPERTY(base_property_id, module, name, type, quality, level_flag, status_flag, max_use, cd, cd_group, power_consume, discard_flag, max_heap, buy_price, sell_price, function, description) VALUES(#basePropertyId#, #module#, #name#, #type#, #quality#, #levelFlag#, #statusFlag#, #maxUse#, #cd#, #cdGroup#, #powerConsume#, #discardFlag#, #maxHeap#, #buyPrice#, #sellPrice#, #function#, #description#)
+	</insert>
+
+	<update id="updateBaseProperty" parameterClass="BaseProperty">
+		UPDATE T_BASE_PROPERTY SET base_property_id=#basePropertyId#, module=#module#, name=#name#, type=#type#, quality=#quality#, level_flag=#levelFlag#, status_flag=#statusFlag#, max_use=#maxUse#, cd=#cd#, cd_group=#cdGroup#, power_consume=#powerConsume#, discard_flag=#discardFlag#, max_heap=#maxHeap#, buy_price=#buyPrice#, sell_price=#sellPrice#, function=#function#, description=#description# WHERE base_property_id=#basePropertyId#
+	</update>
+
+	<delete id="deleteBasePropertyByID" parameterClass="String">
+		DELETE FROM T_BASE_PROPERTY WHERE base_property_id=#basePropertyId#
+	</delete>
+
+	<select id="getBasePropertyByID" parameterClass="String" resultClass="BaseProperty">
+		SELECT base_property_id AS basePropertyId, module AS module, name AS name, type AS type, quality AS quality, level_flag AS levelFlag, status_flag AS statusFlag, max_use AS maxUse, cd AS cd, cd_group AS cdGroup, power_consume AS powerConsume, discard_flag AS discardFlag, max_heap AS maxHeap, buy_price AS buyPrice, sell_price AS sellPrice, function AS function, description AS description FROM T_BASE_PROPERTY WHERE base_property_id=#basePropertyId#
+	</select>
+
+	<select id="getBasePropertyList" resultClass="BaseProperty">
+		SELECT base_property_id AS basePropertyId, module AS module, name AS name, type AS type, quality AS quality, level_flag AS levelFlag, status_flag AS statusFlag, max_use AS maxUse, cd AS cd, cd_group AS cdGroup, power_consume AS powerConsume, discard_flag AS discardFlag, max_heap AS maxHeap, buy_price AS buyPrice, sell_price AS sellPrice, function AS function, description AS description FROM T_BASE_PROPERTY
+	</select>
+
+</sqlMap>

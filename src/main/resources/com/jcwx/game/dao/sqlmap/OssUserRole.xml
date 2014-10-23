@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="OssUserRole">
+	<typeAlias alias="OssUserRole" type="com.jcwx.game.domain.OssUserRole" />
+
+	<insert id="createOssUserRole" parameterClass="OssUserRole">
+		replace INTO T_OSS_USER_ROLE(USERNAME, OSS_ROLE_ID) VALUES(#username#, #ossRoleID#)
+	</insert>
+
+	<update id="updateOssUserRole" parameterClass="OssUserRole">
+		UPDATE T_OSS_USER_ROLE SET USERNAME=#username#, OSS_ROLE_ID=#ossRoleID# WHERE OSS_ROLE_ID=#ossRoleID# AND USERNAME=#username#
+	</update>
+
+	<delete id="deleteOssUserRoleByRoleId" parameterClass="Integer">
+		DELETE FROM T_OSS_USER_ROLE WHERE OSS_ROLE_ID=#ossRoleID#
+	</delete>
+
+	<select id="getOssUserRoleByRoleID" parameterClass="Integer" resultClass="OssUserRole">
+		SELECT USERNAME AS username, OSS_ROLE_ID AS ossRoleID FROM T_OSS_USER_ROLE WHERE OSS_ROLE_ID=#ossRoleID#
+	</select>
+	
+	<select id="getOssUserByRoleUserID" parameterClass="String" resultClass="OssUserRole">
+		SELECT USERNAME AS username, OSS_ROLE_ID AS ossRoleID FROM T_OSS_USER_ROLE WHERE USERNAME=#username#
+	</select>
+
+	<select id="getOssUserRoleList" resultClass="OssUserRole">
+		SELECT USERNAME AS username, OSS_ROLE_ID AS ossRoleID FROM T_OSS_USER_ROLE
+	</select>
+	
+	<delete id="deleteOssUserRoleByUserID" parameterClass="String">
+		DELETE FROM T_OSS_USER_ROLE WHERE USERNAME=#username#
+	</delete>
+
+</sqlMap>

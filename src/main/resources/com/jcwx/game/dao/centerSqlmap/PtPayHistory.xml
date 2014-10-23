@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="PtPayHistory">
+
+	<typeAlias alias="PayHistory" type="com.jcwx.game.domain.PtPayHistory" />
+
+	<insert id="createPayHistory" parameterClass="PayHistory">
+		INSERT INTO T_PAY_HISTORY(id, order_status, pt_code, pt_area, pt_order, pt_login_name, player_id, player_base_id, currency, pt_momey, rmb, game_order, goods_id, goods_num, game_order_time, create_time, remark, order_source, pay_way, notify_ip, notes1, notes2, game_status, game_execmsg, pay_type, nick_name) VALUES(#id#, #orderStatus#, #ptCode#, #ptArea#, #ptOrder#, #ptLoginName#, #playerId#, #playerBaseId#, #currency#, #ptMomey#, #rmb#, #gameOrder#, #goodsId#, #goodsNum#, #gameOrderTime#, #createTime#, #remark#, #orderSource#, #payWay#, #notifyIp#, #notes1#, #notes2#, #gameStatus#, #gameExecmsg#, #payType#, #nickName#)
+	</insert>
+
+	<update id="updatePayHistory" parameterClass="PayHistory">
+		UPDATE T_PAY_HISTORY SET id=#id#, order_status=#orderStatus#, pt_code=#ptCode#, pt_area=#ptArea#, pt_order=#ptOrder#, pt_login_name=#ptLoginName#, player_id=#playerId#, player_base_id=#playerBaseId#, currency=#currency#, pt_momey=#ptMomey#, rmb=#rmb#, game_order=#gameOrder#, goods_id=#goodsId#, goods_num=#goodsNum#, game_order_time=#gameOrderTime#, create_time=#createTime#, remark=#remark#, order_source=#orderSource#, pay_way=#payWay#, notify_ip=#notifyIp#, notes1=#notes1#, notes2=#notes2#, game_status=#gameStatus#, game_execmsg=#gameExecmsg#, pay_type=#payType#, nick_name=#nickName# WHERE id=#id#
+	</update>
+
+	<delete id="deletePayHistoryByID" parameterClass="String">
+		DELETE FROM T_PAY_HISTORY WHERE id=#id#
+	</delete>
+
+	<select id="getPayHistoryByID" parameterClass="String" resultClass="PayHistory">
+		SELECT id AS id, order_status AS orderStatus, pt_code AS ptCode, pt_area AS ptArea, pt_order AS ptOrder, pt_login_name AS ptLoginName, player_id AS playerId, player_base_id AS playerBaseId, currency AS currency, pt_momey AS ptMomey, rmb AS rmb, game_order AS gameOrder, goods_id AS goodsId, goods_num AS goodsNum, game_order_time AS gameOrderTime, create_time AS createTime, remark AS remark, order_source AS orderSource, pay_way AS payWay, notify_ip AS notifyIp, notes1 AS notes1, notes2 AS notes2, game_status AS gameStatus, game_execmsg AS gameExecmsg, pay_type AS payType, nick_name AS nickName FROM T_PAY_HISTORY WHERE id=#id#
+	</select>
+
+	<select id="getPayHistoryList" resultClass="PayHistory">
+		SELECT id AS id, order_status AS orderStatus, pt_code AS ptCode, pt_area AS ptArea, pt_order AS ptOrder, pt_login_name AS ptLoginName, player_id AS playerId, player_base_id AS playerBaseId, currency AS currency, pt_momey AS ptMomey, rmb AS rmb, game_order AS gameOrder, goods_id AS goodsId, goods_num AS goodsNum, game_order_time AS gameOrderTime, create_time AS createTime, remark AS remark, order_source AS orderSource, pay_way AS payWay, notify_ip AS notifyIp, notes1 AS notes1, notes2 AS notes2, game_status AS gameStatus, game_execmsg AS gameExecmsg, pay_type AS payType, nick_name AS nickName FROM T_PAY_HISTORY
+	</select>
+	
+	<select id="getPayHistorysta" parameterClass="java.util.Map" resultClass="java.util.HashMap">
+	   <![CDATA[ select pt_code pt, COUNT(1) nub,SUM(rmb) sum from pay_history p where 
+	   p.create_time >#beginDate# and p.create_time <#endDate# and order_status=0 GROUP BY pt_code ]]>
+	</select>
+	
+	<select id="getPayHistoryUser" parameterClass="java.util.Map" resultClass="java.util.HashMap">
+	   <![CDATA[ select pt_flag pt ,count(1) nub,sum(rmb) sum from pay_history p ,pt_user u where u.user_name=p.pt_login_name and 
+	   u.create_time >#beginDate# and u.create_time <#endDate#  GROUP BY pt_flag ]]>
+	</select>
+	
+	<select id="getPayHistoryNew" parameterClass="java.util.Map" resultClass="java.util.HashMap">
+	   <![CDATA[  select pt, sum from(
+		select  pt_code pt, sum(rmb) sum from pay_history p  where p.game_order_time<#endDate#  and order_status=0 
+		GROUP BY pt_login_name,pt_code 
+		HAVING min(p.game_order_time)> #beginDate#  ) A GROUP BY pt 
+	    ]]>
+	</select>
+	
+	
+
+</sqlMap>

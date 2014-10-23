@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="QueryLostUserLevelDetail">
+
+	<typeAlias alias="ZQueryLostUserLevelDetail"
+		type="com.jcwx.game.domain.ZQueryLostUserLevelDetail" />
+	<select id="getQueryLostUserLevelDetailList" parameterClass="java.util.Map"
+		resultClass="ZQueryLostUserLevelDetail">
+		SELECT statistics_date as statisticsDate,game_id as gameId,area_id as
+		areaId,player_id as playerId,player_base_id as playerBaseId,login_name
+		as loginName,nick_name as nickName,player_level as playerLevel from 
+<![CDATA[ 
+(SELECT DATE_FORMAT(t.login_time,'%Y-%m-%d') as statistics_date,t.game_id,t.area_id,t.player_id,t.player_base_id,t.login_name,t.nick_name,t.`level` player_level from sta_login_log t 
+WHERE  t.login_time>=#firstTime# AND t.login_time<=#lastTime# AND t.game_id=#gameId#
+GROUP BY t.game_id,t.area_id,t.player_base_id) t1
+WHERE NOT EXISTS
+(SELECT a.player_id from
+(SELECT t.game_id, t.area_id,t.player_id,t.player_base_id,t.login_name,t.nick_name,t.`level` player_level from sta_login_log t 
+WHERE  t.login_time>=date_add(#firstTime#, interval 1 day) AND t.login_time<=date_add(#lastTime#, interval 1 day) AND t.game_id=#gameId#
+GROUP BY t.game_id,t.area_id,t.player_base_id) a WHERE t1.player_base_id=a.player_base_id )AND t1.area_id=#areaId#  AND t1.player_level=#playerLevel# GROUP BY player_base_id,area_id ORDER BY player_level,area_id
+
+]]>
+</select>
+	<select id="getQueryActiveUserLevelDetailList" parameterClass="java.util.Map"
+		resultClass="ZQueryLostUserLevelDetail">
+		SELECT statistics_date as statisticsDate,game_id as gameId,area_id as
+		areaId,player_id as playerId,player_base_id as playerBaseId,login_name
+		as loginName,nick_name as nickName,player_level as playerLevel from 
+<![CDATA[ 
+(SELECT DATE_FORMAT(t.login_time,'%Y-%m-%d') as statistics_date,t.game_id,t.area_id,t.player_id,t.player_base_id,t.login_name,t.nick_name,t.`level` player_level from sta_login_log t 
+WHERE  t.login_time>=#firstTime# AND t.login_time<=#lastTime# AND t.game_id=#gameId#
+GROUP BY t.game_id,t.area_id,t.player_base_id) t1
+WHERE  EXISTS
+(SELECT a.player_id from
+(SELECT t.game_id, t.area_id,t.player_id,t.player_base_id,t.login_name,t.nick_name,t.`level` player_level from sta_login_log t 
+WHERE  t.login_time>=date_add(#firstTime#, interval 1 day) AND t.login_time<=date_add(#lastTime#, interval 1 day) AND t.game_id=#gameId#
+GROUP BY t.game_id,t.area_id,t.player_base_id) a WHERE t1.player_base_id=a.player_base_id )AND t1.area_id=#areaId#  AND t1.player_level=#playerLevel# GROUP BY player_base_id,area_id ORDER BY player_level,area_id
+
+]]>
+</select>
+
+
+</sqlMap>

@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="BaseEquip">
+
+	<typeAlias alias="BaseEquip" type="com.jcwx.game.domain.BaseEquip" />
+
+	<insert id="createBaseEquip" parameterClass="BaseEquip">
+		INSERT INTO T_BASE_EQUIP(base_equip_id, name, type, quality, occupation, level_flag, sell_flag, buy_price, sell_price, description, action_module, icon_module) VALUES(#baseEquipId#, #name#, #type#, #quality#, #occupation#, #levelFlag#, #sellFlag#, #buyPrice#, #sellPrice#, #description#, #actionModule#, #iconModule#)
+	</insert>
+
+	<update id="updateBaseEquip" parameterClass="BaseEquip">
+		UPDATE T_BASE_EQUIP SET base_equip_id=#baseEquipId#, name=#name#, type=#type#, quality=#quality#, occupation=#occupation#, level_flag=#levelFlag#, sell_flag=#sellFlag#, buy_price=#buyPrice#, sell_price=#sellPrice#, description=#description#, action_module=#actionModule#, icon_module=#iconModule# WHERE base_equip_id=#baseEquipId#
+	</update>
+
+	<delete id="deleteBaseEquipByID" parameterClass="String">
+		DELETE FROM T_BASE_EQUIP WHERE base_equip_id=#baseEquipId#
+	</delete>
+
+	<select id="getBaseEquipByID" parameterClass="String" resultClass="BaseEquip">
+		SELECT base_equip_id AS baseEquipId, name AS name, type AS type, quality AS quality, occupation AS occupation, level_flag AS levelFlag, sell_flag AS sellFlag, buy_price AS buyPrice, sell_price AS sellPrice, description AS description, action_module AS actionModule, icon_module AS iconModule FROM T_BASE_EQUIP WHERE base_equip_id=#baseEquipId#
+	</select>
+
+	<select id="getBaseEquipList" resultClass="BaseEquip">
+		SELECT base_equip_id AS baseEquipId, name AS name, type AS type, quality AS quality, occupation AS occupation, level_flag AS levelFlag, sell_flag AS sellFlag, buy_price AS buyPrice, sell_price AS sellPrice, description AS description, action_module AS actionModule, icon_module AS iconModule FROM T_BASE_EQUIP
+	</select>
+
+</sqlMap>

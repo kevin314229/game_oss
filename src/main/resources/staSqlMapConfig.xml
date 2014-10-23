@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMapConfig	  
+	PUBLIC "-//ibatis.apache.org//DTD SQL Map Config 2.0//EN"	  
+	"http://ibatis.apache.org/dtd/sql-map-config-2.dtd">
+
+<sqlMapConfig>
+	<settings lazyLoadingEnabled="false" useStatementNamespaces="true" />
+	<sqlMap resource="com/jcwx/game/dao/staSqlmap/Player.xml"/>
+	<sqlMap resource="com/jcwx/game/dao/staSqlmap/KPIReport.xml" />
+	<sqlMap resource="com/jcwx/game/dao/staSqlmap/ConsumeData.xml" />
+	<sqlMap resource="com/jcwx/game/dao/staSqlmap/staLoginlog.xml"/>
+	<sqlMap resource="com/jcwx/game/dao/staSqlmap/QueryActiveUser.xml" />
+	<sqlMap resource="com/jcwx/game/dao/staSqlmap/QueryLostUserLevel.xml" />
+	<sqlMap resource="com/jcwx/game/dao/staSqlmap/PayReport.xml" />
+	<sqlMap resource="com/jcwx/game/dao/staSqlmap/PayHistory.xml" />
+	<sqlMap resource="com/jcwx/game/dao/staSqlmap/QueryLostUserLevelDetail.xml" />
+	<sqlMap resource="com/jcwx/game/dao/staSqlmap/OperationStatistic.xml" />
+	<sqlMap resource="com/jcwx/game/dao/staSqlmap/PayUserInfo.xml" />
+	<sqlMap resource="com/jcwx/game/dao/staSqlmap/PlayerChatLog.xml" />
+	<sqlMap resource="com/jcwx/game/dao/staSqlmap/PlayerBaseRank.xml" />
+		<sqlMap resource="com/jcwx/game/dao/staSqlmap/CPPayOrder.xml" />
+		<sqlMap resource="com/jcwx/game/dao/staSqlmap/StaMallRecord.xml" />
+</sqlMapConfig>

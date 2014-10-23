@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="CPPayOrder">
+
+
+	<typeAlias alias="payOrder" type="com.jcwx.game.domain.CPPayOrder" />
+
+	<select id="getAllPayOrder" resultClass="payOrder" >
+			<![CDATA[
+			 select t2.pt_id as channel,t2.area_id as server ,t2.login_name as uuid,t2.pt_order as orderid,t2.player_base_id as roleId,
+			 t2.pt_money_num as coins,t2.money_num as money,t2.nick_name as role,t.level, 
+			 t2.create_time as ordertime,t2.complete_time as paidtime from sta_operation_log t ,sta_pay_history t2 
+			where t.operation='充值元宝' and t.game_id=2 and t.flow_type=1  and t2.game_id=2  and (t.area_id = 451 or t.area_id=454 or t.area_id=455 or t.area_id=456) 
+			and t.player_base_id = t2.player_base_id and abs(timestampdiff(SECOND,t.create_time,t2.complete_time))<=2  ]]>
+	</select>
+
+	<select id="getPayOrderByDay"  parameterClass="java.util.Map"  resultClass="payOrder"  >
+			<![CDATA[
+			 select t2.pt_id as channel,t2.area_id as server ,t2.login_name as uuid,t2.pt_order as orderid,t2.player_base_id as roleId,
+			 t2.pt_money_num as coins,t2.money_num as money,t2.nick_name as role,t.level, 
+			 t2.create_time as ordertime,t2.complete_time as paidtime from sta_operation_log t ,sta_pay_history t2 
+			where t.operation='充值元宝' and t.game_id=2 and t.flow_type=1  and t2.game_id=2   
+			and (t.area_id = 451 or t.area_id=454 or t.area_id=455 or t.area_id=456)
+			and t.player_base_id = t2.player_base_id and abs(timestampdiff(SECOND,t.create_time,t2.complete_time))<=2  
+			and date(t2.complete_time)=#nowDate# and and date(t.create_time)=#nowDate# ]]>
+	</select>
+
+</sqlMap>

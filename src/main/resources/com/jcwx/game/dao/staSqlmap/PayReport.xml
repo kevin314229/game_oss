@@ -1,0 +1,180 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="PayReport">
+	<typeAlias alias="PayRank" type="com.jcwx.game.domain.PayRank" />
+	<typeAlias alias="PayInfo" type="com.jcwx.game.domain.PayHistory" />
+	<typeAlias alias="PayStatistic" type="com.jcwx.game.domain.PayStatistic" />
+	
+	<resultMap id="payMap" class="java.util.HashMap">
+		<result property="level" column="level" /> 
+		<result property="levelNum" column="levelNum" />
+	</resultMap>
+	<select id="getPayRankList"  parameterClass="java.util.Map" resultClass="PayRank">
+		SELECT pay_id AS payId, game_id AS gameId, pt_id AS ptId, area_id AS areaId, login_name AS loginName,
+		 pt_money_num AS ptMoneyNum,money_num as moneyNum 
+		FROM REPORT_PAY_RANK where 1=1
+		<dynamic>
+			 <isGreaterThan prepend="and" property="gameId" compareValue="0">
+                 game_id = #gameId#
+            </isGreaterThan>
+            
+	  	 <isNotNull property="areaId" prepend="AND">
+         <isNotEqual property="areaId" compareValue="null">
+			  	area_id IN ($areaId$)
+			  </isNotEqual>
+          </isNotNull>
+          <isNotNull property="loginName" prepend="AND">
+				<![CDATA[	login_name like '%$loginName$%']]>
+			</isNotNull>
+			 <isNotNull property="ptId" prepend="AND">
+			<![CDATA[	pt_id =#ptId#]]>
+			</isNotNull>
+		</dynamic>
+		
+		order by moneyNum desc
+		LIMIT #beginNum#,#onePageNum#
+	</select>
+	
+	<select id="getPayRankCount" parameterClass="java.util.Map" resultClass="java.lang.Integer">
+		SELECT count(*)
+		FROM REPORT_PAY_RANK where 1=1
+		<dynamic>
+			 <isGreaterThan prepend="and" property="gameId" compareValue="0">
+                 game_id = #gameId#
+            </isGreaterThan>
+           
+	  	 <isNotNull property="areaId" prepend="AND">
+         <isNotEqual property="areaId" compareValue="null">
+			  	area_id IN ($areaId$)
+			  </isNotEqual>
+          </isNotNull>
+             <isNotNull property="loginName" prepend="AND">
+			<![CDATA[	login_name like '%$loginName$%']]>
+			</isNotNull>
+			 <isNotNull property="ptId" prepend="AND">
+			<![CDATA[	pt_id =#ptId#]]>
+			</isNotNull>
+		</dynamic>
+	</select>
+ 
+	<select id="getPayInfoList" parameterClass="java.util.Map" resultClass="PayInfo">
+		SELECT   game_id AS gameId, pt_id AS ptId, area_id AS areaId, login_name AS loginName,  nick_name AS nickName,  
+		currency , pt_money_num AS ptMoneyNum,money_num as moneyNum ,
+		complete_Time as completeTime from sta_pay_history 
+		where 1=1
+		<dynamic>
+		<isNotNull property="beginDate" prepend="AND">
+				<![CDATA[ complete_Time>='$beginDate$ 00:00:00' ]]>
+			</isNotNull>
+			<isNotNull property="endDate" prepend="AND">
+				<![CDATA[ complete_Time<='$endDate$ 23:59:59' ]]>
+			</isNotNull>
+			 <isGreaterThan prepend="and" property="gameId" compareValue="0">
+                 game_id = #gameId#
+            </isGreaterThan>
+            
+	  	 <isNotNull property="areaId" prepend="AND">
+         <isNotEqual property="areaId" compareValue="null">
+			  	area_id IN ($areaId$)
+			  </isNotEqual>
+          </isNotNull>
+             <isNotNull property="loginName" prepend="AND">
+			<![CDATA[	login_name like '%$loginName$%']]>
+			</isNotNull>
+			  <isNotNull property="nickName" prepend="AND">
+			<![CDATA[	nick_name like '%$nickName$%']]>
+			</isNotNull>
+			 <isNotNull property="ptId" prepend="AND">
+			<![CDATA[	pt_id =#ptId#]]>
+			</isNotNull>
+		</dynamic>
+		order by complete_Time desc,money_num desc
+		LIMIT #beginNum#,#onePageNum#
+	</select>
+	<select id="getPayInfoCount" parameterClass="java.util.Map" resultClass="java.lang.Integer">
+		SELECT  count(1) from sta_pay_history 
+		where 1=1
+		<dynamic>
+		<isNotNull property="beginDate" prepend="AND">
+				<![CDATA[ complete_Time>='$beginDate$ 00:00:00' ]]>
+			</isNotNull>
+			<isNotNull property="endDate" prepend="AND">
+				<![CDATA[ complete_Time<='$endDate$ 23:59:59' ]]>
+			</isNotNull>
+			 <isGreaterThan prepend="and" property="gameId" compareValue="0">
+                 game_id = #gameId#
+            </isGreaterThan>
+           
+	  	 <isNotNull property="areaId" prepend="AND">
+         <isNotEqual property="areaId" compareValue="null">
+			  	area_id IN ($areaId$)
+			  </isNotEqual>
+          </isNotNull>
+             <isNotNull property="loginName" prepend="AND">
+			<![CDATA[	login_name like '%$loginName$%']]>
+			</isNotNull>
+			 <isNotNull property="nickName" prepend="AND">
+			<![CDATA[	nick_name like '%$nickName$%']]>
+			</isNotNull>
+			 <isNotNull property="ptId" prepend="AND">
+			<![CDATA[	pt_id =#ptId#]]>
+			</isNotNull>
+		</dynamic>
+		
+	</select>
+	<select id="getKPIDayReportCount" parameterClass="java.util.Map" resultClass="java.lang.Integer">
+		SELECT  count(*)
+		from report_kpi_day 
+		where  	<![CDATA[kpi_date>=#beginDate#  ]]>
+		<dynamic>
+			<isNotNull property="endDate" prepend="AND">
+				<![CDATA[ kpi_date<=#endDate# ]]>
+			</isNotNull>
+			 <isGreaterThan prepend="and" property="gameId" compareValue="0">
+                     game_id = #gameId#
+            </isGreaterThan>
+           
+			  <isNotNull property="areaId" prepend="AND">
+			  <isNotEqual property="areaId" compareValue="null">
+			  	area_id IN ($areaId$)
+			  </isNotEqual>
+			  </isNotNull> 
+			 <isNotNull property="ptId" prepend="AND">
+			<![CDATA[	pt_id =#ptId#]]>
+			</isNotNull>
+		</dynamic>
+	</select>
+	<select id="getAreaPayList"  parameterClass="java.util.Map" resultClass="PayRank">
+		SELECT pay_id AS payId, game_id AS gameId, pt_id AS ptId, area_id AS areaId, sum(money_num) AS moneyNum ,
+		sum(pt_money_num) AS ptMoneyNum
+		FROM REPORT_PAY_RANK where 1=1
+		<dynamic>
+			 <isGreaterThan prepend="and" property="gameId" compareValue="0">
+                 game_id = #gameId#
+            </isGreaterThan>
+            
+	  	 <isNotNull property="areaId" prepend="AND">
+         <isNotEqual property="areaId" compareValue="null">
+			  	area_id IN ($areaId$)
+			  </isNotEqual>
+          </isNotNull>
+          <isNotNull property="loginName" prepend="AND">
+				<![CDATA[	login_name like '%$loginName$%']]>
+			</isNotNull>
+			 <isNotNull property="ptId" prepend="AND">
+			<![CDATA[	pt_id =#ptId#]]>
+			</isNotNull>
+		</dynamic>
+		group by game_id,area_id
+		order by moneyNum desc
+		 
+	</select>
+	
+	<select id="getAreaRecordList"  parameterClass="java.util.Map" resultClass="PayStatistic">
+		SELECT pay_id AS payId,pay_date as payDate, game_id AS gameId, area_id AS areaId, money_num AS moneyNum ,
+		pt_money_num  AS ptMoneyNum
+		FROM REPORT_PAY_STATISTIC where    game_id = #gameId# and 	area_id =#areaId#
+		  <![CDATA[ and pay_date >= #beginDate# and pay_date <= #endDate# ]]>
+	      order by pay_date;
+	</select>
+</sqlMap>

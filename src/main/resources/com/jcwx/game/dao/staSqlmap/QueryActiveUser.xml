@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="QueryActiveUser">
+
+	<typeAlias alias="ZQueryActiveUser" type="com.jcwx.game.domain.ZQueryActiveUser" />
+
+	<select id="queryActiveUserAllnum" parameterClass="java.util.Map"
+		resultClass="Integer">
+		<![CDATA[ 
+		SELECT count(*) as allNum from report_query_activeuser where active_date>=#beginTime# AND active_date<=#endTime# 
+		]]>
+		<dynamic>
+			<isNotNull property="gameId" prepend="AND">
+				game_id=#gameId#
+			</isNotNull>
+			<isNotNull property="selectString" prepend="AND">
+				area_id IN ($selectString$)
+			</isNotNull>
+		</dynamic>
+	</select>
+
+
+	<select id="getLoginNumPerDay" parameterClass="java.util.Map"
+		resultClass="ZQueryActiveUser">
+	<![CDATA[SELECT active_date as activeDate,game_id as gameId,area_id as areaId,sum(day00_num )as day0,sum(day01_num) as day1,sum(day02_num) as day2,sum(day03_num) as day3,
+	sum(day04_num) as day4,sum(day05_num) as day5,sum(day06_num) as day6,sum(day07_num) as day7 ,sum(week01_num) as week1,sum(month01_num) as month1
+	from report_query_activeuser  
+	where active_date>=#beginTime# AND active_date<=#endTime#]]>
+		<dynamic>
+			<isNotNull property="gameId" prepend="AND">
+				game_id=#gameId#
+			</isNotNull>
+			<isNotNull property="selectString" prepend="AND">
+				area_id IN ($selectString$)
+			</isNotNull>
+		</dynamic>
+		 group BY active_date 
+	</select>
+	<select id="NewRegisterLoginAnalyse" parameterClass="java.util.Map" resultClass="ZQueryActiveUser">
+		<![CDATA[SELECT regist_date as activeDate,game_id as gameId,area_id as areaId,sum(regist_num) as day0,sum(day01_num) as day1,sum(day02_num) as day2,sum(day03_num) as day3,
+	sum(day04_num) as day4,sum(day05_num) as day5,sum(day06_num) as day6,sum(day07_num) as day7 ,sum(week01_num) as week1,sum(week02_num) as week2,sum(month01_num) as month1
+	from report_new_regist_login_analyse 
+	where regist_date>=#beginTime# AND regist_date<=#endTime# ]]>
+		<dynamic>
+			<isNotNull property="gameId" prepend="AND">
+				game_id=#gameId#
+			</isNotNull>
+			<isNotNull property="selectString" prepend="AND">
+				area_id IN ($selectString$)
+			</isNotNull>
+		</dynamic> 
+		group BY regist_date 
+	</select>
+
+
+	<select id="NewRegisterLoginAnalyseAllNum" parameterClass="java.util.Map"
+		resultClass="Integer">
+		<![CDATA[ 
+		SELECT count(*) as allNum from report_new_regist_login_analyse where regist_date>=#beginTime# AND regist_date<=#endTime# 
+		]]>
+		<dynamic>
+			<isNotNull property="gameId" prepend="AND">
+				game_id=#gameId#
+			</isNotNull>
+			<isNotNull property="selectString" prepend="AND">
+				area_id IN ($selectString$)
+			</isNotNull>
+		</dynamic>
+	</select>
+
+	<parameterMap class="java.util.Map" id="procedureParameters">
+		<parameter property="quartz_time" javaType="java.util.Date"
+			jdbcType="DATETIME" mode="IN" />
+		<parameter property="run_flag" javaType="java.lang.Integer"
+			jdbcType="TINYINT" mode="INOUT" />
+	</parameterMap>
+
+	<procedure id="quarzQueryActiveUser" parameterMap="procedureParameters">
+		{
+		call
+		query_from_login_log_to_query_active_user(?,?)
+		}
+	</procedure>
+	<select id="queryRegisterGroupByPtId" parameterClass="java.util.Map" resultClass="ZQueryActiveUser">
+		<![CDATA[SELECT regist_date as activeDate,game_id as gameId,pt_id as ptId,area_id as areaId,sum(regist_num) as day0,sum(day01_num) as day1,sum(day02_num) as day2,sum(day03_num) as day3,
+	sum(day04_num) as day4,sum(day05_num) as day5,sum(day06_num) as day6,sum(day07_num) as day7 ,sum(week01_num) as week1,sum(month01_num) as month1
+	from report_new_regist_login_analyse 
+	where regist_date>=#beginTime# AND regist_date<=#endTime# ]]>
+		<dynamic>
+			<isNotNull property="gameId" prepend="AND">
+				game_id=#gameId#
+			</isNotNull>
+			<isNotNull property="selectString" prepend="AND">
+				area_id IN ($selectString$)
+			</isNotNull>
+		</dynamic> 
+		group BY regist_date,pt_id
+	</select>
+	
+</sqlMap>

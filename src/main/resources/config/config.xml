@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
+<properties>
+
+	<!-- 说明ENC()括号里是加密的，如果没有ENC表示不加密，如果想要加密哪个值用ENC就可以，加密方法访问 /admin/keytool -->
+	
+	<!-- 游戏数据源 -->	
+    <entry key="dataSource.jdbcUrl">jdbc:mysql://192.168.1.124:3306/game_oss_test?useUnicode=true&amp;characterEncoding=UTF-8</entry>
+    <entry key="dataSource.user">ENC(gX7jJOLjFUN2VLnJ0d0Cpw==)</entry>
+    <entry key="dataSource.password">ENC(gX7jJOLjFUN2VLnJ0d0Cpw==)</entry>
+    <entry key="dataSource.acquireIncrement">5</entry>
+    <entry key="dataSource.maxIdleTime">3600</entry>
+    <entry key="dataSource.initialPoolSize">2</entry>
+    <entry key="dataSource.minPoolSize">10</entry>
+    <entry key="dataSource.maxPoolSize">100</entry>
+    <entry key="dataSource.numHelperThreads">5</entry>
+    <entry key="dataSource.maxStatements">0</entry>
+    
+    
+    <entry key="dataSourceLog.jdbcUrl">jdbc:mysql://42.62.60.188:3306/db_report?useUnicode=true&amp;characterEncoding=UTF-8</entry>
+    <entry key="dataSourceLog.user">csp</entry>
+    <entry key="dataSourceLog.password">csp123456</entry> 
+    <!--
+    <entry key="dataSourceLog.jdbcUrl">jdbc:mysql://192.168.1.251:3306/db_report?useUnicode=true&amp;characterEncoding=UTF-8</entry>
+    <entry key="dataSourceLog.user">root</entry>
+    <entry key="dataSourceLog.password">root</entry>-->
+    <entry key="dataSourceLog.acquireIncrement">5</entry>
+    <entry key="dataSourceLog.maxIdleTime">3600</entry>
+    <entry key="dataSourceLog.initialPoolSize">2</entry>
+    <entry key="dataSourceLog.minPoolSize">10</entry>
+    <entry key="dataSourceLog.maxPoolSize">100</entry>
+    <entry key="dataSourceLog.numHelperThreads">5</entry>
+    <entry key="dataSourceLog.maxStatements">0</entry>
+    
+    
+<!--     <entry key="dataSourceCenter.jdbcUrl">jdbc:mysql://210.14.134.218:3306/wonder_center?useUnicode=true&amp;characterEncoding=UTF-8</entry>
+    <entry key="dataSourceCenter.user">center</entry>
+    <entry key="dataSourceCenter.password">Center$jcwx</entry>  -->
+    <entry key="dataSourceCenter.jdbcUrl">jdbc:mysql://192.168.1.203:3306/center_zhxy?useUnicode=true&amp;characterEncoding=UTF-8</entry>
+    <entry key="dataSourceCenter.user">wonder</entry>
+    <entry key="dataSourceCenter.password">wonder123</entry>
+    <entry key="dataSourceCenter.acquireIncrement">5</entry>
+    <entry key="dataSourceCenter.maxIdleTime">3600</entry>
+    <entry key="dataSourceCenter.initialPoolSize">2</entry>
+    <entry key="dataSourceCenter.minPoolSize">10</entry>
+    <entry key="dataSourceCenter.maxPoolSize">100</entry>
+    <entry key="dataSourceCenter.numHelperThreads">5</entry>
+    <entry key="dataSourceCenter.maxStatements">0</entry>
+    
+</properties>

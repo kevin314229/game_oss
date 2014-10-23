@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="Answer">
+	<typeAlias alias="Answer" type="com.jcwx.game.domain.Answer" />
+
+	<insert id="createAnswer" parameterClass="Answer">
+		INSERT INTO T_ANSWER(ANSWER_ID, COMMENT_ID, USER_ID, CONTENT, CREATE_DATE) VALUES(#answerID#, #commentID#, #userID#, #content#, #createDate#)
+		<selectKey resultClass="Integer" keyProperty="answerID" >
+			SELECT @@IDENTITY AS ID
+		</selectKey> 
+	</insert>
+
+	<update id="updateAnswer" parameterClass="Answer">
+		UPDATE T_ANSWER SET ANSWER_ID=#answerID#, COMMENT_ID=#commentID#, USER_ID=#userID#, CONTENT=#content#, CREATE_DATE=#createDate# WHERE Answer_ID=#answerID#
+	</update>
+
+	<delete id="deleteAnswerByID" parameterClass="Integer">
+		DELETE FROM T_ANSWER WHERE Answer_ID=#answerID#
+	</delete>
+
+	<select id="getAnswerByID" parameterClass="Integer" resultClass="Answer">
+		SELECT ANSWER_ID AS answerID, COMMENT_ID AS commentID, USER_ID AS userID, CONTENT AS content, CREATE_DATE AS createDate FROM T_ANSWER WHERE Answer_ID=#answerID#
+	</select>
+
+	<select id="getAnswerListByCommentId" parameterClass="java.lang.Integer" resultClass="Answer" >
+		SELECT ANSWER_ID AS answerID, COMMENT_ID AS commentID, USER_ID AS userID, CONTENT AS content, CREATE_DATE AS createDate FROM T_ANSWER WHERE COMMENT_ID=#commentID#
+	</select>
+
+</sqlMap>

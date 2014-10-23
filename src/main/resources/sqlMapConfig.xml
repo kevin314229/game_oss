@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMapConfig	  
+	PUBLIC "-//ibatis.apache.org//DTD SQL Map Config 2.0//EN"	  
+	"http://ibatis.apache.org/dtd/sql-map-config-2.dtd">
+
+<sqlMapConfig>
+	<settings lazyLoadingEnabled="false" useStatementNamespaces="true" />
+ 	
+ 	<!-- OSS -->
+	<sqlMap resource="com/jcwx/game/dao/sqlmap/Answer.xml" />
+	<sqlMap resource="com/jcwx/game/dao/sqlmap/Comment.xml" />
+	<sqlMap resource="com/jcwx/game/dao/sqlmap/DataHistory.xml" />
+	<sqlMap resource="com/jcwx/game/dao/sqlmap/LoginLog.xml" />
+	<sqlMap resource="com/jcwx/game/dao/sqlmap/PlayerMoneyStat.xml" />
+	
+	<sqlMap resource="com/jcwx/game/dao/sqlmap/SystemNotice.xml" />
+	<sqlMap resource="com/jcwx/game/dao/sqlmap/BlackList.xml" />
+	<sqlMap resource="com/jcwx/game/dao/sqlmap/OssServer.xml" />
+	<sqlMap resource="com/jcwx/game/dao/sqlmap/OssUserServer.xml" />
+ 	<sqlMap resource="com/jcwx/game/dao/sqlmap/OssUser.xml" />
+	<sqlMap resource="com/jcwx/game/dao/sqlmap/OssRole.xml" />
+	<sqlMap resource="com/jcwx/game/dao/sqlmap/OssUserRole.xml" />
+	<sqlMap resource="com/jcwx/game/dao/sqlmap/OssMenu.xml" />
+	<sqlMap resource="com/jcwx/game/dao/sqlmap/OssOperation.xml" />  
+	<sqlMap resource="com/jcwx/game/dao/sqlmap/OssRoleMenu.xml" />
+	<sqlMap resource="com/jcwx/game/dao/sqlmap/OssMonitor.xml" />  
+	<sqlMap resource="com/jcwx/game/dao/sqlmap/OssLog.xml" />  
+	<sqlMap resource="com/jcwx/game/dao/sqlmap/OperationServer.xml" />  
+	<sqlMap resource="com/jcwx/game/dao/sqlmap/Project.xml" />  
+	<sqlMap resource="com/jcwx/game/dao/sqlmap/ServerNotice.xml" />  
+	<sqlMap resource="com/jcwx/game/dao/sqlmap/OssDict.xml" />  
+	<sqlMap resource="com/jcwx/game/dao/sqlmap/Hint.xml" />  
+<!-- 	<sqlMap resource="com/jcwx/game/dao/sqlmap/Lottery.xml" />   -->
+</sqlMapConfig>
